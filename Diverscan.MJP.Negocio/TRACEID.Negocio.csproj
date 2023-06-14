@@ -1,0 +1,215 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{BAF89A5E-ABF5-4C50-9A7B-50841366704F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Diverscan.MJP.Negocio</RootNamespace>
+    <AssemblyName>Diverscan.MJP.Negocio</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DevExpress.Data.v17.1, Version=17.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Xpo.v17.1, Version=17.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="Meta.Numerics, Version=3.0.0.0, Culture=neutral, PublicKeyToken=67d25c65a6631347, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Recursos\Meta.Numerics.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common, Version=5.0.414.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Practices.EnterpriseLibrary\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Data, Version=5.0.414.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Practices.EnterpriseLibrary\Microsoft.Practices.EnterpriseLibrary.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Telerik.Web.Spreadsheet, Version=2016.1.108.40, Culture=neutral, PublicKeyToken=121fae78165ba3d4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Telerik\Telerik.Web.Spreadsheet.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Web.UI">
+      <HintPath>..\Recursos\Telerik.Web.UI.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Administracion\n_BitacoraWeb.cs" />
+    <Compile Include="Administracion\n_Compania.cs" />
+    <Compile Include="Administracion\n_Credenciales.cs" />
+    <Compile Include="Administracion\n_Roles.cs" />
+    <Compile Include="AjusteInventario\AjusteDeInventarioDataLoader.cs" />
+    <Compile Include="AjusteInventario\N_DetalleArticulo.cs" />
+    <Compile Include="AjusteInventario\N_LogAjustesTRA.cs" />
+    <Compile Include="AjusteInventario\N_SolicitudAjusteInventario.cs" />
+    <Compile Include="AjusteInventario\UbicacionEtiquetaLoader.cs" />
+    <Compile Include="Alistos\EstadoAlistosLoader.cs" />
+    <Compile Include="Alistos\NAlisto.cs" />
+    <Compile Include="Alistos\n_EstadoSuspencion.cs" />
+    <Compile Include="App\n_App.cs" />
+    <Compile Include="AprobarDespacho\n_AprobarDespacho.cs" />
+    <Compile Include="AprobarSalida\n_AprobarSalida.cs" />
+    <Compile Include="Calidad\n_RecepcionCalidad.cs" />
+    <Compile Include="Calidad\n_RespuestasCalidad.cs" />
+    <Compile Include="Consulta\n_GetArticulosXubicacion.cs" />
+    <Compile Include="Devolutions\NDevolutions.cs" />
+    <Compile Include="Devolutions\n_SolicitudDevolucion.cs" />
+    <Compile Include="GS1\CargarEntidadesGS1.cs" />
+    <Compile Include="GS1\GS1Extractor.cs" />
+    <Compile Include="GTIN14VariableLogistic\NGTIN14VariableLogistic.cs" />
+    <Compile Include="HistoricoDemanda\n_HistoricoDemandas.cs" />
+    <Compile Include="HistoricoDemanda\n_SolicitudRestaurantes.cs" />
+    <Compile Include="InventarioBasico\N_AjusteInventarioBasico.cs" />
+    <Compile Include="InventarioBasico\N_ArticulosInventarioBasico.cs" />
+    <Compile Include="InventarioBasico\N_CopiaSistemaArticulo.cs" />
+    <Compile Include="InventarioBasico\N_InventarioBasico.cs" />
+    <Compile Include="Inventario\GrupoExpansor.cs" />
+    <Compile Include="Inventario\N_AjusteInventarioCiclico.cs" />
+    <Compile Include="Inventario\N_ArticulosInventarioCiclicoRealiazar.cs" />
+    <Compile Include="Inventario\N_ArticuloXSolicitudAjuste.cs" />
+    <Compile Include="Inventario\N_CantidadArticuloSAP.cs" />
+    <Compile Include="Inventario\N_CategoriaArticulo.cs" />
+    <Compile Include="Inventario\N_CopiaSistemaArticuloCiclico.cs" />
+    <Compile Include="Inventario\N_InventarioCiclico.cs" />
+    <Compile Include="Inventario\N_MaestroArticulo.cs" />
+    <Compile Include="Inventario\N_TomaFisicaInventario.cs" />
+    <Compile Include="Inventario\N_UbicacionesInventarioCiclico.cs" />
+    <Compile Include="LogicaWMS\n_WMS.cs" />
+    <Compile Include="MaestroArticulo\n_MaestroArticulo.cs" />
+    <Compile Include="MotivoAjusteInventario\MotivoAjusteInventarioLoader.cs" />
+    <Compile Include="MotivoAjusteInventario\n_CentroCostos.cs" />
+    <Compile Include="MotivoAjusteInventario\ObternerLogAjusteInventarioLoader.cs" />
+    <Compile Include="MotorDecisiones\n_ManejadorControlesASPX.cs" />
+    <Compile Include="MotorDecisiones\n_MotorDecisiones.cs" />
+    <Compile Include="Operacion\Salidas\n_OperacionesSalidas.cs" />
+    <Compile Include="OPESALMaestroSolicitud\OPESALMaestroSolicitud.cs" />
+    <Compile Include="OPESALPreDetalleSolicitud\n_OPESALPreDetalleSolicitud.cs" />
+    <Compile Include="OrdenCompa\n_DetalleOrdenCompra.cs" />
+    <Compile Include="OrdenCompa\n_PreDetalleSolicitud.cs" />
+    <Compile Include="OrdenCompra\EstadoOrdenCLoader.cs" />
+    <Compile Include="OrdenCompra\n_GetPurchaseOrder.cs" />
+    <Compile Include="OrdenCompra\PurchaseOrdersLoader.cs" />
+    <Compile Include="OrdenesCompras\ordenesCompras.cs" />
+    <Compile Include="PICKING\ArticulosPickingLoader.cs" />
+    <Compile Include="ProcesarRecepcionUbicacion\n_ProcesarRecepcionUbicacion.cs" />
+    <Compile Include="ProcesarSolicitud\n_DetalleSSCCArticuloSolicitud.cs" />
+    <Compile Include="ProcesarSolicitud\n_Insertapredetallesolicitud.cs" />
+    <Compile Include="ProcesarSolicitud\n_ProcesarSolicitud.cs" />
+    <Compile Include="Programa\n_Programa.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Proveedores\n_Proveedores.cs" />
+    <Compile Include="Recepcion\n_DevolucionInmediata.cs" />
+    <Compile Include="Reportes\e_OrdenCE.cs" />
+    <Compile Include="Reportes\NOrdenCompra.cs" />
+    <Compile Include="Reportes\n_ArticuloGTIN.cs" />
+    <Compile Include="Reportes\n_ArticulosDisponiblesBodega.cs" />
+    <Compile Include="Reportes\n_AuditoriaReport.cs" />
+    <Compile Include="Reportes\n_BusquedaDevoluciones.cs" />
+    <Compile Include="Reportes\n_BusquedaOrdenC.cs" />
+    <Compile Include="Reportes\n_Despachos.cs" />
+    <Compile Include="Reportes\n_Destino_Devolucion.cs" />
+    <Compile Include="Reportes\n_DiferenciaInventario.cs" />
+    <Compile Include="Reportes\n_DisponibilidadArticulosPedidoBodega.cs" />
+    <Compile Include="Reportes\n_HistoricoDemanda.cs" />
+    <Compile Include="Reportes\n_KardexReport.cs" />
+    <Compile Include="Reportes\n_KardexReportes.cs" />
+    <Compile Include="Reportes\n_kardexSKU.cs" />
+    <Compile Include="Reportes\n_ProveedorReport.cs" />
+    <Compile Include="Reportes\n_ReporteDespachadoVsRecibido.cs" />
+    <Compile Include="Reportes\n_ReporteSolicitudDevolucion.cs" />
+    <Compile Include="Reportes\n_TRALoteFechas.cs" />
+    <Compile Include="Reportes\OlasFinalizadas\NOlaFinalizada.cs" />
+    <Compile Include="Reportes\ReporteDespachoN.cs" />
+    <Compile Include="Reportes\ReporteDespacho_factory.cs" />
+    <Compile Include="Roles\n_Roles.cs" />
+    <Compile Include="SectorWarehouse\DSectorWarehouse.cs" />
+    <Compile Include="SectorWarehouse\EEStanteWarehouse.cs" />
+    <Compile Include="SectorWarehouse\ESectorWarehouse.cs" />
+    <Compile Include="SectorWarehouse\EUbicacionesXEstante.cs" />
+    <Compile Include="SectorWarehouse\EUbicacionXSector.cs" />
+    <Compile Include="SectorWarehouse\NSectorWareHouse.cs" />
+    <Compile Include="Sincronizador\n_Sincronizador.cs" />
+    <Compile Include="SSCC\SSCCLoader.cs" />
+    <Compile Include="Tareas\N_TareaUsuario.cs" />
+    <Compile Include="TRAIngresoSalidaArticulos\TRAIngresoSalidaArticulosLoader.cs" />
+    <Compile Include="TRAIngresoSalida\N_TRAIngresoSalida.cs" />
+    <Compile Include="TRAIngresoSalida\N_TRAResumen.cs" />
+    <Compile Include="Traslados\n_Traslados.cs" />
+    <Compile Include="Trazabilidad\N_ArticuloTrazabilidad.cs" />
+    <Compile Include="Trazabilidad\N_Despachos.cs" />
+    <Compile Include="Trazabilidad\N_Lotes.cs" />
+    <Compile Include="UsoGeneral\n_ConsultaDummy.cs" />
+    <Compile Include="UsoGeneral\n_SmartMaintenance.cs" />
+    <Compile Include="Usuarios\n_Usuario.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Diverscan.MJP.AccesoDatos\TRACEID.AccesoDatos.csproj">
+      <Project>{ee1ef192-9089-4689-acc2-22922a485e47}</Project>
+      <Name>TRACEID.AccesoDatos</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Diverscan.MJP.Entidades\TRACEID.Entidades.csproj">
+      <Project>{7F85C5B8-7FE4-471F-98A9-2E6AAA9CF258}</Project>
+      <Name>TRACEID.Entidades</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Diverscan.MJP.Utilidades\TRACEID.Utilidades.csproj">
+      <Project>{C829BFF2-98AB-4D2D-8364-7EE6B3005304}</Project>
+      <Name>TRACEID.Utilidades</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

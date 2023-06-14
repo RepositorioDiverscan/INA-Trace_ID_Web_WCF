@@ -1,0 +1,44 @@
+
+#####################################
+CAMPOS A IGNORAR
+#####################################
+Campos a ignorar:
+	Lote,
+	ubicacion,
+	Usuario
+
+
+
+#####################################
+CAMPOS PARA AGRUPAR
+#####################################
+	IdInterno*.
+	El artículo*.
+	FechaRegistro Dia*.
+
+
+
+#####################################
+Grid AJUSTES DE INVENTARIO MACRO
+#####################################
+Ajustes de iventario: 
+	Todo lo que cambia la cantidad en inventario
+
+	-Recepciones
+	-Ajustes entrada.
+	-Ajustes salida.
+	-Despachos.**
+
+
+
+#####################################
+Grid DESPACHOS
+#####################################
+
+Despachos realizados:
+	-
+
+
+
+UNIDAD MEDIDA
+SELECT vDXA.DISPONIBLES * MA.PesoKilos AS Disponible,SUBSTRING(MA.Unidad_Medida,CHARINDEX('-',MA.Unidad_Medida)+1,20) " 

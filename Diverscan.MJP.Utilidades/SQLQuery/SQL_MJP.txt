@@ -1,0 +1,3493 @@
+﻿USE [TEST_MJP_ALMACEN]
+GO
+/****** Object:  StoredProcedure [dbo].[InsertarDetalleCantidadPorUbicacion]    Script Date: 08/30/2013 16:39:30 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+ALTER PROCEDURE [dbo].[InsertarDetalleCantidadPorUbicacion]
+	@IdMaestroUbicacion int,		
+	@numeroGTIN varchar(200),
+	@Cantidad int,
+	@CodigoUbicacion varchar(200),
+	@programa smallint
+	
+AS
+BEGIN TRY
+BEGIN TRANSACTION
+    DECLARE 
+    @IdSaldoUbicacion int,
+    @idInventario int,
+    @IdCodigoInterno bigint,    
+    @idCatalogo bigint,    
+    @cantAux int
+    
+    SET @IdCodigoInterno = 
+    (select ma1.codigoInterno from MaestroArticuloN1 ma1
+     inner join MaestroArticuloN2 ma2 on 
+     ma2.idCodigoInterno = ma1.codigoInterno 
+     inner join GTIN_13 g13 on
+     g13.idGTIN13 = ma2.GTIN13 
+     inner join Programa p on
+     p.IdPrograma = ma2.idPrograma
+     where g13.numeroGTIN = @numeroGTIN and p.IdPrograma = @programa)    
+    
+    IF EXISTS (select top 1 * from Volatil_Inventario 
+               where codigoInterno = @IdCodigoInterno and programa = @programa and tipoEstado = 7)
+    BEGIN 
+        update Volatil_Inventario set cantidad -= @Cantidad where codigoInterno = @IdCodigoInterno and programa = @programa and tipoEstado = 7
+        SET @cantAux = (select top 1 cantidad from Volatil_Inventario where codigoInterno = @IdCodigoInterno and programa = @programa and tipoEstado = 7) 
+        
+        IF @cantAux <= 0 
+        BEGIN
+             delete from Volatil_Inventario where codigoInterno = @IdCodigoInterno and programa = @programa and tipoEstado = 7   
+        END
+             
+        SET @idCatalogo = (select codigoMaterial from Relacional_1 where codigoInterno = @IdCodigoInterno)             
+        insert into Inventario (IdCodInterno,idCatalogo,Cantidad,IdTipoEstado,programa)
+        values (@IdCodigoInterno,@idCatalogo,@Cantidad,8,@programa)
+        SET @idInventario = @@IDENTITY            
+         
+         
+        IF @CodigoUbicacion <> 'NA'
+        BEGIN
+             SET @IdMaestroUbicacion = (select IdMaestroUbicacion from MaestroUbicacion 
+                                         where IdCodigoInterno = @CodigoUbicacion)
+        END
+         
+        IF EXISTS (select * from SaldoPorUbicacion s
+                   inner join Relacional_2 r2 on
+                   r2.IdSaldoUbicacion = s.IdSaldoUbicacion and
+                   r2.IdMaestroUbicacion = @IdMaestroUbicacion
+                   where s.IdInventario = @idInventario)
+        BEGIN
+              update SaldoPorUbicacion set Cantidad += @Cantidad 
+              where IdInventario = @idInventario
+        END
+        ELSE
+        BEGIN
+              insert into SaldoPorUbicacion (IdInventario,Cantidad) values(@idInventario,@Cantidad)
+              set @IdSaldoUbicacion = @@IDENTITY
+              insert into Relacional_2 (IdMaestroUbicacion,IdSaldoUbicacion) values (@IdMaestroUbicacion,@IdSaldoUbicacion)
+        END
+        exec ActualizaSaldoActual @IdMaestroUbicacion  
+     END          
+COMMIT TRANSACTION
+END TRY
+BEGIN CATCH
+ROLLBACK TRANSACTION
+END CATCH
+
+/****** Object:  StoredProcedure [dbo].[insertar_Volatil_Inventario_HH]    Script Date: 09/06/2013 08:56:11 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER PROCEDURE [dbo].[insertar_Volatil_Inventario_HH]
+
+@codigoInterno varchar(100),
+@cantidad varchar(100)
+
+AS
+BEGIN
+
+DECLARE @idPrograma varchar(100)
+
+SET @idPrograma = (SELECT Top 1 idPrograma FROM MaestroArticuloN2 WHERE idCodigoInterno = @codigoInterno)
+
+
+IF EXISTS( SELECT codigoInterno FROM Volatil_Inventario WHERE codigoInterno = @codigoInterno AND programa = @idPrograma)
+	BEGIN
+	
+		UPDATE Volatil_Inventario
+		SET Cantidad = Cantidad + Cast(@Cantidad as int)
+		WHERE codigoInterno = @codigoInterno AND programa = @idPrograma
+		
+	END
+ELSE
+	BEGIN
+		INSERT INTO Volatil_Inventario
+           ([codigoInterno]
+           ,[cantidad]
+           ,[tipoEstado]
+           ,[programa])
+		 VALUES
+			   (@codigoInterno
+			   ,@cantidad
+			   ,'7'
+			   ,@idPrograma)
+	END
+
+END
+
+
+GO
+
+
+
+
+---------------(09-09-2013)---------------------
+
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+
+CREATE PROCEDURE [dbo].[GetDetalletOrden_WEB]
+
+@noPedido varchar(50)
+
+AS
+BEGIN
+	SELECT
+		dc.idDetalleCompra,
+		dc.idOrdenCompra,
+		dc.NumLinea,
+		dc.Material,
+		MA1.descripcionLarga as codInterno,
+		MA1.descripcionLarga as Denominacion,
+		dc.Cantidad
+	FROM Detalle_Compra dc
+	INNER JOIN Orden_Compra oc
+		ON dc.idOrdenCompra = oc.idOrdenCompra
+	INNER JOIN MaestroArticuloN1 MA1
+		ON MA1.codigoInterno = dc.Denominacion
+	WHERE 
+		oc.NumPedido = @noPedido
+END
+
+GO
+
+-----------------------------------------------------------------
+
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+
+
+INSERT INTO Catalogo_Descripcion
+           ([Descripcion])
+     VALUES
+           ('Catalogo OrdenCompra')
+GO
+INSERT INTO Catalogo_Estados
+           ([Nombre]
+           ,[IdCatalogo_Descripcion])
+     VALUES
+           ('Pendiente'
+           ,'6')
+GO
+INSERT INTO Catalogo_Estados
+           ([Nombre]
+           ,[IdCatalogo_Descripcion])
+     VALUES
+           ('Lista para recibir'
+           ,'6')
+GO
+
+ALTER PROCEDURE [dbo].[GetOrdenesPorNumYEstado]
+
+@Estado varchar(10),
+@Numero varchar(20)
+
+AS
+BEGIN
+select
+oc.NumPedido,
+oc.TramiteCompra,
+oc.NomProveedor,
+eo.Nombre AS Estado
+from Orden_Compra oc
+inner join Catalogo_Estados eo
+on oc.IdEstado = eo.IdCatalogo_Estados
+
+where oc.IdEstado = @Estado and oc.NumPedido like '%' + @Numero + '%'
+
+
+END
+
+GO
+
+ALTER PROCEDURE [dbo].[GetOrdenesPorDatoYEstado]
+
+@Estado varchar(10),
+@Dato varchar(200)
+
+AS
+BEGIN
+select
+oc.NumPedido,
+oc.TramiteCompra,
+oc.NomProveedor,
+eo.Nombre AS Estado
+from Orden_Compra oc
+inner join Catalogo_Estados eo
+on oc.IdEstado = eo.IdCatalogo_Estados
+
+where oc.IdEstado = @Estado and (
+oc.NumPedido like '%' + @Dato  + '%' or
+oc.TramiteCompra like '%' + @Dato  + '%' or
+oc.NomProveedor like  '%' + @Dato + '%'
+)
+
+
+END
+
+GO
+
+CREATE PROCEDURE VerificarOrdenParaAlistar
+@NumPedido varchar(100)
+as
+BEGIN
+SELECT COUNT(*)
+	FROM Detalle_Compra dc
+	INNER JOIN Orden_Compra oc
+		ON dc.idOrdenCompra = oc.idOrdenCompra
+	INNER JOIN MaestroArticuloN1 MA1
+		ON MA1.codigoInterno = dc.Denominacion
+	WHERE 
+		oc.NumPedido = @noPedido
+	and codigoInterno is null
+END
+
+GO
+
+CREATE PROCEDURE updAutorizarOrdenCompra_WEB
+@NumPedido VARCHAR(100)
+AS
+BEGIN
+	
+	UPDATE Orden_Compra
+		SET IdEstado = '19'
+	WHERE NumPedido = @NumPedido
+
+END
+
+GO
+
+ALTER PROCEDURE [dbo].[GetOrdenesPorNum]
+
+--@Estado varchar(10),
+@Numero varchar(20)
+
+AS
+BEGIN
+select
+oc.NumPedido,
+oc.TramiteCompra,
+oc.NomProveedor,
+eo.Nombre AS Estado
+from Orden_Compra oc
+inner join Catalogo_Estados eo
+on oc.IdEstado = eo.IdCatalogo_Estados
+
+where oc.NumPedido like '%'+@Numero+'%'
+
+
+END
+
+GO
+
+ALTER PROCEDURE [dbo].[GetOrdenesPorDato]
+
+--@Estado varchar(10),
+@Dato varchar(200)
+
+AS
+BEGIN
+select
+oc.NumPedido,
+oc.TramiteCompra,
+oc.NomProveedor,
+eo.Nombre AS Estado
+from Orden_Compra oc
+inner join Catalogo_Estados eo
+on oc.IdEstado = eo.IdCatalogo_Estados
+where (
+oc.TramiteCompra like '%' + @Dato  + '%' or
+oc.NomProveedor like  '%' + @Dato + '%' or
+eo.Nombre like  '%' + @Dato + '%' or
+oc.NumPedido like  '%' + @Dato + '%'
+)
+
+
+END
+
+GO
+
+
+CREATE PROCEDURE GetArticulosxCriterio_WEB
+
+@CRITERIO VARCHAR(100),
+@DATO VARCHAR (100)
+AS
+BEGIN
+	--DECLARE @CRITERIO VARCHAR(100)
+	--DECLARE @DATO VARCHAR (100)
+	
+	--set @CRITERIO = '2'
+	--set @DATO = 'AIRE ACONDICIONADO'
+	Declare @selected varchar(MAX)
+
+	set @selected = 
+	'SELECT 
+	ma1.codigoInterno,
+	ma1.idUnidadEmpaque,
+	ma1.idTipoEmpaque,
+	ma1.idUnidadMedida,
+	ma1.descripcionLarga,
+	ma1.descripconCorta
+	FROM MaestroArticuloN1 ma1
+	inner join MaestroArticuloN2 ma2
+	on ma1.codigoInterno = ma2.idCodigoInterno
+	inner join GTIN_13 g13
+	on ma2.GTIN13 = g13.idGTIN13'
+
+	IF(@CRITERIO = '0')
+	BEGIN
+		set @selected = @selected + 
+		' where g13.numeroGTIN = '''+@DATO+''' '
+	END
+	ELSE IF(@CRITERIO = '1')
+	BEGIN
+		set @selected = @selected + 
+		' inner join Relacional_GTIN rg 
+		  on rg.idGTIN13 = g13.idGTIN13 
+		  inner join GTIN_14 g14 
+		  on g14.idGTIN14 = rg.idGTIN14' +
+		' where g14.numeroGTIN = '''+@DATO+''' '
+	END
+	ELSE IF(@CRITERIO = '2')
+	BEGIN
+		set @selected = @selected + 
+		' where ma1.descripconCorta like ''%'' + '''+@DATO+''' + ''%'' or ma1.descripcionLarga like ''%'' + '''+@DATO+''' + ''%'' '
+	END
+	ELSE IF(@CRITERIO = '3')
+	BEGIN
+		set @selected = @selected + 
+		' where ma1.codigoInterno like ''%'' + '''+@DATO+''' + ''%'' '
+	END
+	ELSE IF(@CRITERIO = '4')
+	BEGIN
+		set @selected = @selected
+	END
+	
+	EXEC(@selected)
+END
+
+GO
+
+ALTER PROCEDURE [dbo].[VerificarOrdenParaAlistar]
+@NumPedido varchar(100)
+as
+BEGIN
+SELECT COUNT(*)
+	FROM Detalle_Compra dc
+	INNER JOIN Orden_Compra oc
+		ON dc.idOrdenCompra = oc.idOrdenCompra
+	INNER JOIN MaestroArticuloN1 MA1
+		ON MA1.codigoInterno = dc.Denominacion
+	WHERE 
+		oc.NumPedido = @NumPedido
+	and codigoInterno is null
+	and oc.idPrograma is not null
+END
+
+GO
+
+CREATE PROCEDURE updAddPrograma_Orden_WEB
+
+@idPrograma VARCHAR(100),
+@NumPedido VARCHAR(100)
+
+AS
+BEGIN
+
+	UPDATE Orden_Compra
+	   SET [idPrograma] = @idPrograma
+	 WHERE NumPedido = @NumPedido
+ 
+END
+
+GO
+
+ALTER PROCEDURE [dbo].[GeDetalletOrden_HH]
+
+@noPedido varchar(50)
+
+AS
+BEGIN
+	SELECT
+		dc.idDetalleCompra,
+		dc.idOrdenCompra,
+		dc.NumLinea,
+		dc.Material,
+		dc.Denominacion as codInterno,
+		MA1.descripcionLarga as Denominacion,
+		dc.Cantidad,
+		oc.idPrograma
+	FROM Detalle_Compra dc
+	INNER JOIN Orden_Compra oc
+		ON dc.idOrdenCompra = oc.idOrdenCompra
+	INNER JOIN MaestroArticuloN1 MA1
+		ON MA1.codigoInterno = dc.Denominacion
+	WHERE 
+		oc.NumPedido = @noPedido
+END
+
+GO
+
+CREATE PROCEDURE GetGTIN13_de_CodInterno
+
+@idCodigoInterno VARCHAR(100),
+@Programa VARCHAR(100)
+
+AS
+BEGIN
+	select numeroGTIN from MaestroArticuloN2 m2
+	inner join GTIN_13 g13
+	on m2.GTIN13 = g13.idGTIN13
+	where idCodigoInterno = @idCodigoInterno and idPrograma = @Programa and g13.esVirtual is null
+END
+
+GO
+
+CREATE PROCEDURE Vincular_GTIN13conGTIN14_HH
+
+@GTIN13 varchar(100),
+@numeroGTIN VARCHAR(100),
+@cantidad VARCHAR(100)
+
+AS
+BEGIN
+DECLARE @idGTIN13 varchar(100)
+DECLARE @idGTIN14 varchar(100)
+
+INSERT INTO GTIN_14
+           ([numeroGTIN]
+           ,[esInterno]
+           ,[cantidad])
+     VALUES
+           (@numeroGTIN
+           ,'False'
+           ,@cantidad)
+           
+set @idGTIN14 = (select @@IDENTITY)
+
+set @idGTIN13 = (select idGTIN13 from GTIN_13 where numeroGTIN = @GTIN13)
+
+
+INSERT INTO Relacional_GTIN
+           ([idGTIN13]
+           ,[idGTIN14])
+     VALUES
+
+           (@idGTIN13
+           ,@idGTIN14)
+END
+
+END
+
+------------------------------------------------------------------------------------------------------------------
+USE [TEST_MJP_WMS]
+GO
+/****** Object:  StoredProcedure [dbo].[InsertarEstante]    Script Date: 09/12/2013 10:37:15 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER PROCEDURE [dbo].[InsertarEstante]
+	-- Add the parameters for the stored procedure here
+	@Nombre varchar(10),	
+	@IdBodega int,
+	@Fila int,
+	@Columna int,
+	@Pos int,
+	@Profundidad int,
+	@Largo float,
+	@AreaAncho float,
+	@Alto float,
+	@NombreAlmacen varchar(10),
+	@NombreBodega varchar(10),
+	@Cara int
+	
+AS
+BEGIN TRY
+BEGIN TRANSACTION
+    DECLARE 
+    @aux1 int,
+    @aux2 int,
+    @identity int,
+    @codigo varchar(30)
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for procedure here
+    SET @aux1 = 1   
+    WHILE (@aux1 <= @Fila)
+    BEGIN
+         SET @aux2 = 1
+         WHILE (@aux2 <= @Columna)
+         BEGIN
+              IF @Cara = 0
+              BEGIN
+                   INSERT INTO Estante (IdBodega,nombre,fila,columna,pos,largo,areaAncho,alto,cara,profundidad) VALUES (@IdBodega,@Nombre,@aux1,@aux2,@Pos,@Largo,@AreaAncho,@Alto,'CA',@Profundidad)              
+                   SET @identity = @@Identity
+                   SET @codigo = '(91)' + @NombreAlmacen + @NombreBodega + @Nombre + 'CA' + 'F0' + CAST(@aux1 as varchar(10)) + 'C0' + CAST(@aux2 as varchar(10)) + 'P0' + 'D0'
+                   INSERT INTO MaestroUbicacion (IdCodigoInterno,IdEstante) VALUES (@codigo,@identity) 
+                   SET @identity = @@Identity
+                   INSERT INTO DetalleCantidadPorUbicacion (IdMaestroUbicacion,SaldoActual) VALUES (@identity,0) 
+                   IF @Pos <> 0
+                   BEGIN
+                        exec InsertarPosicionEstante @Nombre,'CA',@IdBodega,@aux1,@aux2,@NombreBodega,@NombreAlmacen
+                   END                 
+              END
+              ELSE
+              BEGIN
+                   INSERT INTO Estante (IdBodega,nombre,fila,columna,pos,largo,areaAncho,alto,cara,profundidad) VALUES (@IdBodega,@Nombre,@aux1,@aux2,@Pos,@Largo,@AreaAncho,@Alto,'CA',@Profundidad)              
+                   SET @identity = @@Identity
+                   SET @codigo = '(91)' + @NombreAlmacen + @NombreBodega + @Nombre + 'CA' + 'F0' + CAST(@aux1 as varchar(10)) + 'C0' + CAST(@aux2 as varchar(10)) + 'P0' + 'D0'
+                   INSERT INTO MaestroUbicacion (IdCodigoInterno,IdEstante) VALUES (@codigo,@identity)
+                   SET @identity = @@Identity 
+                   INSERT INTO DetalleCantidadPorUbicacion (IdMaestroUbicacion,SaldoActual) VALUES (@identity,0)
+                   IF @Pos <> 0
+                   BEGIN
+                        exec InsertarPosicionEstante @Nombre,'CA',@IdBodega,@aux1,@aux2,@NombreBodega,@NombreAlmacen
+                   END     
+                   
+                   INSERT INTO Estante (IdBodega,nombre,fila,columna,pos,largo,areaAncho,alto,cara,profundidad) VALUES (@IdBodega,@Nombre,@aux1,@aux2,@Pos,@Largo,@AreaAncho,@Alto,'CB',@Profundidad)              
+                   SET @identity = @@Identity
+                   SET @codigo = '(91)' + @NombreAlmacen + @NombreBodega + @Nombre + 'CB' + 'F0' + CAST(@aux1 as varchar(10)) + 'C0' + CAST(@aux2 as varchar(10)) + 'P0' + 'D0'
+                   INSERT INTO MaestroUbicacion (IdCodigoInterno,IdEstante) VALUES (@codigo,@identity) 
+                   SET @identity = @@Identity
+                   INSERT INTO DetalleCantidadPorUbicacion (IdMaestroUbicacion,SaldoActual) VALUES (@identity,0)
+                   IF @Pos <> 0
+                   BEGIN
+                        exec InsertarPosicionEstante @Nombre,'CB',@IdBodega,@aux1,@aux2,@NombreBodega,@NombreAlmacen
+                   END     
+              END
+              SET @aux2 = @aux2 + 1
+         END 
+         SET @aux1 = @aux1 + 1    
+    END	
+COMMIT TRANSACTION
+END TRY
+BEGIN CATCH
+
+ROLLBACK TRANSACTION
+END CATCH
+
+-------------------------------------------------------------------------------------------
+
+USE [PROD_MJP_WMS]
+GO
+/****** Object:  StoredProcedure [dbo].[InsertarPosicionEstante]    Script Date: 09/12/2013 11:11:48 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+ALTER PROCEDURE [dbo].[InsertarPosicionEstante] 
+	-- Add the parameters for the stored procedure here
+	@Nombre varchar(10),
+	@Cara varchar(10),
+	@IdBodega int,	
+	@Fila int,
+	@Columna int,
+	@NombreBodega varchar(10),
+	@NombreAlmacen varchar(10)	
+AS
+BEGIN TRY
+BEGIN TRANSACTION
+DECLARE 
+@codigo varchar(30),
+@identity bigint
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for procedure here
+    IF NOT EXISTS(select * from Estante where nombre = @Nombre and cara = @Cara and fila = @Fila and columna = @Columna and pos = 1)
+    BEGIN
+    
+	INSERT INTO Estante (IdBodega,nombre,cara,fila,columna,pos,profundidad,largo,areaAncho,alto) 
+	VALUES (@IdBodega,@Nombre,@Cara,@Fila,@Columna,1,0,0.0,0.0,0.0)
+	SET @identity = @@IDENTITY
+	SET @codigo = '(91)' + @NombreAlmacen + @NombreBodega + @Nombre + @Cara + 'F0' + CAST(@Fila as varchar(10)) + 'C0' + CAST(@Columna as varchar(10)) + 'P1' + 'D0' 	
+	INSERT INTO MaestroUbicacion (IdCodigoInterno,IdEstante) VALUES (@codigo,@identity)
+	SET @identity = @@IDENTITY
+	INSERT INTO DetalleCantidadPorUbicacion (IdMaestroUbicacion,SaldoActual) VALUES (@identity,0)
+	
+	
+	INSERT INTO Estante (IdBodega,nombre,cara,fila,columna,pos,profundidad,largo,areaAncho,alto) 
+	VALUES (@IdBodega,@Nombre,@Cara,@Fila,@Columna,2,0,0.0,0.0,0.0)
+	SET @identity = @@IDENTITY
+	SET @codigo = '(91)' + @NombreAlmacen + @NombreBodega + @Nombre + @Cara + 'F0' + CAST(@Fila AS varchar(10)) + 'C0' + CAST(@Columna AS varchar(10)) + 'P2' + 'D0'	
+	INSERT INTO MaestroUbicacion (IdCodigoInterno,IdEstante) VALUES (@codigo,@identity)
+	SET @identity = @@IDENTITY
+	INSERT INTO DetalleCantidadPorUbicacion (IdMaestroUbicacion,SaldoActual) VALUES (@identity,0)
+	
+	SET @codigo = '(91)' + @NombreAlmacen + @NombreBodega + @Nombre + @Cara + 'F0' + CAST(@Fila AS varchar(10)) + 'C0' + CAST(@Columna AS varchar(10)) + 'P0' + 'D0'	
+ 	DECLARE @idM bigint
+ 	SET @idM = (select IdMaestroUbicacion from MaestroUbicacion where IdCodigoInterno = @codigo)
+ 	DELETE FROM DetalleCantidadPorUbicacion where IdMaestroUbicacion = @idM
+ 	DELETE FROM MaestroUbicacion WHERE IdCodigoInterno = @codigo 	
+	DELETE from Estante where nombre = @Nombre and cara = @Cara and fila = @Fila and columna = @Columna and pos = 0
+		
+	END
+COMMIT TRANSACTION
+END TRY
+BEGIN CATCH
+SELECT ERROR_MESSAGE()
+SELECT ERROR_LINE()
+ROLLBACK TRANSACTION
+END CATCH
+
+-------------------------------------------------------------------------------------------------------------------------
+
+USE [TEST_MJP_ALMACEN]
+GO
+/****** Object:  StoredProcedure [dbo].[Insertar_Inventario_Pend]    Script Date: 09/12/2013 09:33:48 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+ALTER PROCEDURE [dbo].[Insertar_Inventario_Pend]
+	-- Add the parameters for the stored procedure here
+	@codigoInterno varchar(100),
+	@programa smallint,
+	@ubicacion bigint,
+	@cantidad int,
+	@numeroGTIN varchar(200)
+	
+AS
+BEGIN TRY
+BEGIN TRANSACTION
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+	
+	IF EXISTS (select * from Relacional_1 where codigoInterno = @codigoInterno)
+	BEGIN			   
+        -- Insert statements for procedure here
+	    insert into Volatil_Inventario (codigoInterno,cantidad,tipoEstado,programa)
+	    values (@codigoInterno,@cantidad,7,@programa)
+	    exec InsertarDetalleCantidadPorUbicacion @ubicacion,@numeroGTIN,@cantidad,'NA',@programa
+	END
+COMMIT TRANSACTION
+END TRY
+BEGIN CATCH
+ROLLBACK TRANSACTION
+END CATCH
+
+--------------------------------------------------------------------------------------------------------
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <13-09-2013>
+-- Description:	<Description,,>
+-- =============================================
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+SET ANSI_PADDING ON
+GO
+
+CREATE TABLE [dbo].[tbl_Familias_Requerimientos](
+	[idFamReq] [int] IDENTITY(1,1) NOT NULL,
+	[idCatalogo] [bigint] NULL,
+	[Descripcion] [varchar](1000) NULL,
+	[ReqFechaVencimiento] [bit] NULL,
+	[ReqLote] [bit] NULL,
+ CONSTRAINT [PK_tbl_Familias_Requerimientos] PRIMARY KEY CLUSTERED 
+(
+	[idFamReq] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+ALTER TABLE [dbo].[tbl_Familias_Requerimientos]  WITH CHECK ADD  CONSTRAINT [FK_tbl_Familias_Requerimientos_Catalogo_CompraRed] FOREIGN KEY([idCatalogo])
+REFERENCES [dbo].[Catalogo_CompraRed] ([idCatalogo])
+GO
+
+ALTER TABLE [dbo].[tbl_Familias_Requerimientos] CHECK CONSTRAINT [FK_tbl_Familias_Requerimientos_Catalogo_CompraRed]
+GO
+
+
+CREATE PROCEDURE InsertarFamiliaRequerimiento
+
+@idCatalogo VARCHAR(100),
+@Descripcion VARCHAR(100),
+@ReqFechaVencimiento VARCHAR(100),
+@ReqLote VARCHAR(100)
+
+
+AS
+BEGIN
+
+INSERT INTO tbl_Familias_Requerimientos
+           ([idCatalogo]
+           ,[Descripcion]
+           ,[ReqFechaVencimiento]
+           ,[ReqLote])
+     VALUES
+           (@idCatalogo
+           ,@Descripcion
+           ,@ReqFechaVencimiento
+           ,@ReqLote)
+END
+GO
+
+CREATE PROCEDURE GetLoqueProducto
+
+@idCodigoInterno VARCHAR(100),
+@codigoMaterial VARCHAR(100)
+
+AS
+BEGIN
+
+	select 
+		c.idCatalogo,
+		c.codigoMaterial,
+		c.clase,
+		c.subClase,
+		c.clasificacion
+		
+	from Relacional_1 r1
+	inner join Catalogo_CompraRed c
+	on c.codigoMaterial = r1.codigoMaterial
+	
+	where r1.codigoInterno = @idCodigoInterno and c.codigoMaterial = @codigoMaterial
+	
+
+END
+GO
+
+create PROCEDURE GetFamiliaConRequerimientos
+
+
+AS
+BEGIN
+
+SELECT 
+ccr.idCatalogo,
+ccr.codigoMaterial,
+ccr.clase,
+ccr.subClase,
+ccr.mercancia,
+ccr.clasificacion,
+fr.ReqFechaVencimiento as reqFechaVencimiento,
+fr.ReqLote as reqLote
+
+FROM tbl_Familias_Requerimientos fr
+inner join Catalogo_CompraRed ccr
+on ccr.idCatalogo = fr.idCatalogo
+
+
+
+END
+
+create PROCEDURE [dbo].[GetListadoCatalogo]
+
+@clase varchar(100),
+@subclase varchar(100),
+@tipo varchar(10)
+
+AS
+BEGIN
+
+	if(@tipo = '1')
+	begin
+		select idCatalogo from Catalogo_CompraRed
+		where clase = @clase and subClase = @subclase
+	end
+	
+	else if(@tipo = '2')
+	begin
+		select idCatalogo from Catalogo_CompraRed
+		where clase = @clase
+	end
+END
+
+create PROCEDURE Verificar_Fam_Req
+
+@codigoIntero varchar(100),
+@codigoMaterial varchar(100)
+
+AS
+BEGIN
+	DECLARE @idCatlogo VARCHAR(100)
+	set @idCatlogo = (select idCatalogo from Catalogo_CompraRed where codigoMaterial = @codigoMaterial)
+		
+	select 
+	fr.idCatalogo,
+	fr.ReqFechaVencimiento,
+	fr.ReqLote
+		
+	from tbl_Familias_Requerimientos fr
+	where idCatalogo = @idCatlogo
+
+END
+
+
+---------------------------------------------------------
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <17-09-2013>
+-- Description:	<Description,,>
+-- =============================================
+CREATE PROCEDURE insertarMaestroEmbarque 
+
+@idEmbarque VARCHAR(100) = NULL,
+@NumOrden VARCHAR(100),
+@Proveedor VARCHAR(100),
+@FechaEntrega VARCHAR(100)
+
+AS
+BEGIN
+	
+	IF NOT EXISTS(SELECT idEmbarque FROM Maestro_Embarque WHERE idEmbarque = @idEmbarque)
+	BEGIN
+		INSERT INTO Maestro_Embarque
+			   ([NumOrden]
+			   ,[Proveedor]
+			   ,[FechaEntrega])
+		 VALUES
+			   (@NumOrden,
+				@Proveedor,
+				@FechaEntrega)
+				
+		SELECT @@IDENTITY
+	END
+END
+
+
+CREATE PROCEDURE insertarDetalleEmbarque 
+
+@idEmbarque VARCHAR(100),
+@CodigoPresupuestario VARCHAR(100),
+@DescripcionPrimario VARCHAR(100),
+@UnidadMedidaPrim VARCHAR(100),
+@CodigoEmpaquePrim VARCHAR(100),
+@TotalUnidadesPrim VARCHAR(100),
+@DescripcionSecudario VARCHAR(100),
+@CodigoEmpaqueSec VARCHAR(100),
+@CantEmpaqueSec VARCHAR(100),
+@EmbalajeEmpaqueSec VARCHAR(100),
+@TotalUnidadesSec VARCHAR(100),
+@CodigoEmpaqueTer VARCHAR(100),
+@EmbalajeEmpaqueTer VARCHAR(100),
+@Lote VARCHAR(100),
+@FechaVencimiento VARCHAR(100)
+
+
+AS
+BEGIN
+
+	INSERT INTO Detalle_Embarque
+			   ([idEmbarque]
+			   ,[CodigoPresupuestario]
+			   ,[DescripcionPrimario]
+			   ,[UnidadMedidaPrim]
+			   ,[CodigoEmpaquePrim]
+			   ,[TotalUnidadesPrim]
+			   ,[DescripcionSecudario]
+			   ,[CodigoEmpaqueSec]
+			   ,[CantEmpaqueSec]
+			   ,[EmbalajeEmpaqueSec]
+			   ,[TotalUnidadesSec]
+			   ,[CodigoEmpaqueTer]
+			   ,[EmbalajeEmpaqueTer]
+			   ,[Lote]
+			   ,[FechaVencimiento])
+		 VALUES
+			   (@idEmbarque,
+				@CodigoPresupuestario,
+				@DescripcionPrimario,
+				@UnidadMedidaPrim,
+				@CodigoEmpaquePrim,
+				@TotalUnidadesPrim,
+				@DescripcionSecudario,
+				@CodigoEmpaqueSec,
+				@CantEmpaqueSec,
+				@EmbalajeEmpaqueSec,
+				@TotalUnidadesSec,
+				@CodigoEmpaqueTer,
+				@EmbalajeEmpaqueTer,
+				@Lote,
+				@FechaVencimiento )
+	
+END
+
+CREATE PROCEDURE GetAvisosPorDato
+
+	@Dato VARCHAR(100) = NULL,
+	@Criterio VARCHAR(2)
+
+AS
+BEGIN
+
+	if(@Criterio = '0')
+	begin
+		SELECT * FROM Maestro_Embarque
+		WHERE NumOrden like '%'+@Dato+'%'
+	end
+
+	if(@Criterio = '1')
+	begin
+		SELECT * FROM Maestro_Embarque
+		WHERE Proveedor like '%'+@Dato+'%'
+	end
+
+	if(@Criterio = '2')
+	begin
+		SELECT * FROM Maestro_Embarque
+		WHERE NumEntrega like '%'+@Dato+'%'
+	end
+	
+	if(@Dato is null or @Dato = '')
+	begin
+		SELECT * FROM Maestro_Embarque
+	end
+	
+	if(@Criterio = '9')
+	begin
+		SELECT * FROM Maestro_Embarque
+		WHERE idEmbarque = @Dato
+	end
+	
+END
+
+
+ALTER TABLE Estante ADD TipoImpresion INT NULL
+
+
+ALTER PROCEDURE [dbo].[InsertarEstante]
+	-- Add the parameters for the stored procedure here
+	@Nombre varchar(10),	
+	@IdBodega int,
+	@Fila int,
+	@Columna int,
+	@Pos int,
+	@Profundidad int,
+	@Largo float,
+	@AreaAncho float,
+	@Alto float,
+	@NombreAlmacen varchar(10),
+	@NombreBodega varchar(10),
+	@Cara int,
+	@TipoImpresion int
+	
+AS
+BEGIN TRY
+BEGIN TRANSACTION
+    DECLARE 
+    @aux1 int,
+    @aux2 int,
+    @identity int,
+    @codigo varchar(30)
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for procedure here
+    SET @aux1 = 1   
+    WHILE (@aux1 <= @Fila)
+    BEGIN
+         SET @aux2 = 1
+         WHILE (@aux2 <= @Columna)
+         BEGIN
+              IF @Cara = 0
+              BEGIN
+                   INSERT INTO Estante (
+					IdBodega,
+					nombre,
+					fila,
+					columna,
+					pos,
+					largo,
+					areaAncho,
+					alto,
+					cara,
+					profundidad,
+					TipoImpresion) 
+				   VALUES (
+				    @IdBodega,
+				    @Nombre,
+				    @aux1,
+				    @aux2,
+				    @Pos,
+				    @Largo,
+				    @AreaAncho,
+				    @Alto,
+				    'CA',
+				    @Profundidad,
+				    @TipoImpresion)              
+                   SET @identity = @@Identity
+                   SET @codigo = '(91)' + @NombreAlmacen + @NombreBodega + @Nombre + 'CA' + 'F0' + CAST(@aux1 as varchar(10)) + 'C0' + CAST(@aux2 as varchar(10)) + 'P0' + 'D0'
+                   INSERT INTO MaestroUbicacion (IdCodigoInterno,IdEstante) VALUES (@codigo,@identity) 
+                   SET @identity = @@Identity
+                   INSERT INTO DetalleCantidadPorUbicacion (IdMaestroUbicacion,SaldoActual) VALUES (@identity,0)                  
+              END
+              ELSE
+              BEGIN
+                   INSERT INTO Estante (IdBodega,nombre,fila,columna,pos,largo,areaAncho,alto,cara,profundidad,TipoImpresion) VALUES (@IdBodega,@Nombre,@aux1,@aux2,@Pos,@Largo,@AreaAncho,@Alto,'CA',@Profundidad,@TipoImpresion)              
+                   SET @identity = @@Identity
+                   SET @codigo = '(91)' + @NombreAlmacen + @NombreBodega + @Nombre + 'CA' + 'F0' + CAST(@aux1 as varchar(10)) + 'C0' + CAST(@aux2 as varchar(10)) + 'P0' + 'D0'
+                   INSERT INTO MaestroUbicacion (IdCodigoInterno,IdEstante) VALUES (@codigo,@identity)
+                   SET @identity = @@Identity 
+                   INSERT INTO DetalleCantidadPorUbicacion (IdMaestroUbicacion,SaldoActual) VALUES (@identity,0)     
+                   
+                   INSERT INTO Estante (IdBodega,nombre,fila,columna,pos,largo,areaAncho,alto,cara,profundidad,TipoImpresion) VALUES (@IdBodega,@Nombre,@aux1,@aux2,@Pos,@Largo,@AreaAncho,@Alto,'CB',@Profundidad,@TipoImpresion)              
+                   SET @identity = @@Identity
+                   SET @codigo = '(91)' + @NombreAlmacen + @NombreBodega + @Nombre + 'CB' + 'F0' + CAST(@aux1 as varchar(10)) + 'C0' + CAST(@aux2 as varchar(10)) + 'P0' + 'D0'
+                   INSERT INTO MaestroUbicacion (IdCodigoInterno,IdEstante) VALUES (@codigo,@identity) 
+                   SET @identity = @@Identity
+                   INSERT INTO DetalleCantidadPorUbicacion (IdMaestroUbicacion,SaldoActual) VALUES (@identity,0)     
+              END
+              SET @aux2 = @aux2 + 1
+         END 
+         SET @aux1 = @aux1 + 1    
+    END	
+COMMIT TRANSACTION
+END TRY
+BEGIN CATCH
+
+ROLLBACK TRANSACTION
+END CATCH
+
+
+ALTER PROCEDURE [dbo].[GetEstantesPorCara]
+	-- Add the parameters for the stored procedure here
+	@cara varchar(10),
+	@nombre varchar(10),
+	@IdBodega int
+	
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for procedure here
+	SELECT IdEstante,IdBodega,nombre,cara,fila,columna,pos,profundidad,largo,areaAncho,alto,TipoImpresion FROM Estante WHERE nombre = @Nombre  AND IdBodega = @IdBodega and cara = @cara
+	ORDER BY fila ASC
+END
+
+ALTER PROCEDURE [dbo].[GetEstantePorID]
+	-- Add the parameters for the stored procedure here
+	@IdEstante int
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for procedure here
+	SELECT IdEstante,IdBodega,nombre,cara,fila,columna,pos,profundidad,largo,areaAncho,alto,TipoImpresion FROM Estante WHERE IdEstante = @IdEstante
+	ORDER BY fila ASC
+END
+
+
+ALTER PROCEDURE [dbo].[GetEstantePorID]
+	-- Add the parameters for the stored procedure here
+	@IdEstante int
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for procedure here
+	SELECT IdEstante,IdBodega,nombre,cara,fila,columna,pos,profundidad,largo,areaAncho,alto,TipoImpresion FROM Estante WHERE IdEstante = @IdEstante
+	ORDER BY fila ASC
+END
+
+ALTER PROCEDURE [dbo].[GetEstantesPorNombre]
+	-- Add the parameters for the stored procedure here
+	@Nombre varchar(10),
+	@IdBodega int
+	
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for procedure here
+	SELECT IdEstante,IdBodega,nombre,cara,fila,columna,pos,profundidad,largo,areaAncho,alto,TipoImpresion FROM Estante WHERE nombre = @Nombre  AND IdBodega = @IdBodega
+	ORDER BY fila ASC
+END
+
+ALTER PROCEDURE [dbo].[Vincular_GTIN13_codInterno_HH]
+
+@idCodigoInterno varchar(100),
+@Programa varchar(100),
+@numGTIN13 varchar(100)
+
+AS 
+BEGIN
+
+DECLARE @idGTIN13 varchar(100)
+
+INSERT INTO GTIN_13
+           ([numeroGTIN]
+           ,[esInterno])
+     VALUES
+           (@numGTIN13
+           ,'False')
+Set @idGTIN13 = (Select @@IDENTITY)
+
+--UPDATE MaestroArticuloN2
+--   SET [GTIN13] = @idGTIN13
+-- WHERE idCodigoInterno = @idCodigoInterno and idPrograma = @Programa
+
+INSERT INTO [MaestroArticuloN2]
+           ([idCodigoInterno]
+           ,[GTIN13]
+           ,[idPrograma])
+     VALUES
+           (@idCodigoInterno
+           ,@idGTIN13
+           ,@Programa)
+
+
+END
+
+ALTER PROCEDURE [dbo].[insertarLoteProducto]
+
+@codigoInterno VARCHAR(100),
+@Programa VARCHAR(100),
+@GTIN VARCHAR(100),
+
+@fechaVencimiento VARCHAR(100),
+@numeroLote VARCHAR(100)
+
+AS
+BEGIN
+
+DECLARE @idGTIN13 varchar(100)
+set @idGTIN13 = (select idGTIN13 from GTIN_13 where numeroGTIN = @GTIN)
+
+IF EXISTS (
+SELECT * FROM MaestroArticuloN2 
+WHERE idCodigoInterno = @codigoInterno and idPrograma = @Programa and GTIN13 = @idGTIN13
+)
+BEGIN
+
+Declare @IdLoteProducto varchar(100)
+
+INSERT INTO LoteProducto
+           ([fechaVencimiento]
+           ,[numeroLote])
+     VALUES
+           (@fechaVencimiento
+           ,@numeroLote)
+set @IdLoteProducto = (select @@IDENTITY)
+
+
+Update MaestroArticuloN2
+	set idLoteProducto = @IdLoteProducto
+Where idCodigoInterno = @codigoInterno and idPrograma = @Programa and GTIN13 = @idGTIN13
+
+END
+END
+
+ALTER PROCEDURE [dbo].[insertarLoteProducto]
+
+@codigoInterno VARCHAR(100),
+@Programa VARCHAR(100),
+@GTIN VARCHAR(100),
+
+@fechaVencimiento VARCHAR(100),
+@numeroLote VARCHAR(100)
+
+AS
+BEGIN
+
+DECLARE @idGTIN13 varchar(100)
+set @idGTIN13 = (select idGTIN13 from GTIN_13 where numeroGTIN = @GTIN)
+
+IF EXISTS (
+SELECT * FROM MaestroArticuloN2 
+WHERE idCodigoInterno = @codigoInterno and idPrograma = @Programa and GTIN13 = @idGTIN13
+)
+BEGIN
+
+Declare @IdLoteProducto varchar(100)
+
+INSERT INTO LoteProducto
+           ([fechaVencimiento]
+           ,[numeroLote])
+     VALUES
+           (@fechaVencimiento
+           ,@numeroLote)
+set @IdLoteProducto = (select @@IDENTITY)
+
+
+Update MaestroArticuloN2
+	set idLoteProducto = @IdLoteProducto
+Where idCodigoInterno = @codigoInterno and idPrograma = @Programa and GTIN13 = @idGTIN13
+
+END
+END
+
+---------------------------------------------------------
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <04-10-2013>
+-- Description:	<Description,,>
+-- =============================================
+
+create procedure VerificarOrdenConPrograma --'2000'
+
+@idOrden varchar(100)
+
+as
+begin
+
+select COUNT(*) from Orden_Compra where NumPedido = @idOrden and idPrograma is not null
+
+end
+
+-- =============================================
+
+CREATE PROCEDURE GetOrdeCompraSSCC_HH
+
+@codeSSCC varchar(100)
+
+AS
+BEGIN
+
+	select top 1 me.NumOrden from Maestro_Embarque me
+	inner join Detalle_Embarque de
+	on me.idEmbarque = de.idEmbarque
+	
+	where de.CodigoEmpaqueTer = @codeSSCC
+	
+END
+
+-- =============================================
+
+CREATE PROCEDURE GetDetalleEmbarque_HH --'0188888888888888'
+
+@codeSSCC varchar(100)
+
+AS
+BEGIN
+
+	select
+		d.DescripcionPrimario,
+		d.TotalUnidadesPrim,
+		d.CodigoEmpaquePrim,
+		d.CodigoEmpaqueSec,
+		d.Lote,
+		d.FechaVencimiento
+		
+	from Detalle_Embarque d
+	where d.CodigoEmpaqueTer = @codeSSCC
+
+END
+
+--====================================================
+
+INSERT INTO Catalogo_Estados
+           ([Nombre]
+           ,[IdCatalogo_Descripcion])
+     VALUES
+           ('Plaqueo'
+           ,'1')
+           
+INSERT INTO Catalogo_Estados
+           ([Nombre]
+           ,[IdCatalogo_Descripcion])
+     VALUES
+           ('En recepcion'
+           ,'1')
+
+--====================================================
+
+ALTER proc [dbo].[InsertarDetalleCompra]
+
+@idOrdenCompra int
+,@NumLinea int
+,@Material varchar(150)
+,@Denominacion varchar(350)
+,@DescripcionPedido varchar(400)
+,@LugarEntrega varchar(350)
+,@Cantidad int
+,@UnidadMedida varchar(50)
+,@PrecioUnitario real
+,@MontoLinea real
+,@CentroGestor varchar(2000)
+,@PosPresupuestaria varchar(2000)
+,@NuSolicitud varchar(100)
+,@MontoSolicitud real
+,@MontoTotal real
+,@CondicionesGenerale  varchar(1000)
+,@ResponsablePovisional varchar(100)
+,@ResposnbleDeinitivo varchar(100)
+,@SolicitudPedido varchar(100)
+
+as
+
+INSERT INTO Detalle_Compra
+           (idOrdenCompra
+           ,NumLinea
+           ,Material
+           ,Denominacion
+           ,DescripcionPedido
+           ,LugarEntrega
+           ,Cantidad
+           ,CantOrden
+           ,UnidadMedida
+           ,PrecioUnitario
+           ,MontoLinea
+           ,CentroGestor
+           ,PosPresupuestaria
+           ,NuSolicitud
+           ,MontoSolicitud
+           ,MontoTotal
+           ,CondicionesGenerale
+           ,ResponsablePovisional
+           ,ResposnbleDeinitivo
+           ,SolicitudPedido)
+     VALUES
+           (@idOrdenCompra
+			,@NumLinea
+			,@Material
+			,@Denominacion
+			,@DescripcionPedido 
+			,@LugarEntrega
+			,@Cantidad
+			,@Cantidad
+			,@UnidadMedida
+			,@PrecioUnitario
+			,@MontoLinea
+			,@CentroGestor
+			,@PosPresupuestaria
+			,@NuSolicitud
+			,@MontoSolicitud
+			,@MontoTotal
+			,@CondicionesGenerale
+			,@ResponsablePovisional
+			,@ResposnbleDeinitivo
+			,@SolicitudPedido)
+
+--====================================================
+
+ALTER TABLE Detalle_Compra ADD CantOrden INT NULL ;
+
+--====================================================
+
+USE [TEST_MJP_ALMACEN]
+GO
+
+/****** Object:  Table [dbo].[Detalle_Requisicion]    Script Date: 11/14/2013 09:47:09 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+CREATE TABLE [dbo].[Detalle_Requisicion](
+	[idDetalleRequisicion] [int] IDENTITY(1,1) NOT NULL,
+	[idMaestroRequisicion] [bigint] NOT NULL,
+	[NumeroLinea] [int] NULL,
+	[Material] [varchar](150) NULL,
+	[Denominacion] [varchar](150) NULL,
+	[Cantidad] [int] NULL,
+	[UnidadMedida] [varchar](150) NULL,
+	[Detalle] [varchar](150) NULL,
+	[FechaPedido] [datetime] NULL,
+	[EstadoLineaPedido] [int] NOT NULL,
+ CONSTRAINT [PK_Detalle_Requisicion] PRIMARY KEY CLUSTERED 
+(
+	[idDetalleRequisicion] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+ALTER TABLE [dbo].[Detalle_Requisicion]  WITH CHECK ADD  CONSTRAINT [FK_Detalle_Requisicion_idMaestroRequisicion_Requisicion] FOREIGN KEY([idMaestroRequisicion])
+REFERENCES [dbo].[MaestroRequisicion] ([IdRequisicion])
+GO
+
+ALTER TABLE [dbo].[Detalle_Requisicion] CHECK CONSTRAINT [FK_Detalle_Requisicion_idMaestroRequisicion_Requisicion]
+GO
+
+
+
+
+--====================================================
+
+USE [TEST_MJP_ALMACEN]
+GO
+
+/****** Object:  Table [dbo].[Requisicion]    Script Date: 11/14/2013 09:11:33 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+SET ANSI_PADDING ON
+GO
+
+CREATE TABLE [dbo].[MaestroRequisicion](
+	[IdRequisicion] [bigint] IDENTITY(1,1) NOT NULL,
+	[Fecha] [datetime] NULL,
+	[IdPrograma] [smallint] NULL,
+	[FechaMaxima] [datetime] NULL,
+	[IdResponsable] [int] NULL,
+	[Observaciones] [varchar](300) NULL,
+	[IdTipoEstado] [int] NULL,
+	[IdCentroPenal] [int] NULL,
+	[IdAlmacen] [int] NULL,
+ CONSTRAINT [PK_MaestroRequisicion] PRIMARY KEY CLUSTERED 
+(
+	[IdRequisicion] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+--IdPrograma
+ALTER TABLE [dbo].[MaestroRequisicion]  WITH CHECK ADD  CONSTRAINT [FK_IdPrograma_Programa] FOREIGN KEY(IdPrograma)
+REFERENCES [dbo].[Programa] ([IdPrograma])
+GO
+
+ALTER TABLE [dbo].[MaestroRequisicion] CHECK CONSTRAINT [FK_IdPrograma_Programa]
+GO
+--IdPrograma
+
+--IdResponsable
+ALTER TABLE [dbo].[MaestroRequisicion]  WITH CHECK ADD  CONSTRAINT [FK_IdResponsable_Usuarios] FOREIGN KEY(IdResponsable)
+REFERENCES [dbo].[Usuarios] ([IDUSUARIO])
+GO
+
+ALTER TABLE [dbo].[MaestroRequisicion] CHECK CONSTRAINT [FK_IdResponsable_Usuarios]
+GO
+--IdResponsable
+
+--IdTipoEstado
+ALTER TABLE [dbo].[MaestroRequisicion]  WITH CHECK ADD  CONSTRAINT [FK_idTipoEstado_Estado] FOREIGN KEY(IdTipoEstado)
+REFERENCES [dbo].[Catalogo_Estados] ([IdCatalogo_Estados])
+GO
+
+ALTER TABLE [dbo].[MaestroRequisicion] CHECK CONSTRAINT [FK_idTipoEstado_Estado]
+GO
+--IdTipoEstado
+
+--IdCentroPenal
+ALTER TABLE [dbo].[MaestroRequisicion]  WITH CHECK ADD  CONSTRAINT [FK_IdCentroPenal_CentroPenales] FOREIGN KEY(IdCentroPenal)
+REFERENCES [dbo].[CentroPenales] ([idCentroPenal])
+GO
+
+ALTER TABLE [dbo].[MaestroRequisicion] CHECK CONSTRAINT [FK_IdCentroPenal_CentroPenales]
+GO
+--IdCentroPenal
+
+--IdAlmacen
+ALTER TABLE [dbo].[MaestroRequisicion]  WITH CHECK ADD  CONSTRAINT [FK_IdAlmacen_Almacen] FOREIGN KEY(IdAlmacen)
+REFERENCES [dbo].[Almacen] ([IdAlmacen])
+GO
+
+ALTER TABLE [dbo].[MaestroRequisicion] CHECK CONSTRAINT [FK_IdAlmacen_Almacen]
+GO
+--IdAlmacen
+
+--====================================================
+USE TEST_MJP_ALMACEN
+GO
+
+CREATE PROCEDURE InsertarMaestroRequisicion
+
+@Fecha VARCHAR(100),
+@IdPrograma INT,
+@FechaMaxima VARCHAR(100),
+@IdResponsable INT,
+@Observaciones VARCHAR(100),
+@IdTipoEstado INT,
+@IdCentroPenal INT,
+@IdAlmacen INT
+
+AS
+BEGIN 
+	INSERT INTO dbo.MaestroRequisicion(Fecha,IdPrograma,FechaMaxima,IdResponsable,Observaciones,IdTipoEstado,IdCentroPenal,IdAlmacen ) 
+	VALUES  (@Fecha,@IdPrograma,@FechaMaxima,@IdResponsable,@Observaciones,@IdTipoEstado,@IdCentroPenal,@IdAlmacen)  
+END;
+--====================================================
+
+
+USE [TEST_MJP_ALMACEN]
+GO
+
+/****** Object:  Table [dbo].[SaldoPorUbicacion]    Script Date: 11/14/2013 15:41:23 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[SaldoPorPrograma](
+	[IdInventario] [bigint] NULL,
+	[Cantidad] [int] NOT NULL,
+	[IdSaldoPrograma] [bigint] IDENTITY(1,1) NOT NULL,
+ CONSTRAINT [PK_SaldoPorPrograma_1] PRIMARY KEY CLUSTERED 
+(
+	[IdSaldoPrograma] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+ALTER TABLE [dbo].[SaldoPorPrograma]  WITH CHECK ADD  CONSTRAINT [FK_SaldoPorPrograma_Inventario] FOREIGN KEY([IdInventario])
+REFERENCES [dbo].[Inventario] ([idInventario])
+GO
+
+ALTER TABLE [dbo].[SaldoPorPrograma] CHECK CONSTRAINT [FK_SaldoPorPrograma_Inventario]
+GO
+
+
+--====================================================
+
+
+USE [TEST_MJP_ALMACEN]
+GO
+/****** Object:  StoredProcedure [dbo].[InsertarMaestroRequisicion]    Script Date: 11/19/2013 09:02:27 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+ALTER PROCEDURE [dbo].[InsertarMaestroRequisicion]
+
+@Fecha DATETIME,
+@IdPrograma INT,
+@FechaMaxima DATETIME,
+@IdResponsable INT,
+@Observaciones VARCHAR(100),
+@IdTipoEstado INT,
+@IdCentroPenal INT,
+@IdAlmacen INT
+
+AS
+BEGIN 
+	INSERT INTO dbo.MaestroRequisicion(Fecha,IdPrograma,FechaMaxima,IdResponsable,Observaciones,IdTipoEstado,IdCentroPenal,IdAlmacen ) 
+	VALUES  (@Fecha,@IdPrograma,@FechaMaxima,@IdResponsable,@Observaciones,@IdTipoEstado,@IdCentroPenal,@IdAlmacen)  
+END;
+
+select @@IDENTITY
+
+--====================================================
+
+USE TEST_MJP_ALMACEN
+GO 
+
+CREATE PROCEDURE GetArticuloInventarioRequisicion
+--@clase varchar(100),
+@subClase varchar(100),
+@IdPrograma smallint,
+@IdAlmacen int
+AS
+BEGIN 
+	SELECT 
+	I.idInventario,
+	I.IdCodInterno,
+	I.idCatalogo,
+	I.Cantidad,
+	I.IdTipoEstado,
+	I.programa,
+	CCR.clase AS CLASEccr,
+	CCR.subClase AS SUBccr,
+	CCR.mercancia AS MERccr,
+	CCR.clasificacion AS CLAccr
+
+	FROM Inventario I
+
+	INNER JOIN Relacional_1 R1 ON
+	R1.codigoInterno = I.IdCodInterno
+
+	INNER JOIN Catalogo_CompraRed CCR ON
+	CCR.idCatalogo = I.idCatalogo
+
+	INNER JOIN SaldoPorUbicacion SPU ON
+	SPU.IdInventario = I.idInventario
+
+	INNER JOIN Relacional_2 R2 ON
+	R2.IdSaldoUbicacion = SPU.IdSaldoUbicacion
+
+	INNER JOIN DetalleCantidadPorUbicacion DCU ON
+	DCU.IdMaestroUbicacion = R2.IdMaestroUbicacion
+
+	INNER JOIN MaestroUbicacion MU ON
+	MU.IdMaestroUbicacion = DCU.IdMaestroUbicacion
+
+	INNER JOIN Estante E ON
+	E.IdEstante = MU.IdEstante
+
+	INNER JOIN Bodega B ON
+	B.IdBodega = E.IdBodega
+
+	INNER JOIN Almacen A ON 
+	A.IdAlmacen = B.IdAlmacen
+	
+
+	WHERE DCU.IdPrograma = @IdPrograma and A.IdAlmacen = @IdAlmacen and CCR.subClase = @subClase
+	
+END;
+
+
+
+
+USE [TEST_MJP_ALMACEN]
+GO
+/****** Object:  StoredProcedure [dbo].[InsertarDetalleCantidadPorUbicacion]    Script Date: 11/20/2013 11:15:16 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+ALTER PROCEDURE [dbo].[InsertarDetalleCantidadPorUbicacion] --38,'7441019500151',20,'(91)A01B03E001CAF01C03P0D0', 8
+
+	@IdMaestroUbicacion int,--38		
+	@numeroGTIN varchar(200),--7441019500151
+	@Cantidad int,--20
+	@CodigoUbicacion varchar(200),--(91)A01B03E001CAF01C03P0D0
+	@programa smallint--8
+
+AS
+BEGIN TRY
+BEGIN TRANSACTION
+	--print('Inicio')
+	print('1')
+    DECLARE 
+    @IdSaldoUbicacion int,
+    @idInventario int,
+    @IdCodigoInterno bigint,    
+    @idCatalogo bigint,    
+    @cantAux int
+    print('2')
+    --print('Declare')
+    SET @IdCodigoInterno = 
+    (select ma1.codigoInterno from MaestroArticuloN1 ma1
+     inner join MaestroArticuloN2 ma2 on 
+     ma2.idCodigoInterno = ma1.codigoInterno 
+     inner join GTIN_13 g13 on
+     g13.idGTIN13 = ma2.GTIN13 
+     inner join Programa p on
+     p.IdPrograma = ma2.idPrograma
+     where g13.numeroGTIN = @numeroGTIN and p.IdPrograma = @programa)    
+	print('3')
+    --print('Valor: ' + @IdCodigoInterno)
+    IF EXISTS (select top 1 * from Volatil_Inventario 
+               where codigoInterno = @IdCodigoInterno and programa = @programa and tipoEstado = 7)
+      
+    BEGIN 
+		print('4')
+		print('5')
+		--print('Esta en Volatil inventario')
+        update Volatil_Inventario set cantidad -= @Cantidad where codigoInterno = @IdCodigoInterno and programa = @programa and tipoEstado = 7
+        print('6')
+        SET @cantAux = (select top 1 cantidad from Volatil_Inventario where codigoInterno = @IdCodigoInterno and programa = @programa and tipoEstado = 7) 
+        print('7')
+		--print('Valor: ' + @cantAux)    
+        IF @cantAux <= 0 
+        BEGIN
+			--print('Elimina')    
+            delete from Volatil_Inventario where codigoInterno = @IdCodigoInterno and programa = @programa and tipoEstado = 7   
+            print('8')
+        END
+        print('9')
+		--print('Guardar la informacion')    
+        SET @idCatalogo = (select codigoMaterial from Relacional_1 where codigoInterno = @IdCodigoInterno)             
+        print('10')
+        --print('Valor ' + @idCatalogo)    
+        insert into Inventario (IdCodInterno,idCatalogo,Cantidad,IdTipoEstado,programa)
+        values (@IdCodigoInterno,@idCatalogo,@Cantidad,8,@programa)
+        SET @idInventario = @@IDENTITY            
+        print('11')
+         
+         
+        IF @CodigoUbicacion <> 'NA'
+        BEGIN
+             SET @IdMaestroUbicacion = (select IdMaestroUbicacion from MaestroUbicacion 
+                                         where IdCodigoInterno = @CodigoUbicacion)
+                                         
+                                         print('12')
+        END
+         
+        IF EXISTS (select * from SaldoPorUbicacion s
+                   inner join Relacional_2 r2 on
+                   r2.IdSaldoUbicacion = s.IdSaldoUbicacion and
+                   r2.IdMaestroUbicacion = @IdMaestroUbicacion
+                   where s.IdInventario = @idInventario)
+                   
+			BEGIN
+				  print('13')
+				  update SaldoPorUbicacion set Cantidad += @Cantidad 
+				  where IdInventario = @idInventario
+			END
+        ELSE
+			BEGIN
+				  print('14')
+				  insert into SaldoPorUbicacion (IdInventario,Cantidad) values(@idInventario,@Cantidad)
+				  set @IdSaldoUbicacion = @@IDENTITY
+				  print('15')
+				  INSERT INTO [DetalleCantidadPorUbicacion]
+					   ([IdMaestroUbicacion]
+					   ,[SaldoActual]
+					   ,[IdPrograma])
+				 VALUES
+					   (@IdMaestroUbicacion
+					   ,@Cantidad
+					   ,8)--cambiar a futuro
+
+				  print('16')
+				  insert into Relacional_2 (IdMaestroUbicacion,IdSaldoUbicacion) values (@IdMaestroUbicacion,@IdSaldoUbicacion)
+				  print('17')
+			END
+		print('18')
+			exec ActualizaSaldoActual @IdMaestroUbicacion  
+        print('termina')
+     END          
+COMMIT TRANSACTION
+END TRY
+BEGIN CATCH
+ROLLBACK TRANSACTION
+END CATCH
+
+-- =============================================
+
+USE [TEST_MJP_ALMACEN]
+GO
+/****** Object:  StoredProcedure [dbo].[GetArticuloInventarioRequisicion]    Script Date: 11/20/2013 13:14:42 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+ALTER PROCEDURE [dbo].[GetArticuloInventarioRequisicion]
+--@clase varchar(100),
+@subClase varchar(100),
+@IdPrograma smallint,
+@IdAlmacen int
+AS
+BEGIN 
+	SELECT 
+	I.idInventario,
+	I.IdCodInterno,
+	I.idCatalogo,
+	I.Cantidad,
+	I.IdTipoEstado,
+	--I.programa,
+	CCR.clase,
+	CCR.subClase,
+	CCR.mercancia,
+	CCR.clasificacion
+
+	FROM Inventario I
+
+	INNER JOIN Relacional_1 R1 ON
+	R1.codigoInterno = I.IdCodInterno
+
+	INNER JOIN Catalogo_CompraRed CCR ON
+	CCR.idCatalogo = I.idCatalogo
+
+	INNER JOIN SaldoPorUbicacion SPU ON
+	SPU.IdInventario = I.idInventario
+
+	INNER JOIN Relacional_2 R2 ON
+	R2.IdSaldoUbicacion = SPU.IdSaldoUbicacion
+
+	INNER JOIN DetalleCantidadPorUbicacion DCU ON
+	DCU.IdMaestroUbicacion = R2.IdMaestroUbicacion
+
+	INNER JOIN MaestroUbicacion MU ON
+	MU.IdMaestroUbicacion = DCU.IdMaestroUbicacion
+
+	INNER JOIN Estante E ON
+	E.IdEstante = MU.IdEstante
+
+	INNER JOIN Bodega B ON
+	B.IdBodega = E.IdBodega
+
+	INNER JOIN Almacen A ON 
+	A.IdAlmacen = B.IdAlmacen
+	
+
+	--WHERE DCU.IdPrograma = @IdPrograma and A.IdAlmacen = @IdAlmacen and CCR.subClase = @subClase
+	WHERE I.programa = @IdPrograma and A.IdAlmacen = @IdAlmacen and CCR.subClase = @subClase
+	
+END;
+
+--====================================================
+
+USE TEST_MJP_ALMACEN
+GO
+
+CREATE PROCEDURE GetSaldoDescripcionArticulosPorUbicacion
+
+@programa VARCHAR(100),
+@idInventario INT,
+@IdAlmacen INT
+
+AS
+BEGIN
+
+SELECT 
+S.IdInventario,
+S.Cantidad,
+S.IdSaldoUbicacion,
+M1.descripcionLarga,
+M1.descripconCorta
+
+FROM SaldoPorUbicacion S
+
+--UBICARLO EN UN ALMACEN ESPECIFICO
+INNER JOIN Relacional_2 R2 ON
+R2.IdSaldoUbicacion = S.IdSaldoUbicacion
+
+INNER JOIN DetalleCantidadPorUbicacion DCU ON 
+DCU.IdMaestroUbicacion = R2.IdMaestroUbicacion
+
+INNER JOIN MaestroUbicacion MUB ON
+MUB.IdMaestroUbicacion = DCU.IdMaestroUbicacion
+
+INNER JOIN Estante E ON 
+E.IdEstante = MUB.IdEstante
+
+INNER JOIN Bodega B ON
+B.IdBodega = E.IdBodega
+
+INNER JOIN Almacen A ON
+A.IdAlmacen = B.IdAlmacen
+--CIERRO UBIACARLO
+
+--CARACTERISTICAS DEL PRODUCTO
+INNER JOIN Inventario I ON
+I.IdInventario = S.IdInventario
+
+INNER JOIN Relacional_1 R1 ON 
+R1.codigoInterno = I.IdCodInterno
+
+INNER JOIN MaestroArticuloN1 M1 ON 
+M1.codigoInterno = R1.codigoInterno
+--CIERRO CARACTERISTICAS
+
+WHERE I.programa = @programa AND I.idInventario = @idInventario AND A.IdAlmacen = @IdAlmacen
+
+END
+
+
+
+
+USE TEST_MJP_ALMACEN
+GO
+
+ALTER PROCEDURE GetSaldoDescripcionArticulosPorUbicacion
+
+@programa VARCHAR(100),
+@idInventario INT,
+@IdAlmacen INT
+
+AS
+BEGIN
+
+SELECT 
+S.IdInventario,
+S.Cantidad,
+S.IdSaldoUbicacion,
+M1.descripcionLarga,
+UM.descripcion as umdescripcion,
+TUM.descripcion as tipodescripcion
+
+
+FROM SaldoPorUbicacion S
+
+--UBICARLO EN UN ALMACEN ESPECIFICO
+INNER JOIN Relacional_2 R2 ON
+R2.IdSaldoUbicacion = S.IdSaldoUbicacion
+
+INNER JOIN DetalleCantidadPorUbicacion DCU ON 
+DCU.IdMaestroUbicacion = R2.IdMaestroUbicacion
+
+INNER JOIN MaestroUbicacion MUB ON
+MUB.IdMaestroUbicacion = DCU.IdMaestroUbicacion
+
+INNER JOIN Estante E ON 
+E.IdEstante = MUB.IdEstante
+
+INNER JOIN Bodega B ON
+B.IdBodega = E.IdBodega
+
+INNER JOIN Almacen A ON
+A.IdAlmacen = B.IdAlmacen
+--CIERRO UBIACARLO
+
+--CARACTERISTICAS DEL PRODUCTO
+INNER JOIN Inventario I ON
+I.IdInventario = S.IdInventario
+
+INNER JOIN Relacional_1 R1 ON 
+R1.codigoInterno = I.IdCodInterno
+
+INNER JOIN MaestroArticuloN1 M1 ON 
+M1.codigoInterno = R1.codigoInterno
+--CIERRO CARACTERISTICAS
+
+--CARACTERISTICAS MEDIDAS
+INNER JOIN Unidades_de_Medida UM ON 
+UM.idUnidadMedida = M1.idUnidadMedida
+
+INNER JOIN Tipo_Unidad_Medida TUM ON
+TUM.idTipoUnidadMedida = UM.idTipoUnidadMedida
+--CIERRO CARACTERISTICAS
+
+WHERE I.programa = @programa AND I.idInventario = @idInventario AND A.IdAlmacen = @IdAlmacen
+
+END
+
+
+
+USE [TEST_MJP_ALMACEN]
+GO
+
+/****** Object:  Table [dbo].[Detalle_Requisicion]    Script Date: 11/20/2013 18:00:33 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+CREATE TABLE [dbo].[Detalle_Requisicion](
+	[idDetalleRequisicion] [int] IDENTITY(1,1) NOT NULL,
+	[idMaestroRequisicion] [bigint] NOT NULL,
+	[idInventario] [int] NOT NULL,
+	[Cantidad] [int] NULL,
+	[UnidadMedida] [varchar](150) NULL,
+	[Detalle] [varchar](150) NULL,
+	[FechaPedido] [datetime] NULL,
+	[EstadoLineaPedido] [int] NOT NULL,
+ CONSTRAINT [PK_Detalle_Requisicion] PRIMARY KEY CLUSTERED 
+(
+	[idDetalleRequisicion] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+ALTER TABLE [dbo].[Detalle_Requisicion]  WITH CHECK ADD  CONSTRAINT [FK_Detalle_Requisicion_idMaestroRequisicion_Requisicion] FOREIGN KEY([idMaestroRequisicion])
+REFERENCES [dbo].[MaestroRequisicion] ([IdRequisicion])
+GO
+
+ALTER TABLE [dbo].[Detalle_Requisicion] CHECK CONSTRAINT [FK_Detalle_Requisicion_idMaestroRequisicion_Requisicion]
+GO
+
+--====================================================
+
+
+USE TEST_MJP_ALMACEN
+GO
+
+CREATE PROCEDURE InsertarDetalleRequisicion
+@idMaestroRequisicion INT,
+@idInventario INT,
+@Cantidad INT,
+@UnidadMedida VARCHAR(150),
+@Detalle VARCHAR(150),
+@FechaPedido VARCHAR(150),
+@EstadoLineaPedido INT
+AS
+BEGIN
+	INSERT INTO Detalle_Requisicion
+           (idMaestroRequisicion
+           ,idInventario
+           ,Cantidad
+           ,UnidadMedida
+           ,Detalle
+           ,FechaPedido
+           ,EstadoLineaPedido)
+     VALUES
+           (@idMaestroRequisicion
+           ,@idInventario
+           ,@Cantidad
+           ,@UnidadMedida
+           ,@Detalle
+           ,@FechaPedido
+           ,@EstadoLineaPedido)
+END;
+
+
+--====================================================
+
+USE [TEST_MJP_ALMACEN]
+GO
+
+/****** Object:  Table [dbo].[Detalle_Requisicion]    Script Date: 11/21/2013 09:11:10 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+create TABLE [dbo].[Detalle_Requisicion] (
+	[idDetalleRequisicion] [int] IDENTITY(1,1) NOT NULL,
+	[idMaestroRequisicion] [bigint] NOT NULL,
+	[idInventario] [int] NOT NULL,
+	[Cantidad] [float] NULL,
+	[UnidadMedida] [varchar](150) NULL,
+	[Detalle] [varchar](150) NULL,
+	[FechaPedido] [datetime] NULL,
+	[EstadoLineaPedido] [int] NOT NULL,
+ CONSTRAINT [PK_Detalle_Requisicion] PRIMARY KEY CLUSTERED 
+(
+	[idDetalleRequisicion] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+ALTER TABLE [dbo].[Detalle_Requisicion]  WITH CHECK ADD  CONSTRAINT [FK_Detalle_Requisicion_idMaestroRequisicion_Requisicion] FOREIGN KEY([idMaestroRequisicion])
+REFERENCES [dbo].[MaestroRequisicion] ([IdRequisicion])
+GO
+
+ALTER TABLE [dbo].[Detalle_Requisicion] CHECK CONSTRAINT [FK_Detalle_Requisicion_idMaestroRequisicion_Requisicion]
+GO
+
+--====================================================
+
+
+USE [TEST_MJP_ALMACEN]
+GO
+/****** Object:  StoredProcedure [dbo].[InsertarDetalleRequisicion]    Script Date: 11/21/2013 09:07:17 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+ALTER PROCEDURE [dbo].[InsertarDetalleRequisicion]
+@idMaestroRequisicion INT,
+@idInventario INT,
+@Cantidad FLOAT,
+@UnidadMedida VARCHAR(150),
+@Detalle VARCHAR(150),
+@FechaPedido VARCHAR(150),
+@EstadoLineaPedido INT
+AS
+BEGIN
+	INSERT INTO Detalle_Requisicion
+           (idMaestroRequisicion
+           ,idInventario
+           ,Cantidad
+           ,UnidadMedida
+           ,Detalle
+           ,FechaPedido
+           ,EstadoLineaPedido)
+     VALUES
+           (@idMaestroRequisicion
+           ,@idInventario
+           ,@Cantidad
+           ,@UnidadMedida
+           ,@Detalle
+           ,@FechaPedido
+           ,@EstadoLineaPedido)
+END;
+
+
+
+
+
+-=====================================
+
+
+USE [TEST_MJP_ALMACEN]
+GO
+
+CREATE PROCEDURE GetMaestroRequisicionXId
+
+@IdRequisicion INT
+AS
+
+BEGIN
+
+SELECT [IdRequisicion]
+      ,[Fecha]
+      ,[IdPrograma]
+      ,[FechaMaxima]
+      ,[IdResponsable]
+      ,[Observaciones]
+      ,[IdTipoEstado]
+      ,[IdCentroPenal]
+      ,[IdAlmacen]
+  FROM [TEST_MJP_ALMACEN].[dbo].[MaestroRequisicion]
+  WHERE IdRequisicion = @IdRequisicion
+
+END;
+
+-==============================================================
+
+USE [TEST_MJP_ALMACEN]
+GO
+
+CREATE PROCEDURE GetDetalleRequisicionXiD
+@idMaestroRequisicion INT
+AS
+BEGIN
+	select 	
+	req.idDetalleRequisicion
+	,req.idMaestroRequisicion
+	,req.idInventario
+	,req.Cantidad
+	,req.UnidadMedida
+	,req.Detalle
+	,req.FechaPedido
+	,req.EstadoLineaPedido
+	
+	from Detalle_Requisicion req 
+	where req.idMaestroRequisicion = @idMaestroRequisicion
+END;
+
+
+
+-==============================================
+
+USE [TEST_MJP_ALMACEN]
+GO
+
+CREATE PROCEDURE GetDetalleRequisicionXiDLinea
+@idDetalleRequisicion INT
+AS
+BEGIN
+	select 	
+	req.idDetalleRequisicion
+	,req.idMaestroRequisicion
+	,req.idInventario
+	,req.Cantidad
+	,req.UnidadMedida
+	,req.Detalle
+	,req.FechaPedido
+	,req.EstadoLineaPedido
+	
+	from Detalle_Requisicion req 
+	where req.idDetalleRequisicion = @idDetalleRequisicion
+END;
+
+--=======================================================
+
+
+
+USE [TEST_MJP_ALMACEN]
+GO
+
+CREATE PROCEDURE GetCaracteristicasArticulo
+
+@idInventario INT
+
+AS
+BEGIN
+SELECT 
+	CCR.clase,
+	CCR.subClase,
+	CCR.mercancia,
+	CCR.clasificacion,
+	UM.descripcion
+
+	FROM Inventario I
+
+	INNER JOIN Relacional_1 R1 ON
+	R1.codigoInterno = I.IdCodInterno
+
+	INNER JOIN Catalogo_CompraRed CCR ON
+	CCR.idCatalogo = I.idCatalogo
+
+	INNER JOIN SaldoPorUbicacion SPU ON
+	SPU.IdInventario = I.idInventario
+
+	INNER JOIN Relacional_2 R2 ON
+	R2.IdSaldoUbicacion = SPU.IdSaldoUbicacion
+
+	INNER JOIN DetalleCantidadPorUbicacion DCU ON
+	DCU.IdMaestroUbicacion = R2.IdMaestroUbicacion
+
+	INNER JOIN MaestroUbicacion MU ON
+	MU.IdMaestroUbicacion = DCU.IdMaestroUbicacion
+
+	INNER JOIN Estante E ON
+	E.IdEstante = MU.IdEstante
+
+	INNER JOIN Bodega B ON
+	B.IdBodega = E.IdBodega
+
+	INNER JOIN Almacen A ON 
+	A.IdAlmacen = B.IdAlmacen
+	
+	INNER JOIN MaestroArticuloN1 M1 ON
+	M1.codigoInterno = I.IdCodInterno
+	
+	INNER JOIN Unidades_de_Medida UM ON
+	UM.idUnidadMedida = M1.idUnidadMedida
+	
+	WHERE I.idInventario = @idInventario
+	
+END;
+
+
+
+--===================================================
+
+USE [TEST_MJP_ALMACEN]
+GO
+
+CREATE PROCEDURE ActualizarLineaRequisicion
+
+@idDetalleRequisicion INT,
+@idMaestroRequisicion INT,
+@idInventario INT,
+
+@Cantidad FLOAT,
+
+@Detalle VARCHAR(100),
+@EstadoLineaPedido VARCHAR(100),
+@FechaPedido VARCHAR(100),
+@UnidadMedida VARCHAR(100)
+                
+AS
+BEGIN
+
+UPDATE [TEST_MJP_ALMACEN].[dbo].[Detalle_Requisicion]
+   SET [idMaestroRequisicion] = @idMaestroRequisicion
+      ,[idInventario] = @idInventario
+      ,[Cantidad] = @Cantidad
+      ,[UnidadMedida] = @UnidadMedida
+      ,[Detalle] = @Detalle
+      ,[FechaPedido] = @FechaPedido
+      ,[EstadoLineaPedido] = @EstadoLineaPedido
+ WHERE idDetalleRequisicion = @idDetalleRequisicion
+
+END
+
+
+--=================================================================
+
+
+USE [TEST_MJP_ALMACEN]
+GO
+/****** Object:  StoredProcedure [dbo].[InsertarDetalleRequisicion]    Script Date: 11/22/2013 08:48:51 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+ALTER PROCEDURE [dbo].[InsertarDetalleRequisicion]
+@idMaestroRequisicion INT,
+@idInventario INT,
+@Cantidad FLOAT,
+@UnidadMedida VARCHAR(150),
+@Detalle VARCHAR(150),
+@FechaPedido VARCHAR(150),
+@EstadoLineaPedido INT
+AS
+BEGIN
+	IF EXISTS(SELECT * FROM Detalle_Requisicion WHERE idMaestroRequisicion = @idMaestroRequisicion AND idInventario = @idInventario)
+	BEGIN 
+		UPDATE Detalle_Requisicion
+		SET 
+		Cantidad += @Cantidad
+		,Detalle = @Detalle
+		,FechaPedido = @FechaPedido
+		,EstadoLineaPedido = @EstadoLineaPedido
+		WHERE idMaestroRequisicion = @idMaestroRequisicion AND idInventario = @idInventario
+	END
+	
+	ELSE
+	BEGIN
+		INSERT INTO Detalle_Requisicion
+           (idMaestroRequisicion
+           ,idInventario
+           ,Cantidad
+           ,UnidadMedida
+           ,Detalle
+           ,FechaPedido
+           ,EstadoLineaPedido)
+     VALUES
+           (@idMaestroRequisicion
+           ,@idInventario
+           ,@Cantidad
+           ,@UnidadMedida
+           ,@Detalle
+           ,@FechaPedido
+           ,@EstadoLineaPedido)
+	END
+	
+END;
+
+---=================================================================
+
+USE [TEST_MJP_ALMACEN]
+GO
+
+CREATE PROCEDURE EliminarLineaDetalleRequisicion
+@idMaestroRequisicion INT,
+@idInventario INT
+AS
+
+BEGIN
+	DELETE  FROM Detalle_Requisicion WHERE idMaestroRequisicion = @idMaestroRequisicion AND idInventario = @idInventario
+END
+
+---=====================================================
+
+
+USE [TEST_MJP_ALMACEN]
+GO
+
+CREATE PROCEDURE EliminiarDetalleRequisicion
+@idMaestroRequisicion INT,
+@idInventario INT
+AS
+
+BEGIN
+	DELETE  FROM Detalle_Requisicion WHERE idMaestroRequisicion = @idMaestroRequisicion AND idInventario = @idInventario
+END
+
+
+
+--=================================================
+
+
+USE [TEST_MJP_ALMACEN]
+GO
+
+CREATE PROCEDURE GetRequisicionesXTipoReq
+@IdPrograma INT
+
+AS
+BEGIN
+
+SELECT 
+
+IdRequisicion,
+Fecha,
+IdPrograma,
+FechaMaxima,
+IdResponsable,
+Observaciones,
+IdTipoEstado,
+IdCentroPenal,
+IdAlmacen
+
+FROM dbo.MaestroRequisicion
+
+WHERE IdPrograma = @IdPrograma
+
+END
+
+--=============================================
+
+
+USE [TEST_MJP_ALMACEN]
+GO
+
+
+CREATE PROCEDURE GetMaestroRequisicionXidPrograma 
+@IdPrograma INT
+AS
+BEGIN
+
+	SELECT [IdRequisicion]
+      ,[Fecha]
+      ,[IdPrograma]
+      ,[FechaMaxima]
+      ,[IdResponsable]
+      ,[Observaciones]
+      ,[IdTipoEstado]
+      ,[IdCentroPenal]
+      ,[IdAlmacen]
+  FROM [MaestroRequisicion]
+  WHERE IdPrograma = @IdPrograma
+
+END;
+
+--===========================================================================
+
+USE [TEST_MJP_ALMACEN]
+GO
+/****** Object:  StoredProcedure [dbo].[GetVolatilInvetarioPorGTIN]    Script Date: 11/28/2013 09:44:31 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER PROC [dbo].[GetVolatilInvetarioPorGTIN]
+@numeroGTIN bigint
+AS
+BEGIN
+
+SELECT 
+
+vi.codigoInterno,
+vi.cantidad,
+vi.tipoEstado,
+vi.programa,
+ma1.descripcionLarga,
+ma1.descripconCorta,
+gt.numeroGTIN,
+cr.clasificacion
+
+FROM Volatil_Inventario vi
+
+inner join dbo.MaestroArticuloN1 ma1 on
+ma1.codigoInterno = vi.codigoInterno
+
+inner join dbo.MaestroArticuloN2 ma2 on 
+ma2.idCodigoInterno = vi.codigoInterno
+and ma2.idPrograma = vi.programa
+
+inner join dbo.GTIN_13 gt on 
+gt.idGTIN13 = ma2.GTIN13
+
+inner join Relacional_1 r on 
+r.codigoInterno = vi.codigoInterno
+
+inner join MaestroArticuloN1  ma
+on ma.codigoInterno = r.codigoInterno
+
+inner join Catalogo_CompraRed cr
+on r.codigoMaterial = cr.idCatalogo
+
+WHERE gt.numeroGTIN = @numeroGTIN
+
+END
+
+
+--========================================================
+
+
+USE [TEST_MJP_ALMACEN]
+GO
+/****** Object:  StoredProcedure [dbo].[GetSaldoUbicacionPorMercancia]    Script Date: 11/28/2013 11:02:07 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER proc [dbo].[GetSaldoUbicacionPorMercancia]
+@idInventario int,
+@IdSaldoUbicacion int
+as
+select 
+ma.codigoInterno,
+g.numeroGTIN,
+cr.clasificacion,
+s.Cantidad,
+i.programa
+
+from Relacional_1 r
+inner join MaestroArticuloN1  ma
+on ma.codigoInterno = r.codigoInterno
+
+inner join Catalogo_CompraRed cr
+on r.codigoMaterial = cr.idCatalogo
+
+inner join MaestroArticuloN2 ma2
+on r.codigoInterno = ma2.idCodigoInterno
+
+inner join GTIN_13 g
+on ma2.GTIN13 = g.idGTIN13
+
+inner join SaldoPorUbicacion s on
+s.IdInventario = @idInventario and
+s.IdSaldoUbicacion = @IdSaldoUbicacion
+
+
+inner join Inventario i
+on r.codigoInterno = i.IdCodInterno and
+r.codigoMaterial = i.idCatalogo and 
+i.idInventario = s.IdInventario
+
+--=====================================================================
+-- Author:		<Author,Fernando Torres,>
+-- Create date: <Create, 11/29/2013 14:58:58,>
+-- Description:	<Cambios a procedures,>
+--=====================================================================
+
+USE [TEST_MJP_ALMACEN]
+GO
+/****** Object:  StoredProcedure [dbo].[GetOrdenesPorNumYEstado]    Script Date: 11/29/2013 17:08:34 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER PROCEDURE [dbo].[GetOrdenesPorNumYEstado]
+
+@Estado varchar(10),
+@Numero varchar(20)
+
+AS
+BEGIN
+select
+oc.NumPedido,
+oc.TramiteCompra,
+oc.NomProveedor,
+eo.Nombre AS Estado,
+oc.idPrograma
+from Orden_Compra oc
+inner join Catalogo_Estados eo
+on oc.IdEstado = eo.IdCatalogo_Estados
+
+where oc.IdEstado = @Estado and oc.NumPedido like '%' + @Numero + '%' and
+ oc.idPrograma is not null
+
+
+END
+
+
+--==============================================
+-- Author:		<Author,Fernando Torres,>
+-- Create date: <Create, 11/29/2013 14:58:58,>
+-- Description:	<Creado desde cero,>
+--=====================================================================
+
+USE TEST_MJP_ALMACEN
+GO
+
+CREATE PROCEDURE GetArticulosCantidadPrograma
+
+@programa INT
+
+AS
+
+BEGIN
+SELECT 
+Sum(sa.Cantidad) AS cantidad,
+sa.idInventario,
+inv.IdCodInterno,
+inv.programa,
+inv.IdTipoEstado,
+cr.clasificacion,
+gt13.numeroGTIN
+
+from SaldoPorUbicacion sa
+
+INNER JOIN Inventario inv ON
+inv.idInventario = sa.IdInventario
+
+INNER JOIN Catalogo_CompraRed cr on
+inv.idCatalogo = cr.idCatalogo
+
+INNER JOIN MaestroArticuloN2 m2 on 
+m2.idCodigoInterno = inv.IdCodInterno
+
+INNER JOIN GTIN_13 gt13 ON 
+gt13.idGTIN13 = m2.GTIN13
+
+WHERE inv.programa = @programa AND IdTipoEstado = 8
+
+GROUP BY sa.idInventario, inv.IdCodInterno,inv.programa,inv.IdTipoEstado,cr.clasificacion,gt13.numeroGTIN
+
+END;
+
+--==============================================
+-- Author:		<Author,Fernando Torres,>
+-- Create date: <Create, 12/02/2013 14:58:58,>
+-- Description:	<Cambios desde cero,>
+--=====================================================================
+
+USE [TEST_MJP_ALMACEN]
+GO
+/****** Object:  StoredProcedure [dbo].[GetArticulosCantidadPrograma]    Script Date: 12/02/2013 16:52:25 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+ALTER PROCEDURE [dbo].[GetArticulosCantidadPrograma]
+
+@programa INT,
+@cantidad INT
+AS
+
+BEGIN
+SELECT 
+Sum(sa.Cantidad) AS cantidad,
+sa.idInventario,
+inv.IdCodInterno,
+inv.programa,
+inv.IdTipoEstado,
+cr.clasificacion,
+gt13.numeroGTIN
+
+from SaldoPorUbicacion sa
+
+INNER JOIN Inventario inv ON
+inv.idInventario = sa.IdInventario
+
+INNER JOIN Catalogo_CompraRed cr on
+inv.idCatalogo = cr.idCatalogo
+
+INNER JOIN MaestroArticuloN2 m2 on 
+m2.idCodigoInterno = inv.IdCodInterno
+
+INNER JOIN GTIN_13 gt13 ON 
+gt13.idGTIN13 = m2.GTIN13
+
+WHERE inv.programa = @programa AND IdTipoEstado = 8
+
+GROUP BY sa.idInventario, inv.IdCodInterno,inv.programa,inv.IdTipoEstado,cr.clasificacion,gt13.numeroGTIN
+
+HAVING Sum(sa.Cantidad) >@cantidad
+END;
+--consulta que muestra la ubicacion que se encuentra el articulo
+
+--Select from 
+
+
+
+
+--==============================================
+-- Author:		<Author,Fernando Torres,>
+-- Create date: <Create, 12/02/2013 14:58:58,>
+-- Description:	<Cambios desde cero,>
+--=====================================================================
+use TEST_MJP_ALMACEN
+go
+
+alter PROCEDURE GetArticulosUbicacionProgramaXIdInventario
+
+@idInventario INT 
+AS
+BEGIN
+
+SELECT 
+INV.idInventario,
+SU.IdSaldoUbicacion,
+DCU.SaldoActual,
+MU.IdCodigoInterno,
+ES.nombre,
+BD.descripcion,
+AM.descripcion
+
+FROM dbo.SaldoPorUbicacion SU
+
+INNER JOIN dbo.Inventario INV ON 
+INV.idInventario = SU.IdInventario
+
+INNER JOIN dbo.Relacional_2 R2 ON
+R2.IdSaldoUbicacion = SU.IdSaldoUbicacion
+
+INNER JOIN dbo.DetalleCantidadPorUbicacion DCU ON
+DCU.IdMaestroUbicacion = R2.IdMaestroUbicacion
+
+INNER JOIN dbo.MaestroUbicacion MU ON
+MU.IdMaestroUbicacion = DCU.IdMaestroUbicacion
+
+INNER JOIN dbo.Estante ES ON
+ES.IdEstante = MU.IdEstante
+
+INNER JOIN dbo.Bodega BD ON
+BD.IdBodega = ES.IdBodega
+
+INNER JOIN dbo.Almacen AM ON
+AM.IdAlmacen = BD.IdAlmacen
+
+WHERE INV.idInventario = @idInventario
+
+END;
+
+--==============================================
+-- Author:		<Author,Fernando Torres,>
+-- Create date: <Create, 12/02/2013 14:58:58,>
+-- Description:	<Modificacion,>
+--=====================================================================
+
+USE [TEST_MJP_WMS]
+GO
+/****** Object:  StoredProcedure [dbo].[GetArticulosUbicacionProgramaXIdInventario]    Script Date: 12/04/2013 10:47:57 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+ALTER PROCEDURE [dbo].[GetArticulosUbicacionProgramaXIdInventario]
+
+@idInventario INT 
+AS
+BEGIN
+
+SELECT 
+INV.idInventario,
+SU.IdSaldoUbicacion,
+DCU.SaldoActual,
+MU.IdCodigoInterno,
+ES.nombre,
+BD.descripcion as descripcionBD,
+AM.descripcion as descripcionAM
+
+FROM dbo.SaldoPorUbicacion SU
+
+INNER JOIN dbo.Inventario INV ON 
+INV.idInventario = SU.IdInventario
+
+INNER JOIN dbo.Relacional_2 R2 ON
+R2.IdSaldoUbicacion = SU.IdSaldoUbicacion
+
+INNER JOIN dbo.DetalleCantidadPorUbicacion DCU ON
+DCU.IdMaestroUbicacion = R2.IdMaestroUbicacion
+
+INNER JOIN dbo.MaestroUbicacion MU ON
+MU.IdMaestroUbicacion = DCU.IdMaestroUbicacion
+
+INNER JOIN dbo.Estante ES ON
+ES.IdEstante = MU.IdEstante
+
+INNER JOIN dbo.Bodega BD ON
+BD.IdBodega = ES.IdBodega
+
+INNER JOIN dbo.Almacen AM ON
+AM.IdAlmacen = BD.IdAlmacen
+
+
+WHERE INV.idInventario = @idInventario
+ORDER BY SaldoActual ASC
+END;
+
+
+--==============================================
+-- Author:		<Author,Fernando Torres,>
+-- Create date: <Create, 12/02/2013 14:58:58,>
+-- Description:	<Creacion,>
+--=====================================================================
+
+USE TEST_MJP_WMS
+GO
+
+ALTER PROCEDURE ActualizaArticuloProgramaCantidad
+
+@saldoubicacion INT,
+@idInventario INT,
+@cantidad INT,
+@programa INT,
+@IdCodigoInterno INT 
+
+AS 
+
+BEGIN TRY
+BEGIN TRANSACTION
+
+DECLARE 
+@IdCodInterno INT,
+@IdInvenTemp INT,
+@idCatalogo INT,
+@IdCodInternoUbicacion BIGINT,
+@IdSaldoUbicacionTemporal INT,
+@cantidaActual INT
+		
+	SET @IdCodInterno = (SELECT IdCodInterno FROM dbo.Inventario INV WHERE idInventario = @idInventario)
+	SET @idCatalogo = (SELECT idCatalogo FROM dbo.Inventario INV WHERE idInventario = @idInventario)
+	SET @IdCodInternoUbicacion = (SELECT IdMaestroUbicacion FROM MaestroUbicacion WHERE IdCodigoInterno = @IdCodigoInterno)
+	
+	IF EXISTS(SELECT idInventario FROM Inventario WHERE IdCodInterno = @IdCodInterno AND programa = @programa)
+		BEGIN
+			SET @IdInvenTemp = (SELECT idInventario FROM Inventario WHERE IdCodInterno = @IdCodInterno AND programa = @programa)
+			
+			IF EXISTS(SELECT R2.IdSaldoUbicacion FROM dbo.Relacional_2 R2
+			
+			INNER JOIN SaldoPorUbicacion SU ON
+			SU.IdSaldoUbicacion = R2.IdSaldoUbicacion
+			WHERE R2.IdMaestroUbicacion = @IdCodInternoUbicacion AND SU.IdInventario = @idInventario
+			)
+			BEGIN
+				--SI EN LA MISMA UBICACION Y EXISIENDO EN EL INVENTARIO HAY UN ARTICULO CON EL MISMO CODIGO DE PRODUCTO Y
+				--CON EL PROGRAMA A AGREGAR Y ESTE EN LA MISMA UBICACION
+				SET @IdSaldoUbicacionTemporal = (SELECT R2.IdSaldoUbicacion FROM dbo.Relacional_2 R2 INNER JOIN SaldoPorUbicacion SU ON
+						SU.IdSaldoUbicacion = R2.IdSaldoUbicacion
+						WHERE R2.IdMaestroUbicacion = @IdCodInternoUbicacion AND SU.IdInventario = @idInventario)
+				--QUITAMOS LA CANTIDAD QUE SE VA A RETIRAR		
+				UPDATE SaldoPorUbicacion SET Cantidad -= @cantidad WHERE IdSaldoUbicacion = @saldoubicacion
+				SET @cantidaActual = (SELECT Cantidad FROM SaldoPorUbicacion WHERE IdSaldoUbicacion = @saldoubicacion)
+				IF(@cantidaActual <= 0)
+					BEGIN
+						DELETE FROM SaldoPorUbicacion WHERE IdSaldoUbicacion = @saldoubicacion
+						DELETE FROM Relacional_2 WHERE IdSaldoUbicacion = @saldoubicacion AND IdMaestroUbicacion =  @IdCodInternoUbicacion
+					END
+				--AGREGAMOS LA CANTIDAD A LA UBICACION DE LA PAR
+				UPDATE SaldoPorUbicacion SET Cantidad += @cantidad WHERE IdSaldoUbicacion = @IdSaldoUbicacionTemporal
+			END
+			ELSE
+				BEGIN
+					INSERT INTO dbo.SaldoPorUbicacion(IdInventario, Cantidad) VALUES (@IdInvenTemp, @cantidad)
+					SET @IdSaldoUbicacionTemporal = @@IDENTITY 
+					INSERT INTO dbo.Relacional_2(IdMaestroUbicacion, IdSaldoUbicacion) VALUES (@IdCodInternoUbicacion ,@IdSaldoUbicacionTemporal)
+				END
+			--UPDATE dbo.SaldoPorUbicacion SET IdInventario = @IdInvenTemp WHERE IdSaldoUbicacion = @saldoubicacion
+		END
+	ELSE
+		BEGIN
+			INSERT INTO dbo.Inventario(IdCodInterno,idCatalogo,Cantidad,IdTipoEstado,programa) VALUES (@IdCodInterno, @idCatalogo,10, 8, @programa);
+			SET @IdInvenTemp = (select @@IDENTITY)
+			INSERT INTO dbo.SaldoPorUbicacion(IdInventario, Cantidad) VALUES (@IdInvenTemp, @cantidad)
+			SET @IdSaldoUbicacionTemporal = (SELECT @@IDENTITY)
+			INSERT INTO dbo.Relacional_2(IdMaestroUbicacion, IdSaldoUbicacion) VALUES (@IdCodInternoUbicacion ,@IdSaldoUbicacionTemporal)
+			--UPDATE dbo.SaldoPorUbicacion SET IdInventario = @IdInvenTemp WHERE IdSaldoUbicacion = @saldoubicacion
+		END	
+COMMIT TRANSACTION
+END TRY
+BEGIN CATCH
+ROLLBACK TRANSACTION
+END CATCH
+
+
+--==============================================
+-- Author:		<Author,Fernando Torres,>
+-- Create date: <CREATE, 06/12/2013 14:58:58,>
+-- Description:	<ALTER,>
+--=====================================================================
+
+
+USE [TEST_MJP_WMS]
+GO
+/****** Object:  StoredProcedure [dbo].[GetVolatilInvetarioPorGTIN]    Script Date: 12/06/2013 10:05:30 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER PROC [dbo].[GetVolatilInvetarioPorGTIN]
+@numeroGTIN bigint
+AS
+BEGIN
+
+SELECT 
+
+vi.codigoInterno,
+vi.cantidad,
+vi.tipoEstado,
+vi.programa,
+ma1.descripcionLarga,
+ma1.descripconCorta,
+gt.numeroGTIN,
+cr.clasificacion,
+cr.codigoMaterial
+
+FROM Volatil_Inventario vi
+
+inner join dbo.MaestroArticuloN1 ma1 on
+ma1.codigoInterno = vi.codigoInterno
+
+inner join dbo.MaestroArticuloN2 ma2 on 
+ma2.idCodigoInterno = vi.codigoInterno
+and ma2.idPrograma = vi.programa
+
+inner join dbo.GTIN_13 gt on 
+gt.idGTIN13 = ma2.GTIN13
+
+inner join Relacional_1 r on 
+r.codigoInterno = vi.codigoInterno
+
+inner join MaestroArticuloN1  ma
+on ma.codigoInterno = r.codigoInterno
+
+inner join Catalogo_CompraRed cr
+on r.codigoMaterial = cr.idCatalogo
+
+WHERE gt.numeroGTIN = @numeroGTIN
+
+END
+
+
+--==============================================
+-- Author:		<Author,Fernando Torres,>
+-- Create date: <CREATE, 06/12/2013 14:58:58,>
+-- Description:	<CREATE,>
+--=====================================================================
+
+USE [TEST_MJP_WMS]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+Create PROCEDURE [dbo].[Verificar_Fam_Req_Web]
+
+@codigoMaterial varchar(100)
+
+AS
+BEGIN
+	DECLARE @idCatalogo VARCHAR(100)
+	set @idCatalogo = (select idCatalogo from Catalogo_CompraRed where codigoMaterial = @codigoMaterial)
+		
+	select 
+	fr.idCatalogo,
+	fr.ReqFechaVencimiento,
+	fr.ReqLote
+		
+	from tbl_Familias_Requerimientos fr
+	where idCatalogo = @idCatalogo
+
+END
+
+
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+
+
+USE [TEST_MJP_WMS]
+GO
+/****** Object:  StoredProcedure [dbo].[InsertarDetalleCantidadPorUbicacion]    Script Date: 12/06/2013 14:06:00 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+ALTER PROCEDURE [dbo].[InsertarDetalleCantidadPorUbicacion] --35, '7441019500151', 10, '(91)A01B03E001CBF01C01P0D0', 8,'20140524', 178945
+--34, '7453015103397', 2, '(91)A01B03E001CAF01C01P0D0', 8
+-- 
+
+--38,'7441019500151',20,'(91)A01B03E001CAF01C03P0D0', 8
+
+	@IdMaestroUbicacion int,--38 56		34
+	@numeroGTIN varchar(200),--7441019500151 7441003596122	7453015103397
+	@Cantidad int,--20 2	2
+	@CodigoUbicacion varchar(200),--(91)A01B03E001CAF01C03P0D0 (91)A01B03E001CAF04C03P0D0	(91)A01B03E001CAF01C01P0D0
+	@programa smallint,--8 8	8
+	
+	@fechaVencimiento varchar(200),
+	
+	@numeroLote int 
+
+AS
+BEGIN TRY
+BEGIN TRANSACTION
+	--print('Inicio')
+	print('1')
+    DECLARE 
+    
+    @IdSaldoUbicacion int,
+    @idInventario int,
+    @IdCodigoInterno bigint,    
+    @idCatalogo bigint,    
+    @cantAux int,
+    @cod_inv int,
+    @IdLoteXMAN2TEMP int
+    print('2')
+    --print('Declare')
+    SET @IdCodigoInterno = 
+    (select ma1.codigoInterno from MaestroArticuloN1 ma1
+     inner join MaestroArticuloN2 ma2 on 
+     ma2.idCodigoInterno = ma1.codigoInterno 
+     inner join GTIN_13 g13 on
+     g13.idGTIN13 = ma2.GTIN13 
+     inner join Programa p on
+     p.IdPrograma = ma2.idPrograma
+     where g13.numeroGTIN = @numeroGTIN and p.IdPrograma = @programa)    
+	print('3')
+	
+    IF EXISTS (select top 1 * from Volatil_Inventario 
+               where codigoInterno = @IdCodigoInterno and programa = @programa and tipoEstado = 7)
+      
+    BEGIN 
+		print('4')
+		print(@programa)
+		print(@fechaVencimiento)
+		print(@numeroLote)
+		print(@IdCodigoInterno)
+		--LOTE
+			SET @IdLoteXMAN2TEMP = (SELECT LM2.IdLoteXMAN2 FROM dbo.LoteXMaestroArticuloN2 LM2
+				INNER JOIN dbo.MaestroArticuloN2 M2 ON
+				M2.idMaestroArtN2 = LM2.IdMAN2 AND
+				M2.idPrograma = @programa
+				INNER JOIN dbo.LoteProducto LP ON
+				LP.IdLoteFecha = LM2.IdLote
+				WHERE LP.fechaVencimiento = @fechaVencimiento AND LP.numeroLote = @numeroLote AND M2.idCodigoInterno= @IdCodigoInterno)
+		--LOTE						
+		print(@IdLoteXMAN2TEMP)
+		print('5')
+		--print('Esta en Volatil inventario')
+        update Volatil_Inventario set cantidad -= @Cantidad where codigoInterno = @IdCodigoInterno and programa = @programa and tipoEstado = 7 and IdLotxMA2 = @IdLoteXMAN2TEMP
+        print('6')
+        SET @cantAux = (select top 1 cantidad from Volatil_Inventario where codigoInterno = @IdCodigoInterno and programa = @programa and tipoEstado = 7 and IdLotxMA2 = @IdLoteXMAN2TEMP) 
+        print('7')
+		--print('Valor: ' + @cantAux)    
+        IF @cantAux <= 0 
+        BEGIN
+			--print('Elimina')    
+            delete from Volatil_Inventario where codigoInterno = @IdCodigoInterno and programa = @programa and tipoEstado = 7 and IdLotxMA2 = @IdLoteXMAN2TEMP  
+            print('8')
+        END
+        print('9')
+		--print('Guardar la informacion')    
+        SET @idCatalogo = (select codigoMaterial from Relacional_1 where codigoInterno = @IdCodigoInterno)             
+        print('10')
+        --print('Valor ' + @idCatalogo)    
+        --preguntar si existe el articulo y hacer un update
+        
+		IF EXISTS(select idInventario from Inventario where programa = @programa and IdCodInterno = @IdCodigoInterno and  IdLoteXMAN2 = @IdLoteXMAN2TEMP)
+		BEGIN
+			set @cod_inv = (select idInventario from Inventario where programa = @programa and IdCodInterno = @IdCodigoInterno and  IdLoteXMAN2 = @IdLoteXMAN2TEMP)
+			--solo esta insertando en la columna cantidad de inventario
+			--hacer insert entre articulos iguales
+			update Inventario set Cantidad += @Cantidad where idInventario = @cod_inv and  IdLoteXMAN2 = @IdLoteXMAN2TEMP
+			SET @idInventario = @cod_inv
+		END
+		ELSE
+		BEGIN
+			insert into Inventario (IdCodInterno,idCatalogo,Cantidad,IdTipoEstado,programa, IdLoteXMAN2)
+			values (@IdCodigoInterno,@idCatalogo,@Cantidad,8,@programa,@IdLoteXMAN2TEMP)
+			SET @idInventario = @@IDENTITY            
+			print('11')			
+		END
+		
+         
+        IF @CodigoUbicacion <> 'NA'
+        BEGIN
+             SET @IdMaestroUbicacion = (select IdMaestroUbicacion from MaestroUbicacion 
+                                         where IdCodigoInterno = @CodigoUbicacion)
+                                         
+                                         print('12')
+        END
+         
+        IF EXISTS (select * from SaldoPorUbicacion s
+                   inner join Relacional_2 r2 on
+                   r2.IdSaldoUbicacion = s.IdSaldoUbicacion and
+                   r2.IdMaestroUbicacion = @IdMaestroUbicacion
+                   where s.IdInventario = @idInventario)
+                   
+			BEGIN
+				  print('13')
+				  update SaldoPorUbicacion set Cantidad += @Cantidad 
+				  where IdInventario = @idInventario
+			END
+        ELSE
+			BEGIN
+				  print('14')
+				  insert into SaldoPorUbicacion (IdInventario,Cantidad) values(@idInventario,@Cantidad)
+				  set @IdSaldoUbicacion = @@IDENTITY
+				  print('15')
+				  IF EXISTS (SELECT IdMaestroUbicacion FROM DetalleCantidadPorUbicacion WHERE IdMaestroUbicacion = @IdMaestroUbicacion)
+					BEGIN 
+						UPDATE DetalleCantidadPorUbicacion SET SaldoActual += @Cantidad WHERE IdMaestroUbicacion = @IdMaestroUbicacion
+					END					  
+				  ELSE 
+				  BEGIN
+					INSERT INTO [DetalleCantidadPorUbicacion]
+					   ([IdMaestroUbicacion]
+					   ,[SaldoActual])
+					   --[IdPrograma])
+					VALUES
+					   (@IdMaestroUbicacion
+					   ,@Cantidad)
+					   --,8)--cambiar a futuro
+				  END
+				  
+				  print('16')
+				  insert into Relacional_2 (IdMaestroUbicacion,IdSaldoUbicacion) values (@IdMaestroUbicacion,@IdSaldoUbicacion)
+				  print('17')
+			END
+		print('18')
+			exec ActualizaSaldoActual @IdMaestroUbicacion  
+        print('termina')
+        SELECT 'EXITO'
+     END          
+COMMIT TRANSACTION
+END TRY
+BEGIN CATCH
+ROLLBACK TRANSACTION
+	SELECT 'ERROR'
+END CATCH
+
+-- =============================================
+-- Author:		<Fernando,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Alter,,>
+-- =============================================
+
+
+USE [TEST_MJP_WMS]
+GO
+/****** Object:  StoredProcedure [dbo].[GetSaldoUbicacionPorMercancia]    Script Date: 12/09/2013 10:13:49 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER proc [dbo].[GetSaldoUbicacionPorMercancia]
+@idInventario int,
+@IdSaldoUbicacion int
+as
+select 
+ma.codigoInterno,
+g.numeroGTIN,
+cr.clasificacion,
+s.Cantidad,
+i.programa,
+lp.fechaVencimiento,
+lp.numeroLote
+
+from Relacional_1 r
+inner join MaestroArticuloN1  ma
+on ma.codigoInterno = r.codigoInterno
+
+inner join Catalogo_CompraRed cr
+on r.codigoMaterial = cr.idCatalogo
+
+inner join MaestroArticuloN2 ma2
+on r.codigoInterno = ma2.idCodigoInterno
+
+inner join GTIN_13 g
+on ma2.GTIN13 = g.idGTIN13
+
+inner join SaldoPorUbicacion s on
+s.IdInventario = @idInventario
+and s.IdSaldoUbicacion = @IdSaldoUbicacion
+
+inner join Inventario i on 
+
+r.codigoInterno = i.IdCodInterno and
+r.codigoMaterial = i.idCatalogo and 
+i.idInventario = s.IdInventario
+--lineas agregadas por Fernando Torres
+inner join LoteXMaestroArticuloN2 lm2 on
+lm2.IdLoteXMAN2 = i.IdLoteXMAN2
+
+inner join LoteProducto lp on
+lp.IdLoteFecha = lm2.IdLote
+
+-- =============================================
+-- Author:		<Fernando,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Alter,,>
+-- =============================================
+
+USE [TEST_MJP_WMS]
+GO
+/****** Object:  StoredProcedure [dbo].[InsertarDetalleCantidadPorUbicacion]    Script Date: 12/09/2013 09:07:40 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+ALTER PROCEDURE [dbo].[InsertarDetalleCantidadPorUbicacion] --35, '7441019500151', 10, '(91)A01B03E001CBF01C01P0D0', 8,'20140524', 178945
+--34, '7453015103397', 2, '(91)A01B03E001CAF01C01P0D0', 8
+-- 
+
+--38,'7441019500151',20,'(91)A01B03E001CAF01C03P0D0', 8
+
+	@IdMaestroUbicacion int,--38 56		34
+	@numeroGTIN varchar(200),--7441019500151 7441003596122	7453015103397
+	@Cantidad int,--20 2	2
+	@CodigoUbicacion varchar(200),--(91)A01B03E001CAF01C03P0D0 (91)A01B03E001CAF04C03P0D0	(91)A01B03E001CAF01C01P0D0
+	@programa smallint,--8 8	8
+	
+	@fechaVencimiento varchar(200),
+	
+	@numeroLote int
+
+AS
+BEGIN TRY
+BEGIN TRANSACTION
+	--print('Inicio')
+	print('1')
+    DECLARE 
+    
+    @IdSaldoUbicacion int,
+    @idInventario int,
+    @IdCodigoInterno bigint,    
+    @idCatalogo bigint,    
+    @cantAux int,
+    @cod_inv int,
+    @IdLoteXMAN2TEMP int
+    print('2')
+    --print('Declare')
+    SET @IdCodigoInterno = 
+    (select ma1.codigoInterno from MaestroArticuloN1 ma1
+     inner join MaestroArticuloN2 ma2 on 
+     ma2.idCodigoInterno = ma1.codigoInterno 
+     inner join GTIN_13 g13 on
+     g13.idGTIN13 = ma2.GTIN13 
+     inner join Programa p on
+     p.IdPrograma = ma2.idPrograma
+     where g13.numeroGTIN = @numeroGTIN and p.IdPrograma = @programa)    
+	print('3')
+	
+    IF EXISTS (select top 1 * from Volatil_Inventario 
+               where codigoInterno = @IdCodigoInterno and programa = @programa and tipoEstado = 7)
+      
+    BEGIN 
+		print('4')
+		print(@programa)
+		print(@fechaVencimiento)
+		print(@numeroLote)
+		print(@IdCodigoInterno)
+		--LOTE
+			--IF EXISTS (SELECT LM2.IdLoteXMAN2 FROM dbo.LoteXMaestroArticuloN2 LM2
+			--	INNER JOIN dbo.MaestroArticuloN2 M2 ON
+			--	M2.idMaestroArtN2 = LM2.IdMAN2 AND
+			--	M2.idPrograma = @programa
+			--	INNER JOIN dbo.LoteProducto LP ON
+			--	LP.IdLoteFecha = LM2.IdLote
+			--	WHERE LP.fechaVencimiento = @fechaVencimiento AND LP.numeroLote = @numeroLote AND M2.idCodigoInterno= @IdCodigoInterno)
+			--BEGIN
+			
+				--cambiar modo de consulta dependiendo del valor que entra null o no null
+				IF @fechaVencimiento IS  NULL AND @numeroLote IS NOT NULL
+				BEGIN
+						SET @IdLoteXMAN2TEMP = (SELECT LM2.IdLoteXMAN2 FROM dbo.LoteXMaestroArticuloN2 LM2
+						INNER JOIN dbo.MaestroArticuloN2 M2 ON
+						M2.idMaestroArtN2 = LM2.IdMAN2 AND
+						M2.idPrograma = @programa
+						INNER JOIN dbo.LoteProducto LP ON
+						LP.IdLoteFecha = LM2.IdLote
+						WHERE LP.fechaVencimiento IS NULL AND LP.numeroLote = @numeroLote AND M2.idCodigoInterno= @IdCodigoInterno)
+				END
+				
+				IF @numeroLote IS NULL AND @fechaVencimiento IS NOT NULL
+				BEGIN 
+						SET @IdLoteXMAN2TEMP = (SELECT LM2.IdLoteXMAN2 FROM dbo.LoteXMaestroArticuloN2 LM2
+						INNER JOIN dbo.MaestroArticuloN2 M2 ON
+						M2.idMaestroArtN2 = LM2.IdMAN2 AND
+						M2.idPrograma = @programa
+						INNER JOIN dbo.LoteProducto LP ON
+						LP.IdLoteFecha = LM2.IdLote
+						WHERE LP.fechaVencimiento = @fechaVencimiento AND LP.numeroLote IS NULL AND M2.idCodigoInterno= @IdCodigoInterno)
+				END
+				
+				IF @numeroLote IS NULL AND @fechaVencimiento IS NULL
+				BEGIN
+						SET @IdLoteXMAN2TEMP = (SELECT LM2.IdLoteXMAN2 FROM dbo.LoteXMaestroArticuloN2 LM2
+						INNER JOIN dbo.MaestroArticuloN2 M2 ON
+						M2.idMaestroArtN2 = LM2.IdMAN2 AND
+						M2.idPrograma = @programa
+						INNER JOIN dbo.LoteProducto LP ON
+						LP.IdLoteFecha = LM2.IdLote
+						WHERE LP.fechaVencimiento IS NULL AND LP.numeroLote IS NULL AND M2.idCodigoInterno= @IdCodigoInterno)			
+				END
+				
+				IF @numeroLote IS NOT NULL AND @fechaVencimiento IS NOT NULL
+				BEGIN 
+						SET @IdLoteXMAN2TEMP = (SELECT LM2.IdLoteXMAN2 FROM dbo.LoteXMaestroArticuloN2 LM2
+						INNER JOIN dbo.MaestroArticuloN2 M2 ON
+						M2.idMaestroArtN2 = LM2.IdMAN2 AND
+						M2.idPrograma = @programa
+						INNER JOIN dbo.LoteProducto LP ON
+						LP.IdLoteFecha = LM2.IdLote
+						WHERE LP.fechaVencimiento = @fechaVencimiento AND LP.numeroLote = @numeroLote AND M2.idCodigoInterno= @IdCodigoInterno)						
+				END
+				
+			IF @IdLoteXMAN2TEMP IS NULL
+			BEGIN
+				SELECT 'ERROR'
+				RETURN				
+			END
+			--cierre de cambio
+			--END
+			--ELSE
+			--BEGIN
+			--	SELECT 'ERROR'
+			--	RETURN
+				--cierra el procedure
+			--END		
+		--LOTE						
+		print(@IdLoteXMAN2TEMP)
+		print('5')
+		--print('Esta en Volatil inventario')
+        update Volatil_Inventario set cantidad -= @Cantidad where codigoInterno = @IdCodigoInterno and programa = @programa and tipoEstado = 7 and IdLotxMA2 = @IdLoteXMAN2TEMP
+        print('6')
+        SET @cantAux = (select top 1 cantidad from Volatil_Inventario where codigoInterno = @IdCodigoInterno and programa = @programa and tipoEstado = 7 and IdLotxMA2 = @IdLoteXMAN2TEMP) 
+        print('7')
+		--print('Valor: ' + @cantAux)    
+        IF @cantAux <= 0 
+        BEGIN
+			--print('Elimina')    
+            delete from Volatil_Inventario where codigoInterno = @IdCodigoInterno and programa = @programa and tipoEstado = 7 and IdLotxMA2 = @IdLoteXMAN2TEMP  
+            print('8')
+        END
+        print('9')
+		--print('Guardar la informacion')    
+        SET @idCatalogo = (select codigoMaterial from Relacional_1 where codigoInterno = @IdCodigoInterno)             
+        print('10')
+        --print('Valor ' + @idCatalogo)    
+        --preguntar si existe el articulo y hacer un update
+        
+		IF EXISTS(select idInventario from Inventario where programa = @programa and IdCodInterno = @IdCodigoInterno and  IdLoteXMAN2 = @IdLoteXMAN2TEMP)
+		BEGIN
+			set @cod_inv = (select idInventario from Inventario where programa = @programa and IdCodInterno = @IdCodigoInterno and  IdLoteXMAN2 = @IdLoteXMAN2TEMP)
+			--solo esta insertando en la columna cantidad de inventario
+			--hacer insert entre articulos iguales
+			update Inventario set Cantidad += @Cantidad where idInventario = @cod_inv and  IdLoteXMAN2 = @IdLoteXMAN2TEMP
+			SET @idInventario = @cod_inv
+		END
+		ELSE
+		BEGIN
+			insert into Inventario (IdCodInterno,idCatalogo,Cantidad,IdTipoEstado,programa, IdLoteXMAN2)
+			values (@IdCodigoInterno,@idCatalogo,@Cantidad,8,@programa,@IdLoteXMAN2TEMP)
+			SET @idInventario = @@IDENTITY            
+			print('11')			
+		END
+		
+         
+        IF @CodigoUbicacion <> 'NA'
+        BEGIN
+             SET @IdMaestroUbicacion = (select IdMaestroUbicacion from MaestroUbicacion 
+                                         where IdCodigoInterno = @CodigoUbicacion)
+                                         
+                                         print('12')
+        END
+         
+        IF EXISTS (select * from SaldoPorUbicacion s
+                   inner join Relacional_2 r2 on
+                   r2.IdSaldoUbicacion = s.IdSaldoUbicacion and
+                   r2.IdMaestroUbicacion = @IdMaestroUbicacion
+                   where s.IdInventario = @idInventario)
+                   
+			BEGIN
+				  print('13')
+				  update SaldoPorUbicacion set Cantidad += @Cantidad 
+				  where IdInventario = @idInventario
+			END
+        ELSE
+			BEGIN
+				  print('14')
+				  insert into SaldoPorUbicacion (IdInventario,Cantidad) values(@idInventario,@Cantidad)
+				  set @IdSaldoUbicacion = @@IDENTITY
+				  print('15')
+				  IF EXISTS (SELECT IdMaestroUbicacion FROM DetalleCantidadPorUbicacion WHERE IdMaestroUbicacion = @IdMaestroUbicacion)
+					BEGIN 
+						UPDATE DetalleCantidadPorUbicacion SET SaldoActual += @Cantidad WHERE IdMaestroUbicacion = @IdMaestroUbicacion
+					END					  
+				  ELSE 
+				  BEGIN
+					INSERT INTO [DetalleCantidadPorUbicacion]
+					   ([IdMaestroUbicacion]
+					   ,[SaldoActual])
+					   --[IdPrograma])
+					VALUES
+					   (@IdMaestroUbicacion
+					   ,@Cantidad)
+					   --,8)--cambiar a futuro
+				  END
+				  
+				  print('16')
+				  insert into Relacional_2 (IdMaestroUbicacion,IdSaldoUbicacion) values (@IdMaestroUbicacion,@IdSaldoUbicacion)
+				  print('17')
+			END
+		print('18')
+			exec ActualizaSaldoActual @IdMaestroUbicacion  
+        print('termina')
+        SELECT 'EXITO'
+     END          
+COMMIT TRANSACTION
+END TRY
+BEGIN CATCH
+ROLLBACK TRANSACTION
+	SELECT 'ERROR'
+END CATCH
+
+
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+
+
+USE [TEST_MJP_WMS]
+GO
+/****** Object:  StoredProcedure [dbo].[GetPendientesGTIN_Clasificar]    Script Date: 12/09/2013 12:10:51 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE PROCEDURE [dbo].[GetPendientesGTIN_ClasificarXidTempGTIN] 
+	-- Add the parameters for the stored procedure here
+@idTempGTIN INT
+AS
+BEGIN
+
+
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for procedure here
+	select 
+	t.idTempGTIN,
+	t.numeroGTIN,
+	t.ubicacion,
+	m.IdCodigoInterno as ruta,
+	t.fecha,
+	t.cantidad,
+	t.descripcionCorta ,
+	t.idCatalogo,
+	t.idLote,
+	t.idPrograma,
+	t.GTIN14,
+	lp.fechaVencimiento,
+	lp.numeroLote
+	
+	from TemporalGTIN t
+	
+	inner join MaestroUbicacion m on
+	m.IdMaestroUbicacion = t.ubicacion
+	
+	inner join LoteProducto lp on
+	lp.IdLoteFecha = t.idLote
+	
+	WHERE t.idTempGTIN = @idTempGTIN
+END

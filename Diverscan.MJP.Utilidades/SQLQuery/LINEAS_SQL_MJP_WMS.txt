@@ -1,0 +1,1518 @@
+﻿-- =============================================
+-- Puesto en Produccion 12-12-2013
+-- =============================================
+
+
+-- =============================================
+-- Author:		<Author,,Fernando Torres>
+-- Create date: <Create Date,12 12 2013,>
+-- Description:	<Description, Creado desde 0,>
+-- =============================================
+
+USE TEST_MJP_WMS
+GO
+CREATE PROCEDURE VerficiarGTIN13BD
+@numeroGTIN VARCHAR(100)
+
+AS
+BEGIN
+	SELECT idGTIN13 FROM GTIN_13 WHERE numeroGTIN = @numeroGTIN
+END;  
+
+
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================  
+
+USE [TEST_MJP_WMS]
+GO
+/****** Object:  StoredProcedure [dbo].[GetPendientesGTIN_ClasificarXidTempGTIN]    Script Date: 12/13/2013 09:09:06 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,,Fernando>
+-- Create date: <Create Date,,12 13 2013>
+-- Description:	<Description,,Cambio>
+-- =============================================
+ALTER PROCEDURE [dbo].[GetPendientesGTIN_ClasificarXidTempGTIN] 
+	-- Add the parameters for the stored procedure here
+@idTempGTIN INT
+AS
+BEGIN
+
+
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for procedure here
+	select 
+	t.idTempGTIN,
+	t.numeroGTIN,
+	t.ubicacion,
+	m.IdCodigoInterno as ruta,
+	t.fecha,
+	t.cantidad,
+	t.descripcionCorta ,
+	t.idCatalogo,
+	t.idLote,
+	t.idPrograma,
+	t.GTIN14,
+	t.CantidadGTIN14,
+	lp.fechaVencimiento,
+	lp.numeroLote
+	
+	from TemporalGTIN t
+	
+	inner join MaestroUbicacion m on
+	m.IdMaestroUbicacion = t.ubicacion
+	
+	inner join LoteProducto lp on
+	lp.IdLoteFecha = t.idLote
+	
+	WHERE t.idTempGTIN = @idTempGTIN
+END
+
+
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+
+ALTER PROCEDURE [dbo].[GetPendientesGTIN_Clasificar] 
+	-- Add the parameters for the stored procedure here
+	
+AS
+BEGIN
+
+
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for procedure here
+	select 
+	t.idTempGTIN,
+	t.numeroGTIN,
+	t.ubicacion,
+	m.IdCodigoInterno as ruta,
+	t.fecha,
+	t.cantidad,
+	t.descripcionCorta ,
+	t.idCatalogo,
+	t.idLote,
+	t.idPrograma,
+	t.GTIN14,
+	t.CantidadGTIN14,
+	lp.fechaVencimiento,
+	lp.numeroLote
+	
+	from TemporalGTIN t
+	
+	inner join MaestroUbicacion m on
+	m.IdMaestroUbicacion = t.ubicacion
+	
+	inner join LoteProducto lp on
+	lp.IdLoteFecha = t.idLote
+	
+	order by t.fecha asc
+END
+
+
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+
+
+USE [TEST_MJP_WMS]
+GO
+/****** Object:  StoredProcedure [dbo].[VerficiarGTIN13BD]    Script Date: 12/13/2013 09:43:35 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER PROCEDURE [dbo].[VerficiarGTIN13BD]
+@numeroGTIN VARCHAR(100)
+
+AS
+BEGIN
+	IF EXISTS (SELECT idGTIN13 FROM GTIN_13 WHERE numeroGTIN = @numeroGTIN)
+	BEGIN
+		SELECT idGTIN13 FROM GTIN_13 WHERE numeroGTIN = @numeroGTIN
+	END
+	ELSE
+	BEGIN 
+		SELECT 'NADA'
+	END
+END;  
+  
+
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+
+
+USE [TEST_MJP_WMS]
+GO
+/****** Object:  StoredProcedure [dbo].[GetBusquedaCatalogoRegistrado]    Script Date: 12/15/2013 19:25:20 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+ALTER PROCEDURE [dbo].[GetBusquedaCatalogoRegistrado]
+@codigoMaterial BIGINT,
+@gtin13 VARCHAR(100),
+@gtin14 VARCHAR(100)
+
+AS
+BEGIN
+	DECLARE 
+	@idCatalogo BIGINT,
+	@codigoInterno BIGINT
+
+	IF @gtin13 IS NULL  AND @gtin14 IS NOT NULL 
+	BEGIN
+
+		SET @codigoInterno = (SELECT R1.codigoInterno FROM Relacional_1 R1
+			INNER JOIN MaestroArticuloN1 M1 ON
+			M1.codigoInterno = R1.codigoInterno
+			INNER JOIN MaestroArticuloN2 M2 ON
+			M2.idCodigoInterno = M1.codigoInterno
+			INNER JOIN GTIN_13 GT13 ON
+			GT13.idGTIN13 = M2.GTIN13
+			INNER JOIN Relacional_GTIN RGTIN ON
+			RGTIN.idGTIN13 = GT13.idGTIN13
+			INNER JOIN GTIN_14 GT14 ON 
+			GT14.idGTIN14 = RGTIN.idGTIN14
+			WHERE codigoMaterial = @idCatalogo AND GT14.numeroGTIN = @gtin14 AND GT13.esInterno = 1)
+			
+		SELECT 
+			N1.descripcionLarga,
+			N1.descripconCorta,
+			N1.idUnidadEmpaque,
+			N1.idTipoEmpaque,
+			N1.idUnidadMedida,
+			N1.codigoInterno,
+			TUM.idTipoUnidadMedida,
+			ATC.categoríaMJP,
+			ATC.marca,
+			ATC.talla,
+			ATC.color,
+			ATC.alto,
+			ATC.califUnidMedioAltoArt,
+			ATC.profundidad,
+			ATC.califUnidMedioProfArt,
+			ATC.PesoNeto,
+			ATC.califUnidMedioPesoNeto,
+			ATC.PrecioNeto,
+			ATC.temperatura,
+			ATC.sabor,
+			ATC.fragancia,
+			ATC.CondicionesManipulacion,
+			ATC.medidaUso,
+			ATC.tipoMaterial,
+			GT13.numeroGTIN AS GTIN13,
+			GT14.numeroGTIN AS GTIN14,
+			GT14.esInterno
+			
+		FROM dbo.MaestroArticuloN1 N1
+			
+			INNER JOIN Unidades_de_Medida UM ON
+			UM.idUnidadMedida = N1.idUnidadMedida
+			
+			INNER JOIN Tipo_Unidad_Medida TUM ON
+			TUM.idTipoUnidadMedida = UM.idTipoUnidadMedida
+			
+			INNER JOIN Atributos_Comunes ATC ON
+			ATC.codigoInterno = N1.codigoInterno
+			
+			INNER JOIN MaestroArticuloN2 N2 ON
+			N2.idCodigoInterno = N1.codigoInterno
+			
+			INNER JOIN GTIN_13 GT13 ON
+			GT13.idGTIN13 = N2.GTIN13
+			
+			INNER JOIN Relacional_GTIN RGTIN ON
+			RGTIN.idGTIN13 = GT13.idGTIN13
+			
+			INNER JOIN GTIN_14 GT14 ON 
+			GT14.idGTIN14 = RGTIN.idGTIN14
+			
+		WHERE N1.codigoInterno = @codigoInterno AND GT14.numeroGTIN = @gtin14 AND GT13.esInterno = 1
+	END
+	
+	IF @gtin14 IS NULL  AND @gtin13 IS NOT NULL 
+	BEGIN 
+	
+		SET @codigoInterno = (SELECT R1.codigoInterno FROM Relacional_1 R1
+			INNER JOIN MaestroArticuloN1 M1 ON
+			M1.codigoInterno = R1.codigoInterno
+			INNER JOIN MaestroArticuloN2 M2 ON
+			M2.idCodigoInterno = M1.codigoInterno
+			INNER JOIN GTIN_13 GT13 ON
+			GT13.idGTIN13 = M2.GTIN13
+			INNER JOIN Relacional_GTIN RGTIN ON
+			RGTIN.idGTIN13 = GT13.idGTIN13
+			INNER JOIN GTIN_14 GT14 ON 
+			GT14.idGTIN14 = RGTIN.idGTIN14
+			WHERE codigoMaterial = @idCatalogo AND GT14.esInterno = 1 AND GT13.numeroGTIN = @gtin13)
+				
+	
+		SELECT 
+		N1.descripcionLarga,
+		N1.descripconCorta,
+		N1.idUnidadEmpaque,
+		N1.idTipoEmpaque,
+		N1.idUnidadMedida,
+		N1.codigoInterno,
+		TUM.idTipoUnidadMedida,
+		ATC.categoríaMJP,
+		ATC.marca,
+		ATC.talla,
+		ATC.color,
+		ATC.alto,
+		ATC.califUnidMedioAltoArt,
+		ATC.profundidad,
+		ATC.califUnidMedioProfArt,
+		ATC.PesoNeto,
+		ATC.califUnidMedioPesoNeto,
+		ATC.PrecioNeto,
+		ATC.temperatura,
+		ATC.sabor,
+		ATC.fragancia,
+		ATC.CondicionesManipulacion,
+		ATC.medidaUso,
+		ATC.tipoMaterial,
+		GT13.numeroGTIN AS GTIN13,
+		GT14.numeroGTIN AS GTIN14,
+		GT14.esInterno
+		
+		
+		FROM dbo.MaestroArticuloN1 N1
+		
+		INNER JOIN Unidades_de_Medida UM ON
+		UM.idUnidadMedida = N1.idUnidadMedida
+		
+		INNER JOIN Tipo_Unidad_Medida TUM ON
+		TUM.idTipoUnidadMedida = UM.idTipoUnidadMedida
+		
+		INNER JOIN Atributos_Comunes ATC ON
+		ATC.codigoInterno = N1.codigoInterno
+		
+		INNER JOIN MaestroArticuloN2 N2 ON
+		N2.idCodigoInterno = N1.codigoInterno
+		
+		INNER JOIN GTIN_13 GT13 ON
+		GT13.idGTIN13 = N2.GTIN13
+		
+		INNER JOIN Relacional_GTIN RGTIN ON
+		RGTIN.idGTIN13 = GT13.idGTIN13
+		
+		INNER JOIN GTIN_14 GT14 ON 
+		GT14.idGTIN14 = RGTIN.idGTIN14
+		
+		WHERE N1.codigoInterno = @codigoInterno AND GT13.numeroGTIN = @gtin13 AND GT14.esInterno = 1
+	END
+	
+	IF @gtin14 IS NOT NULL  AND @gtin13 IS NOT NULL 
+	BEGIN
+	
+	SET @codigoInterno = (SELECT R1.codigoInterno FROM Relacional_1 R1
+			INNER JOIN MaestroArticuloN1 M1 ON
+			M1.codigoInterno = R1.codigoInterno
+			INNER JOIN MaestroArticuloN2 M2 ON
+			M2.idCodigoInterno = M1.codigoInterno
+			INNER JOIN GTIN_13 GT13 ON
+			GT13.idGTIN13 = M2.GTIN13
+			INNER JOIN Relacional_GTIN RGTIN ON
+			RGTIN.idGTIN13 = GT13.idGTIN13
+			INNER JOIN GTIN_14 GT14 ON 
+			GT14.idGTIN14 = RGTIN.idGTIN14
+			WHERE codigoMaterial = @idCatalogo AND GT14.numeroGTIN = @gtin14 AND GT13.numeroGTIN = @gtin13)
+			
+		SELECT 
+			N1.descripcionLarga,
+			N1.descripconCorta,
+			N1.idUnidadEmpaque,
+			N1.idTipoEmpaque,
+			N1.idUnidadMedida,
+			N1.codigoInterno,
+			TUM.idTipoUnidadMedida,
+			ATC.categoríaMJP,
+			ATC.marca,
+			ATC.talla,
+			ATC.color,
+			ATC.alto,
+			ATC.califUnidMedioAltoArt,
+			ATC.profundidad,
+			ATC.califUnidMedioProfArt,
+			ATC.PesoNeto,
+			ATC.califUnidMedioPesoNeto,
+			ATC.PrecioNeto,
+			ATC.temperatura,
+			ATC.sabor,
+			ATC.fragancia,
+			ATC.CondicionesManipulacion,
+			ATC.medidaUso,
+			ATC.tipoMaterial,
+			GT13.numeroGTIN AS GTIN13,
+			GT14.numeroGTIN AS GTIN14,
+			GT14.esInterno
+			
+		FROM dbo.MaestroArticuloN1 N1
+			
+			INNER JOIN Unidades_de_Medida UM ON
+			UM.idUnidadMedida = N1.idUnidadMedida
+			
+			INNER JOIN Tipo_Unidad_Medida TUM ON
+			TUM.idTipoUnidadMedida = UM.idTipoUnidadMedida
+			
+			INNER JOIN Atributos_Comunes ATC ON
+			ATC.codigoInterno = N1.codigoInterno
+			
+			INNER JOIN MaestroArticuloN2 N2 ON
+			N2.idCodigoInterno = N1.codigoInterno
+			
+			INNER JOIN GTIN_13 GT13 ON
+			GT13.idGTIN13 = N2.GTIN13
+			
+			INNER JOIN Relacional_GTIN RGTIN ON
+			RGTIN.idGTIN13 = GT13.idGTIN13
+			
+			INNER JOIN GTIN_14 GT14 ON 
+			GT14.idGTIN14 = RGTIN.idGTIN14
+			
+		WHERE N1.codigoInterno = @codigoInterno AND GT14.numeroGTIN = @gtin14 AND GT13.numeroGTIN = @gtin13
+	
+	END
+END
+
+
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+
+
+USE [TEST_MJP_WMS]
+GO
+/****** Object:  StoredProcedure [dbo].[GetBusquedaCatalogoRegistrado]    Script Date: 12/16/2013 11:12:05 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+ALTER PROCEDURE [dbo].[GetBusquedaCatalogoRegistrado]-- 29901205000002, '7702635200048', null
+@codigoMaterial BIGINT,--29901205000002
+@gtin13 VARCHAR(100),--7702635200048
+@gtin14 VARCHAR(100)--null
+
+AS
+BEGIN
+	DECLARE 
+	@idCatalogo BIGINT,
+	@codigoInterno BIGINT
+	print('1')
+	IF @gtin13 IS NULL  AND @gtin14 IS NOT NULL 
+	BEGIN
+		print('2')
+		SET @codigoInterno = (SELECT R1.codigoInterno FROM Relacional_1 R1
+			INNER JOIN MaestroArticuloN1 M1 ON
+			M1.codigoInterno = R1.codigoInterno
+			INNER JOIN MaestroArticuloN2 M2 ON
+			M2.idCodigoInterno = M1.codigoInterno
+			INNER JOIN GTIN_13 GT13 ON
+			GT13.idGTIN13 = M2.GTIN13
+			INNER JOIN Relacional_GTIN RGTIN ON
+			RGTIN.idGTIN13 = GT13.idGTIN13
+			INNER JOIN GTIN_14 GT14 ON 
+			GT14.idGTIN14 = RGTIN.idGTIN14
+			
+			INNER JOIN Catalogo_CompraRed CCR ON
+			CCR.idCatalogo = R1.codigoMaterial
+			
+			WHERE CCR.codigoMaterial = @codigoMaterial AND GT14.numeroGTIN = @gtin14 AND GT13.esInterno = 1)
+			
+			print('3')
+		SELECT 
+			N1.descripcionLarga,
+			N1.descripconCorta,
+			N1.idUnidadEmpaque,
+			N1.idTipoEmpaque,
+			N1.idUnidadMedida,
+			N1.codigoInterno,
+			TUM.idTipoUnidadMedida,
+			ATC.categoríaMJP,
+			ATC.marca,
+			ATC.talla,
+			ATC.color,
+			ATC.alto,
+			ATC.califUnidMedioAltoArt,
+			ATC.profundidad,
+			ATC.califUnidMedioProfArt,
+			ATC.PesoNeto,
+			ATC.califUnidMedioPesoNeto,
+			ATC.PrecioNeto,
+			ATC.temperatura,
+			ATC.sabor,
+			ATC.fragancia,
+			ATC.CondicionesManipulacion,
+			ATC.medidaUso,
+			ATC.tipoMaterial,
+			GT13.numeroGTIN AS GTIN13,
+			GT14.numeroGTIN AS GTIN14,
+			GT14.esInterno,
+			GT14.cantidad AS cantidadgtin14
+			
+		FROM dbo.MaestroArticuloN1 N1
+			
+			INNER JOIN Unidades_de_Medida UM ON
+			UM.idUnidadMedida = N1.idUnidadMedida
+			
+			INNER JOIN Tipo_Unidad_Medida TUM ON
+			TUM.idTipoUnidadMedida = UM.idTipoUnidadMedida
+			
+			INNER JOIN Atributos_Comunes ATC ON
+			ATC.codigoInterno = N1.codigoInterno
+			
+			INNER JOIN MaestroArticuloN2 N2 ON
+			N2.idCodigoInterno = N1.codigoInterno
+			
+			INNER JOIN GTIN_13 GT13 ON
+			GT13.idGTIN13 = N2.GTIN13
+			
+			INNER JOIN Relacional_GTIN RGTIN ON
+			RGTIN.idGTIN13 = GT13.idGTIN13
+			
+			INNER JOIN GTIN_14 GT14 ON 
+			GT14.idGTIN14 = RGTIN.idGTIN14
+			
+		WHERE N1.codigoInterno = @codigoInterno AND GT14.numeroGTIN = @gtin14 AND GT13.esInterno = 1
+		print('4')
+	END
+	print('5')
+	IF @gtin14 IS NULL  AND @gtin13 IS NOT NULL 
+	BEGIN 
+		print('6')
+		SET @codigoInterno = (SELECT R1.codigoInterno FROM Relacional_1 R1
+			INNER JOIN MaestroArticuloN1 M1 ON
+			M1.codigoInterno = R1.codigoInterno
+			INNER JOIN MaestroArticuloN2 M2 ON
+			M2.idCodigoInterno = M1.codigoInterno
+			INNER JOIN GTIN_13 GT13 ON
+			GT13.idGTIN13 = M2.GTIN13
+			INNER JOIN Relacional_GTIN RGTIN ON
+			RGTIN.idGTIN13 = GT13.idGTIN13
+			INNER JOIN GTIN_14 GT14 ON 
+			GT14.idGTIN14 = RGTIN.idGTIN14
+			
+			INNER JOIN Catalogo_CompraRed CCR ON
+			CCR.idCatalogo = R1.codigoMaterial
+			
+			WHERE CCR.codigoMaterial = @codigoMaterial AND GT14.esInterno = 1 AND GT13.numeroGTIN = @gtin13)
+			
+	print(@codigoInterno)
+	print('7')
+		SELECT 
+		N1.descripcionLarga,
+		N1.descripconCorta,
+		N1.idUnidadEmpaque,
+		N1.idTipoEmpaque,
+		N1.idUnidadMedida,
+		N1.codigoInterno,
+		TUM.idTipoUnidadMedida,
+		ATC.categoríaMJP,
+		ATC.marca,
+		ATC.talla,
+		ATC.color,
+		ATC.alto,
+		ATC.califUnidMedioAltoArt,
+		ATC.profundidad,
+		ATC.califUnidMedioProfArt,
+		ATC.PesoNeto,
+		ATC.califUnidMedioPesoNeto,
+		ATC.PrecioNeto,
+		ATC.temperatura,
+		ATC.sabor,
+		ATC.fragancia,
+		ATC.CondicionesManipulacion,
+		ATC.medidaUso,
+		ATC.tipoMaterial,
+		GT13.numeroGTIN AS GTIN13,
+		GT14.numeroGTIN AS GTIN14,
+		GT14.esInterno,
+		GT14.cantidad AS cantidadgtin14
+		
+		
+		FROM dbo.MaestroArticuloN1 N1
+		
+		INNER JOIN Unidades_de_Medida UM ON
+		UM.idUnidadMedida = N1.idUnidadMedida
+		
+		INNER JOIN Tipo_Unidad_Medida TUM ON
+		TUM.idTipoUnidadMedida = UM.idTipoUnidadMedida
+		
+		INNER JOIN Atributos_Comunes ATC ON
+		ATC.codigoInterno = N1.codigoInterno
+		
+		INNER JOIN MaestroArticuloN2 N2 ON
+		N2.idCodigoInterno = N1.codigoInterno
+		
+		INNER JOIN GTIN_13 GT13 ON
+		GT13.idGTIN13 = N2.GTIN13
+		
+		INNER JOIN Relacional_GTIN RGTIN ON
+		RGTIN.idGTIN13 = GT13.idGTIN13
+		
+		INNER JOIN GTIN_14 GT14 ON 
+		GT14.idGTIN14 = RGTIN.idGTIN14
+		
+		WHERE N1.codigoInterno = @codigoInterno AND GT13.numeroGTIN = @gtin13 AND GT14.esInterno = 1
+		print('8')
+	END
+	print('9')
+	IF @gtin14 IS NOT NULL  AND @gtin13 IS NOT NULL 
+	BEGIN
+	print('10')
+	SET @codigoInterno = (SELECT R1.codigoInterno FROM Relacional_1 R1
+			INNER JOIN MaestroArticuloN1 M1 ON
+			M1.codigoInterno = R1.codigoInterno
+			INNER JOIN MaestroArticuloN2 M2 ON
+			M2.idCodigoInterno = M1.codigoInterno
+			INNER JOIN GTIN_13 GT13 ON
+			GT13.idGTIN13 = M2.GTIN13
+			INNER JOIN Relacional_GTIN RGTIN ON
+			RGTIN.idGTIN13 = GT13.idGTIN13
+			INNER JOIN GTIN_14 GT14 ON 
+			GT14.idGTIN14 = RGTIN.idGTIN14
+			
+			INNER JOIN Catalogo_CompraRed CCR ON
+			CCR.idCatalogo = R1.codigoMaterial
+			
+			WHERE CCR.codigoMaterial = @codigoMaterial AND GT14.numeroGTIN = @gtin14 AND GT13.numeroGTIN = @gtin13)
+			
+			print('')
+		SELECT 
+			N1.descripcionLarga,
+			N1.descripconCorta,
+			N1.idUnidadEmpaque,
+			N1.idTipoEmpaque,
+			N1.idUnidadMedida,
+			N1.codigoInterno,
+			TUM.idTipoUnidadMedida,
+			ATC.categoríaMJP,
+			ATC.marca,
+			ATC.talla,
+			ATC.color,
+			ATC.alto,
+			ATC.califUnidMedioAltoArt,
+			ATC.profundidad,
+			ATC.califUnidMedioProfArt,
+			ATC.PesoNeto,
+			ATC.califUnidMedioPesoNeto,
+			ATC.PrecioNeto,
+			ATC.temperatura,
+			ATC.sabor,
+			ATC.fragancia,
+			ATC.CondicionesManipulacion,
+			ATC.medidaUso,
+			ATC.tipoMaterial,
+			GT13.numeroGTIN AS GTIN13,
+			GT14.numeroGTIN AS GTIN14,
+			GT14.esInterno,
+			GT14.cantidad AS cantidadgtin14
+			
+		FROM dbo.MaestroArticuloN1 N1
+			
+			INNER JOIN Unidades_de_Medida UM ON
+			UM.idUnidadMedida = N1.idUnidadMedida
+			
+			INNER JOIN Tipo_Unidad_Medida TUM ON
+			TUM.idTipoUnidadMedida = UM.idTipoUnidadMedida
+			
+			INNER JOIN Atributos_Comunes ATC ON
+			ATC.codigoInterno = N1.codigoInterno
+			
+			INNER JOIN MaestroArticuloN2 N2 ON
+			N2.idCodigoInterno = N1.codigoInterno
+			
+			INNER JOIN GTIN_13 GT13 ON
+			GT13.idGTIN13 = N2.GTIN13
+			
+			INNER JOIN Relacional_GTIN RGTIN ON
+			RGTIN.idGTIN13 = GT13.idGTIN13
+			
+			INNER JOIN GTIN_14 GT14 ON 
+			GT14.idGTIN14 = RGTIN.idGTIN14
+			
+		WHERE N1.codigoInterno = @codigoInterno AND GT14.numeroGTIN = @gtin14 AND GT13.numeroGTIN = @gtin13
+	print('11')
+	END
+	print('12')
+END
+
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+
+USE [TEST_MJP_WMS]
+GO
+/****** Object:  StoredProcedure [dbo].[InsertarMaestroArticuloN2]    Script Date: 12/16/2013 13:02:47 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER PROC [dbo].[InsertarMaestroArticuloN2]
+
+@idCodigoInterno varchar(200),
+@GTIN13 varchar(200),
+@Programa INT
+
+AS
+begin
+
+declare @id int
+set @id = (select idGTIN13 from GTIN_13 where numeroGTIN= @GTIN13)
+IF NOT EXISTS (SELECT idCodigoInterno FROM MaestroArticuloN2 WHERE idCodigoInterno = @idCodigoInterno AND GTIN13 = @id AND idPrograma=@Programa)
+BEGIN
+	insert into MaestroArticuloN2 (idCodigoInterno, GTIN13,idPrograma)
+	values (convert(bigint, @idCodigoInterno), @id,@Programa)
+END
+
+
+end
+
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+
+
+
+USE TEST_MJP_WMS
+GO
+
+ALTER PROCEDURE exc_VistaArticulos
+@idprograma INT
+AS
+BEGIN
+	SELECT * FROM vw_ListadoArticulosPrograma WHERE programa = @idprograma
+END
+
+
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+
+
+
+
+USE TEST_MJP_WMS
+GO
+
+ALTER VIEW vw_ListadoArticulosPrograma
+AS
+
+SELECT 
+Sum(sa.Cantidad) AS cantidad,
+sa.idInventario,
+inv.IdCodInterno,
+inv.programa,
+inv.IdTipoEstado,
+cr.clasificacion,
+gt13.numeroGTIN
+
+from SaldoPorUbicacion sa
+
+INNER JOIN Inventario inv ON
+inv.idInventario = sa.IdInventario
+
+INNER JOIN Catalogo_CompraRed cr on
+inv.idCatalogo = cr.idCatalogo
+
+INNER JOIN MaestroArticuloN2 m2 on 
+m2.idCodigoInterno = inv.IdCodInterno
+
+INNER JOIN GTIN_13 gt13 ON 
+gt13.idGTIN13 = m2.GTIN13
+
+WHERE  IdTipoEstado = 8
+
+GROUP BY sa.idInventario, inv.IdCodInterno,inv.programa,inv.IdTipoEstado,cr.clasificacion,gt13.numeroGTIN
+
+
+
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+
+
+
+
+USE [TEST_MJP_WMS]
+GO
+/****** Object:  StoredProcedure [dbo].[insertar_Volatil_Inventario_HH]    Script Date: 12/17/2013 10:25:15 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER PROCEDURE [dbo].[insertar_Volatil_Inventario_HH] --5013, 10, 8, , 21
+
+@codigoInterno varchar(100),
+@cantidad varchar(100),
+@idPrograma varchar(100),
+@idLotxMA2 varchar(100),
+@idOrdenCompra varchar(100)
+
+AS
+BEGIN
+Print '6'
+IF EXISTS( SELECT codigoInterno FROM Volatil_Inventario WHERE codigoInterno = @codigoInterno AND programa = @idPrograma and 
+IdLotxMA2 = @idLotxMA2)
+	BEGIN
+	Print '7'
+		UPDATE Volatil_Inventario
+		SET Cantidad = Cantidad + Cast(@Cantidad as int)
+		WHERE codigoInterno = @codigoInterno AND programa = @idPrograma AND IdLotxMA2 = @idLotxMA2
+		Print '8'
+	END
+ELSE
+	BEGIN
+	Print '9'
+		INSERT INTO Volatil_Inventario
+           ([codigoInterno]
+           ,[cantidad]
+           ,[tipoEstado]
+           ,[programa]
+           ,[idLotxMA2])
+		 VALUES
+			   (@codigoInterno
+			   ,@cantidad
+			   ,'7'
+			   ,@idPrograma
+			   ,@idLotxMA2)
+	END
+Print '10'
+IF (SELECT SUM(Cantidad) FROM Detalle_Compra WHERE IdOrdenCompra = @IdOrdenCompra) = 0
+BEGIN
+UPDATE Orden_Compra 
+SET IdEstado = 24
+WHERE IdOrdenCompra = @IdOrdenCompra
+END
+END
+
+
+USE [TEST_MJP_WMS]
+GO
+/****** Object:  StoredProcedure [dbo].[insertarLoteProducto]    Script Date: 12/17/2013 13:54:49 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER PROCEDURE [dbo].[insertarLoteProducto]5050, 6, 7401005988561, NULL, NULL
+
+@codigoInterno VARCHAR(100), -- 5050
+@Programa VARCHAR(100), -- 6
+@GTIN VARCHAR(100),-- 7401005988561
+
+@fechaVencimiento VARCHAR(100),-- NULL
+@numeroLote VARCHAR(100)-- NULL
+AS
+BEGIN
+Print 'Paso 0'
+DECLARE @idGTIN13 varchar(100)
+DECLARE @idLoteProducto varchar(50)
+set @idGTIN13 = (select idGTIN13 from GTIN_13 where numeroGTIN = @GTIN)
+--IF NOT EXISTS (
+--SELECT * FROM MaestroArticuloN2 
+--WHERE idCodigoInterno = @codigoInterno and idPrograma = @Programa and GTIN13 = @idGTIN13
+
+----SELECT idCodigoInterno FROM MaestroArticuloN2 
+----WHERE idCodigoInterno = '5016' and idPrograma = '8' and GTIN13 = '999'
+
+--)
+--BEGIN
+Print 'Paso 1'
+Declare @idMaestroArtN2 varchar(100)
+SET @idMaestroArtN2 = (SELECT idMaestroArtN2 FROM MaestroArticuloN2 
+WHERE idCodigoInterno = @codigoInterno and idPrograma = @Programa and GTIN13 = @idGTIN13)
+Print 'Paso 2'
+Print @idMaestroArtN2
+--Verificación de nulidad de Campos de entrada--
+IF @fechaVencimiento is null and @numeroLote is null
+BEGIN
+Print 'Paso 3'
+SET @IdLoteProducto = (SELECT IdLoteFecha FROM LoteProducto WHERE (fechaVencimiento is null and numeroLote IS NULL))
+Print @IdLoteProducto
+END
+ELSE
+IF @fechaVencimiento IS NULL AND @numeroLote in (SELECT numeroLote FROM LoteProducto WHERE fechaVencimiento is null)
+BEGIN
+Print 'Paso 4'
+SET @IdLoteProducto = (SELECT IdLoteFecha FROM LoteProducto WHERE (fechaVencimiento is null and numeroLote = @numeroLote))
+END
+ELSE
+IF @numeroLote IS NULL AND @fechaVencimiento in (SELECT fechaVencimiento FROM LoteProducto WHERE numeroLote is null)
+BEGIN
+Print 'Paso 5'
+SET @IdLoteProducto = (SELECT IdLoteFecha FROM LoteProducto WHERE (fechaVencimiento = @fechaVencimiento and numeroLote IS NULL))
+END
+--FIN de Verificación de nulidad de Campos de entrada--
+ELSE
+BEGIN
+Print 'Paso 6'
+SET @IdLoteProducto = (SELECT IdLoteFecha FROM LoteProducto WHERE (fechaVencimiento = @fechaVencimiento and numeroLote = @numeroLote))
+IF @IdLoteProducto is null
+BEGIN
+Print 'Paso 7'
+INSERT INTO LoteProducto
+           ([fechaVencimiento]
+           ,[numeroLote])
+     VALUES
+           (@fechaVencimiento
+           ,@numeroLote)
+SET @IdLoteProducto = (select @@IDENTITY)
+END
+END
+Print 'Paso 8'
+Declare @IdLoteXMAN2 varchar(100)
+IF NOT EXISTS (SELECT IdLoteXMAN2 FROM LoteXMaestroArticuloN2 WHERE IdMAN2 = @idMaestroArtN2 and IdLote = @IdLoteProducto)
+BEGIN
+Print 'Paso 9'
+INSERT INTO LoteXMaestroArticuloN2
+           ([IdMAN2]
+           ,[IdLote])
+      VALUES
+           (@idMaestroArtN2
+           ,@IdLoteProducto)
+SET @IdLoteXMAN2 = (select @@IDENTITY)
+END
+ELSE 
+Print 'Paso 10'
+SET @IdLoteXMAN2 = (SELECT IdLoteXMAN2 FROM LoteXMaestroArticuloN2 WHERE IdMAN2 = @idMaestroArtN2 and IdLote = @IdLoteProducto)
+Print 'Paso 11'
+SELECT @IdLoteXMAN2
+END
+
+
+USE [TEST_MJP_WMS]
+GO
+/****** Object:  StoredProcedure [dbo].[Vincular_GTIN13conGTIN14_HH]    Script Date: 12/17/2013 11:40:02 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER PROCEDURE [dbo].[Vincular_GTIN13conGTIN14_HH]
+
+@GTIN13 varchar(100),
+@numeroGTIN VARCHAR(100),
+@cantidad VARCHAR(100)
+
+AS
+BEGIN
+DECLARE @idGTIN13 varchar(100)
+DECLARE @idGTIN14 varchar(100)
+SET @idGTIN14 = (SELECT idGTIN14 FROM GTIN_14 WHERE numeroGTIN = @numeroGTIN AND cantidad = @cantidad)
+IF @idGTIN14 IS NULL
+BEGIN
+INSERT INTO GTIN_14
+           ([numeroGTIN]
+           ,[esInterno]
+           ,[cantidad])
+     VALUES
+           (@numeroGTIN
+           ,'False'
+           ,@cantidad)
+           
+set @idGTIN14 = (select @@IDENTITY)
+END
+
+set @idGTIN13 = (select idGTIN13 from GTIN_13 where numeroGTIN = @GTIN13)
+
+IF NOT EXISTS (SELECT idRelacionalGTIN FROM Relacional_GTIN WHERE idGTIN13 = @idGTIN13 AND idGTIN14 = @idGTIN14)
+INSERT INTO Relacional_GTIN
+           ([idGTIN13]
+           ,[idGTIN14])
+     VALUES
+           (@idGTIN13
+           ,@idGTIN14)
+END
+
+
+-- =============================================
+-- Author:		<Author,,FERNANDO T>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,ALTER>
+-- =============================================
+
+
+
+
+USE [TEST_MJP_WMS]
+GO
+/****** Object:  StoredProcedure [dbo].[InsertarFamilia_Requerimiento]    Script Date: 12/17/2013 11:25:00 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER PROCEDURE [dbo].[InsertarFamilia_Requerimiento]
+
+ @idCatalogo VARCHAR(100)
+,@Descripcion VARCHAR(100)
+,@ReqFechaVencimiento VARCHAR(100)
+,@ReqLote VARCHAR(100)
+
+AS
+BEGIN
+
+IF NOT EXISTS (SELECT idCatalogo FROM tbl_Familias_Requerimientos WHERE idCatalogo = @idCatalogo)
+	BEGIN
+		INSERT INTO tbl_Familias_Requerimientos
+			   ([idCatalogo]
+			   ,[Descripcion]
+			   ,[ReqFechaVencimiento]
+			   ,[ReqLote])
+		 VALUES
+			   (@idCatalogo
+			   ,@Descripcion
+			   ,@ReqFechaVencimiento
+			   ,@ReqLote)
+			   SELECT ('OK')
+	END
+	ELSE
+	BEGIN
+		SELECT ('NO')
+	END        
+END
+
+
+-- =============================================
+-- Author:		<Author,,FERNANDO T>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,ALTER>
+-- =============================================
+
+
+
+
+USE [TEST_MJP_WMS]
+GO
+/****** Object:  StoredProcedure [dbo].[GetListadoCatalogo]    Script Date: 12/17/2013 11:16:00 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER PROCEDURE [dbo].[GetListadoCatalogo]
+
+@clase varchar(100),
+@subclase varchar(100),
+@tipo varchar(10)
+
+AS
+BEGIN
+
+	if(@tipo = '1')
+	begin
+		select CCR.idCatalogo from Catalogo_CompraRed CCR
+		
+		--INNER JOIN tbl_Familias_Requerimientos TBL ON
+		--TBL.idCatalogo <> CCR.idCatalogo
+		----10811
+		----0
+		
+		where clase = @clase and subClase = @subclase and CCR.idCatalogo not in (select tbl.idCatalogo from tbl_Familias_Requerimientos tbl)
+	end
+	
+	else if(@tipo = '2')
+	begin
+	
+		select ccr.idCatalogo from Catalogo_CompraRed ccr
+		where clase = @clase and ccr.idCatalogo not in (select tbl.idCatalogo from tbl_Familias_Requerimientos tbl)
+		
+	end
+END
+
+
+
+-- =============================================
+-- Author:		<Author,,FERNANDO T>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,ALTER>
+-- =============================================
+
+USE [TEST_MJP_WMS]
+GO
+/****** Object:  StoredProcedure [dbo].[GetOrdenesPorNum]    Script Date: 12/17/2013 14:44:27 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER PROCEDURE [dbo].[GetOrdenesPorNum]
+
+--@Estado varchar(10),
+@Numero varchar(20)
+
+AS
+BEGIN
+select
+oc.NumPedido,
+oc.TramiteCompra,
+oc.NomProveedor,
+eo.Nombre AS Estado,
+pr.NombreCorto as idPrograma
+from Orden_Compra oc
+
+inner join Catalogo_Estados eo
+on oc.IdEstado = eo.IdCatalogo_Estados
+
+inner join Programa pr on
+pr.IdPrograma = oc.idPrograma
+
+where oc.NumPedido like '%'+@Numero+'%'
+
+
+END
+
+
+USE [TEST_MJP_WMS]
+GO
+/****** Object:  StoredProcedure [dbo].[GetInventarioPorMercancia]    Script Date: 12/17/2013 15:36:14 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE proc [dbo].[GetArticulosM2PorMercancia]--7813
+@idCateg varchar(100)
+as
+begin
+select
+
+ma1.codigoInterno as codigoInterno,
+g.numeroGTIN as numeroGTIN,
+ma1.descripcionLarga as clasificacion
+
+from Relacional_1 r1
+INNER JOIN MaestroArticuloN1 ma1
+	on ma1.codigoInterno = R1.codigoInterno
+INNER JOIN MaestroArticuloN2 ma2
+	on ma2.idCodigoInterno = MA1.codigoInterno
+INNER JOIN GTIN_13 g
+	on ma2.GTIN13 = g.idGTIN13
+	
+where R1.codigoMaterial = @idCateg
+end
+
+
+
+
+-- =============================================
+-- Author:		<Author,,FERNANDO T>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,ALTER>
+-- =============================================
+
+
+USE [TEST_MJP_WMS]
+GO
+/****** Object:  StoredProcedure [dbo].[GetArticulosM2PorMercancia]    Script Date: 12/18/2013 09:18:33 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER proc [dbo].[GetArticulosM2PorMercancia]--7813
+@idCateg varchar(100)
+as
+begin
+select
+
+ma1.codigoInterno as codigoInterno,
+g.numeroGTIN as numeroGTIN,
+ma1.descripcionLarga as clasificacion,
+g14.numeroGTIN as numeroGTIN14
+
+from Relacional_1 r1
+INNER JOIN MaestroArticuloN1 ma1
+	on ma1.codigoInterno = R1.codigoInterno
+INNER JOIN MaestroArticuloN2 ma2
+	on ma2.idCodigoInterno = MA1.codigoInterno
+INNER JOIN GTIN_13 g
+	on ma2.GTIN13 = g.idGTIN13
+	
+INNER JOIN Relacional_GTIN rgt on
+rgt.idGTIN13 = g.idGTIN13
+
+inner join GTIN_14 g14 on
+g14.idGTIN14 = rgt.idGTIN14
+	
+where R1.codigoMaterial = @idCateg
+end
+
+
+
+
+
+
+-- =============================================
+-- Author:		<Author,,FERNANDO T>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,ALTER>
+-- =============================================
+
+
+
+
+USE TEST_MJP_WMS
+GO
+
+CREATE PROCEDURE GetMaestroArticuloN2_web
+
+
+@clase varchar(100),
+@subClase varchar(100)
+AS
+BEGIN
+
+	IF @subClase IS NULL
+	BEGIN
+		SELECT 
+			m2.idCodigoInterno,
+			m2.GTIN13,
+			m1.descripconCorta,
+			m1.descripcionLarga,
+			ccr.idCatalogo
+			
+			from MaestroArticuloN2 m2
+			
+			INNER JOIN MaestroArticuloN1 m1 ON
+			m1.codigoInterno = m2.idCodigoInterno
+			
+			INNER JOIN Relacional_1 r1 on
+			r1.codigoInterno = m1.codigoInterno
+			
+			INNER JOIN Catalogo_CompraRed ccr on 
+			ccr.idCatalogo = r1.codigoInterno
+			
+			WHERE ccr.clase = @clase
+	END
+	
+	IF @clase IS NOT NULL AND @subClase IS NOT NULL
+	BEGIN
+		SELECT 
+			m2.idCodigoInterno,
+			m2.GTIN13,
+			m1.descripconCorta,
+			m1.descripcionLarga,
+			ccr.idCatalogo
+			
+			from MaestroArticuloN2 m2
+			
+			INNER JOIN MaestroArticuloN1 m1 ON
+			m1.codigoInterno = m2.idCodigoInterno
+			
+			INNER JOIN Relacional_1 r1 on
+			r1.codigoInterno = m1.codigoInterno
+			
+			INNER JOIN Catalogo_CompraRed ccr on 
+			ccr.idCatalogo = r1.codigoInterno
+			
+			WHERE ccr.clase = @clase AND ccr.subClase = @subClase
+		
+	END
+	
+END
+
+
+
+
+-- =============================================
+-- Author:		<Author,,FERNANDO T>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,ALTER>
+-- =============================================
+
+
+
+USE [TEST_MJP_WMS]
+GO
+/****** Object:  StoredProcedure [dbo].[GetAriculosVinculados]    Script Date: 12/18/2013 11:35:13 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER PROCEDURE [dbo].[GetAriculosVinculados]
+
+@CodigoMaterial varchar(100),
+@idPrograma INT
+AS
+BEGIN
+Declare @idCodigoMaterial varchar(100)
+
+set @idCodigoMaterial = (
+						select idCatalogo from Catalogo_CompraRed 
+						where codigoMaterial = @CodigoMaterial
+						)
+
+SELECT 
+	R1.codigoInterno,
+	MA1.descripcionLarga
+FROM Relacional_1 R1
+INNER JOIN MaestroArticuloN1 MA1
+ON R1.codigoInterno = MA1.codigoInterno
+
+INNER JOIN MaestroArticuloN2 MA2
+ON MA2.idCodigoInterno = MA1.codigoInterno
+
+
+WHERE codigoMaterial = @idCodigoMaterial AND MA2.idPrograma = @idPrograma
+
+END
+
+
+-- =============================================
+-- Author:		<Author,,FERNANDO T>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,ALTER>
+-- =============================================
+
+
+USE [TEST_MJP_WMS]
+GO
+/****** Object:  StoredProcedure [dbo].[VerificarOrdenConPrograma]    Script Date: 12/18/2013 11:46:36 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER procedure [dbo].[VerificarOrdenConPrograma]
+
+@idOrden varchar(100)
+
+as
+begin
+
+select idPrograma from Orden_Compra where NumPedido = @idOrden and idPrograma is not null
+
+end
+
+
+-- =============================================
+-- Author:		<Author,,FERNANDO T>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,ALTER>
+-- =============================================
+
+
+
+
+
+//VOLRAR OJO
+
+USE [TEST_MJP_WMS]
+GO
+/****** Object:  StoredProcedure [dbo].[GetAriculosVinculados]    Script Date: 12/18/2013 11:35:13 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[GetAriculosVinculados2]
+
+@CodigoMaterial varchar(100),
+@idPrograma INT
+AS
+BEGIN
+Declare @idCodigoMaterial varchar(100)
+
+set @idCodigoMaterial = (
+						select idCatalogo from Catalogo_CompraRed 
+						where codigoMaterial = @CodigoMaterial
+						)
+
+SELECT 
+	R1.codigoInterno,
+	MA1.descripcionLarga
+FROM Relacional_1 R1
+INNER JOIN MaestroArticuloN1 MA1
+ON R1.codigoInterno = MA1.codigoInterno
+
+INNER JOIN MaestroArticuloN2 MA2
+ON MA2.idCodigoInterno = MA1.codigoInterno
+
+
+WHERE MA1.codigoMaterial = @idCodigoMaterial AND MA2.idPrograma = @idPrograma
+
+END
+
+-- =============================================
+-- Author:		<Author,,FERNANDO T>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,ALTER>
+-- =============================================
+
+
+USE [TEST_MJP_WMS]
+GO
+/****** Object:  StoredProcedure [dbo].[GetAriculosVinculados]    Script Date: 12/18/2013 11:56:13 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER PROCEDURE [dbo].[GetAriculosVinculados]
+
+@CodigoMaterial varchar(100)
+
+AS
+BEGIN
+Declare @idCodigoMaterial varchar(100)
+
+set @idCodigoMaterial = (
+						select idCatalogo from Catalogo_CompraRed 
+						where codigoMaterial = @CodigoMaterial
+						)
+
+SELECT 
+	R1.codigoInterno,
+	MA1.descripcionLarga
+FROM Relacional_1 R1
+INNER JOIN MaestroArticuloN1 MA1
+ON R1.codigoInterno = MA1.codigoInterno
+
+WHERE codigoMaterial = @idCodigoMaterial 
+
+END
+
+-- =============================================
+-- Author:		<Author,,FERNANDO T>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,ALTER>
+-- =============================================
+
+
+
+USE [TEST_MJP_WMS]
+GO
+/****** Object:  StoredProcedure [dbo].[InsertarOrdenCompra]    Script Date: 12/18/2013 13:54:59 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER proc [dbo].[InsertarOrdenCompra]
+
+@Institucion varchar(300)
+,@NumPedido BIGINT
+,@FechaEmision datetime
+,@NomContacto varchar(300)
+,@TelContacto varchar(50)
+,@CedulaJuridica varchar(150)
+,@NomProveedor varchar(200)
+,@Sociedad varchar(350)
+,@TramiteCompra varchar(50)
+,@TipoCambio real
+,@IdEstado int
+,@IdTipoIngreso int
+
+as
+
+INSERT INTO Orden_Compra
+           (Institucion
+           ,NumPedido
+           ,FechaEmision
+           ,NomContacto
+           ,TelContacto
+           ,CedulaJuridica
+           ,NomProveedor
+           ,Sociedad
+           ,TramiteCompra
+           ,TipoCambio
+           ,IdEstado
+           ,IdTipoIngreso)
+     VALUES
+           (@Institucion
+			,@NumPedido
+			,@FechaEmision
+			,@NomContacto
+			,@TelContacto
+			,@CedulaJuridica
+			,@NomProveedor
+			,@Sociedad
+			,@TramiteCompra
+			,@TipoCambio
+			,@IdEstado
+			,@IdTipoIngreso)
+
+
+
+			//CAMBIAR TIPO DE CAMPO
+
+
+			USE [TEST_MJP_WMS]
+GO
+
+/****** Object:  Table [dbo].[Orden_Compra]    Script Date: 12/18/2013 13:57:53 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+SET ANSI_PADDING ON
+GO
+
+CREATE TABLE [dbo].[Orden_Compra](
+	[idOrdenCompra] [int] IDENTITY(1,1) NOT NULL,
+	[Institucion] [varchar](300) NULL,
+	[NumPedido] [bigint] NULL,
+	[FechaEmision] [datetime] NULL,
+	[NomContacto] [varchar](300) NULL,
+	[TelContacto] [varchar](50) NULL,
+	[CedulaJuridica] [varchar](150) NULL,
+	[NomProveedor] [varchar](200) NULL,
+	[Sociedad] [varchar](350) NULL,
+	[TramiteCompra] [varchar](50) NULL,
+	[TipoCambio] [real] NULL,
+	[IdEstado] [int] NULL,
+	[IdTipoIngreso] [int] NULL,
+	[idPrograma] [smallint] NULL,
+ CONSTRAINT [PK_Orden_Compra] PRIMARY KEY CLUSTERED 
+(
+	[idOrdenCompra] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+ALTER TABLE [dbo].[Orden_Compra]  WITH CHECK ADD  CONSTRAINT [FK_Orden_Compra_Catalogo_Estados] FOREIGN KEY([IdEstado])
+REFERENCES [dbo].[Catalogo_Estados] ([IdCatalogo_Estados])
+GO
+
+ALTER TABLE [dbo].[Orden_Compra] CHECK CONSTRAINT [FK_Orden_Compra_Catalogo_Estados]
+GO
+
+ALTER TABLE [dbo].[Orden_Compra]  WITH CHECK ADD  CONSTRAINT [FK_Orden_Compra_TipoIngresoOrden] FOREIGN KEY([IdTipoIngreso])
+REFERENCES [dbo].[TipoIngresoOrden] ([IdTipoIngreso])
+GO
+
+ALTER TABLE [dbo].[Orden_Compra] CHECK CONSTRAINT [FK_Orden_Compra_TipoIngresoOrden]
+GO
+
+
+//CAMBIAR TIPO DE CAMPO

@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/WCFOrdenCompraCRLib" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/WCFOrdenCompraCRLib" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/GeneradorOrdenCompraMJP" />
+  <xs:complexType name="OrdenCompraParametros">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Clave" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="IdInstitucion" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="OrdenId" type="xs:int" />
+      <xs:element minOccurs="0" name="Usuario" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="OrdenCompraParametros" nillable="true" type="tns:OrdenCompraParametros" />
+  <xs:complexType name="OrdenCompra">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q1="http://schemas.datacontract.org/2004/07/GeneradorOrdenCompraMJP" base="q1:OrdenCompraMJP">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Resultado" nillable="true" type="tns:Resultado" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="OrdenCompra" nillable="true" type="tns:OrdenCompra" />
+  <xs:complexType name="Resultado">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Codigo" type="xs:int" />
+      <xs:element minOccurs="0" name="MensajeError" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Resultado" nillable="true" type="tns:Resultado" />
+</xs:schema>

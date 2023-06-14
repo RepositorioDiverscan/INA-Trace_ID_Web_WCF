@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/GeneradorOrdenCompraMJP" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/GeneradorOrdenCompraMJP" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:complexType name="OrdenCompraMJP">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="FechaNotificacionOrdenCompra" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="InstitucionFechaPedido" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="InstitucionNombre" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="InstitucionNumeroPedido" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="InstitucionNumeroTramite" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="InstitucionPersonaContactoTelefono" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="InstitucionSociedad" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="InstitucionTipoCambio" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="MontoTotalOrdenCompra" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="OrdenCompraDetalle" nillable="true" type="tns:ArrayOfOrdenCompraDetalle" />
+      <xs:element minOccurs="0" name="ProveedorCedulaJuridica" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ProveedorNombre" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="OrdenCompraMJP" nillable="true" type="tns:OrdenCompraMJP" />
+  <xs:complexType name="ArrayOfOrdenCompraDetalle">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="OrdenCompraDetalle" nillable="true" type="tns:OrdenCompraDetalle" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfOrdenCompraDetalle" nillable="true" type="tns:ArrayOfOrdenCompraDetalle" />
+  <xs:complexType name="OrdenCompraDetalle">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Cantidad" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="CentroGestor" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="CodigoMercancia" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="DescripcionCortaMercancia" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="DescripcionLargaMercancia" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Moneda" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="MontoLinea" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="MontoSolicitudPedido" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="NumeroLinea" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="NumeroSolicitudPedido" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="PosicionPresupuestaria" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="PrecioUnitario" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="TextosExtras" nillable="true" type="tns:ArrayOfTextosExtras" />
+      <xs:element minOccurs="0" name="UnidadMedida" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="OrdenCompraDetalle" nillable="true" type="tns:OrdenCompraDetalle" />
+  <xs:complexType name="ArrayOfTextosExtras">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="TextosExtras" nillable="true" type="tns:TextosExtras" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfTextosExtras" nillable="true" type="tns:ArrayOfTextosExtras" />
+  <xs:complexType name="TextosExtras">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="NombreCampo" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ValorCampo" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="TextosExtras" nillable="true" type="tns:TextosExtras" />
+</xs:schema>

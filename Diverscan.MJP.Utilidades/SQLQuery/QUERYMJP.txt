@@ -1,0 +1,274 @@
+﻿-- =============================================
+-- Author:		<Author,,Fernando Torres Siles>
+-- Create date: <Create Date,,14 02 2013>
+-- Description:	<Description,,Creacion sp para reportes>
+-- =============================================
+
+CREATE PROCEDURE [dbo].[sp_ReporteArticulos]
+@clasein varchar(256),
+@subclasein varchar(256),
+@mercanciain varchar(256)
+
+AS
+BEGIN
+
+CREATE TABLE #tbl_temp_ReporteArticulos(
+descripconCorta varchar(256),
+descripcionLarga varchar(256),
+g13 varchar(256),
+g14 varchar(256),
+programa varchar(256),
+clase varchar(256),
+subclase varchar(256),
+mercancia varchar(256),
+cantidad varchar(256)
+)
+
+
+DECLARE
+@descripconCorta varchar(256),
+@descripcionLarga varchar(256),
+@g13 varchar(256),
+@g14 varchar(256),
+@programa varchar(256),
+
+@clase varchar(256),
+@subclase varchar(256),
+@mercancia varchar(256),
+@cantidad varchar(256),
+
+@clasenomb varchar(256),
+@subclasenomb varchar(256),
+@mercancianomb varchar(256),
+
+@query nvarchar(256)
+
+
+IF @clasein IS NOT NULL AND @subclasein IS NULL AND @mercanciain IS NULL
+BEGIN
+	SELECT @query = 'DECLARE CursorsspReporte CURSOR for select * from vw_ConsultaReporteArticulos vw where vw.clase = ' + @clasein 
+END
+
+IF @clasein IS NOT NULL AND @subclasein IS NOT NULL AND @mercanciain IS NULL
+BEGIN
+	SELECT @query = 'DECLARE CursorsspReporte CURSOR for select * from vw_ConsultaReporteArticulos vw where vw.clase = ' + @clasein + ' and vw.subclase = ' + @subclasein
+END
+
+IF @clasein IS NOT NULL AND @subclasein IS NOT NULL AND @mercanciain IS NOT NULL
+BEGIN
+	SELECT @query = 'DECLARE CursorsspReporte CURSOR for select * from vw_ConsultaReporteArticulos vw where vw.clase = ' + @clasein + ' and vw.subclase = ' + @subclasein + 'and vw.mercancia = ' + @mercanciain
+END
+
+
+EXEC sp_executesql @query
+	OPEN CursorsspReporte
+		
+		FETCH next from CursorsspReporte INTO 
+				@descripconCorta,
+				@descripcionLarga,
+				@g13,
+				@g14,
+				@programa,
+				@clase,
+				@subclase,
+				@mercancia,
+				@cantidad	 
+		
+		
+		WHILE (@@FETCH_STATUS = 0)
+		BEGIN
+		
+			SET @clasenomb  = (SELECT [clasificacion] FROM [Catalogo_CompraRed] WHERE [clase] = @clase and [subClase] = 000 and [mercancia] = 000000)
+			SET @subclasenomb = (SELECT [clasificacion] FROM [Catalogo_CompraRed] WHERE [clase] = @clase and [subClase] = @subclase and [mercancia] = 000000)
+			SET @mercancianomb = (SELECT [clasificacion] FROM [Catalogo_CompraRed] WHERE [clase] = @clase and [subClase] = @subclase and [mercancia] = @mercancia)
+			
+			INSERT INTO #tbl_temp_ReporteArticulos(
+				descripconCorta,
+				descripcionLarga,
+				g13,
+				g14,
+				programa,
+				clase,
+				subclase,
+				mercancia,
+				cantidad
+				)
+				VALUES (@descripconCorta,
+				@descripcionLarga,
+				@g13,
+				@g14,
+				@programa,
+				@clasenomb,
+				@subclasenomb,
+				@mercancianomb,
+				@cantidad
+				)
+
+	
+			FETCH next from CursorsspReporte INTO 
+				@descripconCorta,
+				@descripcionLarga,
+				@g13,
+				@g14,
+				@programa,
+				@clase,
+				@subclase,
+				@mercancia,
+				@cantidad
+		END
+		
+	CLOSE CursorsspReporte
+	DEALLOCATE CursorsspReporte
+
+	SELECT * FROM #tbl_temp_ReporteArticulos
+	
+END	
+
+-- =============================================
+-- Author:		<Author,,Fernando Torres Siles>
+-- Create date: <Create Date,,14 02 2014>
+-- Description:	<Description,,Creacion de vista para reporte>
+-- =============================================
+
+
+CREATE view [dbo].[vw_ConsultaReporteArticulos]
+as
+
+	select 
+		
+		mn1.descripconCorta,
+		mn1.descripcionLarga,
+		g13.numeroGTIN as g13,
+		g14.numeroGTIN as g14,
+		pr.NombreCorto as programa,
+		ccr.clase,
+		ccr.subClase,
+		ccr.mercancia,
+		
+		sum(spu.Cantidad) as cantidad
+		
+	from
+	Inventario inv 
+
+	inner join SaldoPorUbicacion spu on
+	inv.idInventario = spu.IdInventario
+
+	inner join MaestroArticuloN2 mn2 on
+	mn2.idCodigoInterno = inv.IdCodInterno
+	and mn2.idPrograma = inv.programa
+
+	inner join MaestroArticuloN1 mn1 on
+	mn1.codigoInterno = mn2.idCodigoInterno
+
+	inner join GTIN_13 g13 on
+	g13.idGTIN13 = mn2.GTIN13
+
+	inner join Relacional_GTIN rgtn on
+	rgtn.idGTIN13 = mn2.GTIN13
+
+	inner join GTIN_14 g14 on
+	rgtn.idGTIN14 = g14.idGTIN14
+
+	inner join Programa pr on
+	pr.IdPrograma = inv.programa
+
+	inner join Relacional_1 rl1 on
+	rl1.codigoInterno = mn1.codigoInterno
+
+	inner join Catalogo_CompraRed ccr on
+	ccr.idCatalogo = rl1.codigoMaterial
+	
+	group by g13.numeroGTIN, g14.numeroGTIN, pr.NombreCorto,ccr.clase,ccr.subClase,ccr.mercancia,ccr.clasificacion,mn1.descripconCorta,mn1.descripcionLarga
+
+
+
+-- =============================================
+-- Author:		<Author,,Fernando Torres Siles>
+-- Create date: <Create Date,, 27 02 2014>
+-- Description:	<Description,, Herencia de procedures>
+-- =============================================
+
+
+Create PROCEDURE [dbo].[EditarCantidadUbicada] 
+	@IdUbicacionOrigen bigint, --43
+	@IdSaldoUbicacion bigint, --155
+	@CantMover int --5
+	
+AS
+BEGIN TRY
+BEGIN TRANSACTION 
+DECLARE
+@cantAux INT
+
+	
+     update SaldoPorUbicacion set Cantidad = @CantMover where IdSaldoUbicacion = @IdSaldoUbicacion
+     
+     SET @cantAux = (select Cantidad from SaldoPorUbicacion where IdSaldoUbicacion = @IdSaldoUbicacion)         
+     IF  @cantAux = 0
+     BEGIN
+          delete from Relacional_2 where IdSaldoUbicacion = @IdSaldoUbicacion
+          delete from SaldoPorUbicacion where IdSaldoUbicacion = @IdSaldoUbicacion
+     END
+     ELSE
+     BEGIN
+	 	exec UpdateSaldoXUbicacion @IdSaldoUbicacion, 8 
+     END
+           
+    exec ActualizaSaldoActual @IdUbicacionOrigen 
+COMMIT TRANSACTION
+END TRY
+BEGIN CATCH
+    SELECT ERROR_MESSAGE()
+    SELECT ERROR_LINE()
+    ROLLBACK TRANSACTION
+END CATCH
+
+
+
+-- =============================================
+-- Author:		<Author,,>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+
+
+-- =============================================
+-- Author:		<Author,,>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+
+
+-- =============================================
+-- Author:		<Author,,>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+
+
+-- =============================================
+-- Author:		<Author,,>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+
+
+-- =============================================
+-- Author:		<Author,,>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+
+
+-- =============================================
+-- Author:		<Author,,>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+
+
+-- =============================================
+-- Author:		<Author,,>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================

@@ -1,0 +1,7 @@
+###############################
+GRID AJUSTES INVENTARIO 
+###############################
+
+1.En el caso de las recepciones indicar el número de OC ERP al que pertenece dicho movimiento.
+2.Agregar indicador de suma o resta sobre inventario.
+3.Fechas orden ascendente.

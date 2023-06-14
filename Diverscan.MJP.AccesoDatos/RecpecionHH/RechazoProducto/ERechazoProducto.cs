@@ -1,0 +1,41 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Runtime.Serialization;
+
+namespace Diverscan.MJP.AccesoDatos.RecpecionHH.RechazoProducto
+{
+    [DataContract]
+    public class ERechazoProducto
+    {
+        int _idUsuario;
+        long _idDetalleOrdenCompra;
+        long _idArticulo;
+        decimal _cantidad;
+        string _lote;
+        string _fechaVencimiento;
+        string _ubicacion;
+        string _motivoRechazo;
+        string _descripcionRechazo;
+
+        [DataMember]
+        public int IdUsuario { get => _idUsuario; set => _idUsuario = value; }
+        [DataMember]
+        public long IdDetalleOrdenCompra { get => _idDetalleOrdenCompra; set => _idDetalleOrdenCompra = value; }
+        [DataMember]
+        public long IdArticulo { get => _idArticulo; set => _idArticulo = value; }
+        [DataMember]
+        public decimal Cantidad { get => _cantidad; set => _cantidad = value; }
+        [DataMember]
+        public string Lote { get => _lote; set => _lote = value; }
+        [DataMember]
+        public string FechaVencimiento { get => _fechaVencimiento; set => _fechaVencimiento = value; }
+        [DataMember]
+        public string Ubicacion { get => _ubicacion; set => _ubicacion = value; }
+        [DataMember]
+        public string MotivoRechazo { get => _motivoRechazo; set => _motivoRechazo = value; }
+        [DataMember]
+        public string DescripcionRechazo { get => _descripcionRechazo; set => _descripcionRechazo = value; }
+    }
+}

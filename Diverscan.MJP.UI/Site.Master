@@ -1,0 +1,566 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="Diverscan.MJP.UI.SiteMaster" %>
+
+<%--@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" --%>
+<%@ Register TagPrefix="telerik" Namespace="Telerik.Web.UI" Assembly="Telerik.Web.UI" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head id="Head1" runat="server">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Control de Bodegas</title>
+    <link rel="icon" type="image/ico" href="Images/Logos/ico.png" />
+    <link rel="icon" type="image/ico" href="Images/Logos/ico.ico" />
+    <link rel="shortcut icon" type="image/x-icon" href="Images/Logos/ico.ico" />
+    <link href="~/Styles/Alerta/alertify.core.css" rel="stylesheet" type="text/css" />
+    <link href="~/Styles/Alerta/alertify.default.css" rel="stylesheet" type="text/css" />
+    <link href="Styles/jsGritter.css" rel="stylesheet" type="text/css" />
+    <link href="~/Styles/Site.css" rel="stylesheet" type="text/css" />
+    <link href="~/Styles/StyleFieldset.css" rel="stylesheet" type="text/css" />
+    <link href="Styles/StyleButton.css" rel="stylesheet" type="text/css" />
+    <link href="Styles/StyleTextBox.css" rel="stylesheet" type="text/css" />
+    <link href="Styles/StyleAccordion.css" rel="stylesheet" type="text/css" />
+    <link href="Styles/StyleDropDownList.css" rel="stylesheet" />
+    <link href="Styles/Stylepop.css" rel="stylesheet" />
+    <link href="Styles/topMenu.css" rel="stylesheet" />
+    <link href="~/Styles/jquery-ui-1.8.19.custom.css" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
+
+
+
+    <!--SweetAlert2-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-bootstrap-4@5.0.10/bootstrap-4.min.css">
+
+    <!--Font Awesome and Boostrap CSS-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+
+
+
+
+    <script type="text/javascript" src="~/Scripts/ScriptsSite/formatDate.js"></script>
+    <script type="text/javascript" src="~/Scripts/ScriptsSite/jquery-ui-1.8.19.custom.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/ScriptsSite/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/ScriptsSite/jquery-3.3.1.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" type="text/javascript"></script>
+
+
+    <!--Boostrap JS-->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+    <!--SweetAlert2-->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.all.min.js"></script>
+    <!--JS PDF-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <asp:ContentPlaceHolder ID="HeadContent" runat="server"></asp:ContentPlaceHolder>
+</head>
+<body id="CuerpoHtml" runat="server" style="width: 100%; height: 100%;">
+    <script type="text/javascript">             
+        function getNotifications() {
+            $.ajax({
+                type: "POST",
+                url: "/Notificaciones/Notificaciones.aspx/GetNotifications",
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    if (data.d !== "false" || data.d === null || data === null) {
+                        var notificaciones = data.d.split("|");//Separador de notificaciones
+                        for (var i = 0; i < notificaciones.length; i++) {
+                            alertify.alert(notificaciones[i]); //Notificación con botón de aceptar para hacer estricta su visualización, se muestra en la parte central superior
+                            //alertify.error(notificaciones[i]); //Mensaje sencillo en rojo, se muestra al lado derecho
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+    <script type="text/javascript">
+
+        setInterval(function () {
+            getNotifications();
+        }, 3600000);
+
+        //var tiempoRecarga = 60000;
+        //3600 000 milisegundos => 60 min
+        //1800 000 milisegundos => 30 min
+        //900 000  milisegundos => 15 min
+        //600 000  milisegundos => 10 min
+        //300 000  milisegundos => 5 min
+        //60 000   milisegundos => 1 min
+
+        //Imprimir divs
+        function imprimirDiv(divID) {
+            //Get the HTML of div
+            var divElements = document.getElementById(divID).innerHTML;
+            //Get the HTML of whole page
+            var oldPage = document.body.innerHTML;
+
+            //Reset the page's HTML with div's HTML only
+            document.body.innerHTML =
+                "<html><head><title></title></head><body>" +
+                divElements + "</body>";
+
+            //Print Page
+            window.print();
+
+            //Restore orignal HTML
+            document.body.innerHTML = oldPage;
+        }
+        //Obtener notificaciones
+    </script>
+    <form id="Form1" runat="server">
+        <div class="page">
+            <asp:ScriptManager ID="scrMaster" runat="server">
+                <Scripts>
+                    <asp:ScriptReference Path="~/Scripts/Alertas/alertify.js" />
+                    <asp:ScriptReference Path="~/Scripts/Alertas/tipoAlerta.js" />
+                    <asp:ScriptReference Path="~/Scripts/ScriptsSite/Diagram.js" />
+                    <asp:ScriptReference Assembly="Telerik.Web.UI" Name="Telerik.Web.UI.Common.Core.js" />
+                    <asp:ScriptReference Assembly="Telerik.Web.UI" Name="Telerik.Web.UI.Common.jQuery.js" />
+                    <asp:ScriptReference Assembly="Telerik.Web.UI" Name="Telerik.Web.UI.Common.jQueryInclude.js" />
+                </Scripts>
+            </asp:ScriptManager>
+            <script type="text/javascript" src="../Scripts/Utility.js"></script>
+            <telerik:RadSkinManager ID="RadSkinManager1" runat="server" ShowChooser="false" PersistenceMode="Cookie" Skin="Outlook" />
+            <div class="header" id="cabezera" runat="server">
+                <div class="loginDisplay">
+                    <table>
+                        <tr>
+                            <td>
+                                <asp:Label runat="server" ID="lbNombre" Text="NOMBRE"> </asp:Label>
+                                <asp:Label runat="server" ID="lbApellidos" Text="Apellidos"> </asp:Label>
+                                <asp:DropDownList ID="ddlmenu" runat="server" Visible="false"></asp:DropDownList>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <asp:Label runat="server" ID="lbPrograma"> </asp:Label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <asp:LoginView ID="HeadLoginView" runat="server" EnableViewState="false">
+                                    <AnonymousTemplate>
+                                        <asp:LinkButton ID="btnCerrarSesion" OnClick="BtnCerrarSesionClick" runat="server">[Cerrar sesión]</asp:LinkButton>
+                                    </AnonymousTemplate>
+                                    <LoggedInTemplate>
+                                        Welcome <span class="bold">
+                                            <asp:LoginName ID="HeadLoginName" runat="server" />
+                                        </span>! [  ]
+                                    </LoggedInTemplate>
+                                </asp:LoginView>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="title">
+                    <div>
+                        <table class="tblLogo">
+                            <tr>
+                                <td>
+                                    <asp:Image runat="server" ID="imgLodoMJP" ImageUrl="~/Images/Logos/TraceID2.png" />
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="clear hideSkiplink" id="MenuNavigate" runat="server">
+
+                    <div>
+                        <table width="100%" style="vertical-align: central">
+                            <tr>
+                                <td style="height: 10px"></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <asp:SiteMapPath ID="siteMap" runat="server" ForeColor="White">
+                                    </asp:SiteMapPath>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="height: 10px"></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <div class="MenuTelerik">
+                    <%--PostBack ="false" AutoPostBack="false"--%>
+                    <telerik:RadPanelBar ID="RadPanelBar1" RenderMode="Lightweight" runat="server" ExpandMode="FullExpandedItem" Height="450px" AllowCollapseAllItems="false" CollapseAnimation-Type="None" CollapseAnimation-Duration="6000">
+                        <Items>
+                            <%--ADMINISTRACION--%>
+                            <telerik:RadPanelItem Text="Administración" PostBack="false" ImageUrl="~/Images/MenuItem/Application.png" Expanded="true">
+                                <Items>
+                                    <%--INVENTARIO--%>
+                                    <telerik:RadPanelItem Text="Inventario" Visible="True" Font-Bold="True" BackColor="AliceBlue" ImageUrl="~/Images/Ico/imageres_111.ico">
+                                        <Items>
+                                            <telerik:RadPanelItem runat="server" ImageUrl="~/Images/Ico/imageres_6.ico" Text="Lotes y Fechas de Vencimiento"
+                                                NavigateUrl="~/Administracion/Inventario/wf_FechaVencimientoLote.aspx" Visible="false">
+                                            </telerik:RadPanelItem>
+
+                                            <telerik:RadPanelItem Text="Gestión de Ajustes" ImageUrl="~/Images/Ico/imageres_6.ico"
+                                                NavigateUrl="~/Administracion/Inventario/AutorizacionAjusteInventario.aspx" Visible="true">
+                                            </telerik:RadPanelItem>
+
+                                            <telerik:RadPanelItem Text="Agregar Inventario" ImageUrl="~/Images/Ico/imageres_6.ico"
+                                                NavigateUrl="~/Administracion/Inventario/InventarioBasicoVisor.aspx" Visible="true">
+                                            </telerik:RadPanelItem>
+
+                                            <telerik:RadPanelItem Text="Resultados de Inventarios" ImageUrl="~/Images/Ico/imageres_6.ico"
+                                                NavigateUrl="~/Administracion/Inventario/VisorInventariosBasico.aspx" Visible="true">
+                                            </telerik:RadPanelItem>
+
+                                            <telerik:RadPanelItem Text="Gestión Pedidos" ImageUrl="~/Images/Ico/Imageres_6.ico"
+                                                NavigateUrl="~/Administracion/GestionPedido/GestionPedido.aspx">
+                                            </telerik:RadPanelItem>
+
+                                        </Items>
+                                    </telerik:RadPanelItem>
+
+                                    <%--OPERACIÓN--%>
+                                    <telerik:RadPanelItem runat="server" Text="Operación" Font-Bold="True" BackColor="AliceBlue" ImageUrl="~/Images/Ico/imageres_92.ico" Visible="false">
+                                        <Items>
+                                            <telerik:RadPanelItem runat="server" ImageUrl="~/Images/Ico/imageres_6.ico" Text="Horario Bodega" Visible="false"
+                                                NavigateUrl="~/Administracion/Operacion/wf_HorariosBodega.aspx">
+                                            </telerik:RadPanelItem>
+                                            <telerik:RadPanelItem runat="server" ImageUrl="~/Images/Ico/imageres_5333.ico" Text="Duracion al destino" Visible="false"
+                                                NavigateUrl="~/Administracion/Operacion/wf_DuracionBodegaDestino.aspx">
+                                            </telerik:RadPanelItem>
+                                            <telerik:RadPanelItem runat="server" ImageUrl="~/Images/Ico/imageres_79.ico" Text="Usuario Accion" Visible="false"
+                                                NavigateUrl="~/Administracion/Operacion/wf_TiempoUsuarioAccion.aspx">
+                                            </telerik:RadPanelItem>
+                                            <telerik:RadPanelItem runat="server" Text="Traslados" ImageUrl="~/Images/Ico/imageres_5333.ico" Visible="false"
+                                                NavigateUrl="~/Administracion/Operacion/wf_Traslados.aspx">
+                                            </telerik:RadPanelItem>
+
+                                        </Items>
+                                    </telerik:RadPanelItem>
+                                    <%--SEGURIDAD--%>
+                                    <telerik:RadPanelItem Text="Seguridad" Font-Bold="True" BackColor="AliceBlue" ImageUrl="~/Images/Ico/imageres_78.ico">
+                                        <Items>
+                                            <telerik:RadPanelItem runat="server" ImageUrl="~/Images/Ico/imageres_79.ico" Text="Usuarios y Roles"
+                                                NavigateUrl="~/Administracion/Seguridad/wf_SeguridadUsuarios.aspx" Visible="true">
+                                            </telerik:RadPanelItem>
+                                        </Items>
+                                    </telerik:RadPanelItem>
+
+                                    <%--BUSCADOR--%>
+                                    <telerik:RadPanelItem runat="server" ImageUrl="~/Images/MenuItem/Paste.png" Text="Buscador" BackColor="AliceBlue" PostBack="False" Visible="false" Font-Bold="True">
+                                        <Items>
+                                            <telerik:RadPanelItem runat="server" ImageUrl="~/Images/MenuItem/layers.png" Text="Web" NavigateUrl="~/Alicia/AliciaWeb.html" Visible="false"></telerik:RadPanelItem>
+                                        </Items>
+                                    </telerik:RadPanelItem>
+
+                                    <%--SALIDAS--%>
+                                    <telerik:RadPanelItem Text="Salidas" ImageUrl="~/Images/MenuItem/truck3.png" PostBack="False" BackColor="AliceBlue" Visible="false" Font-Bold="True">
+                                        <Items>
+                                            <telerik:RadPanelItem runat="server" ImageUrl="~/Images/MenuItem/shopping-cart.png" Text=" Requisicion"
+                                                NavigateUrl="~/Salidas/Requisicion/wf_ConsultaRequisicion.aspx" Visible="false">
+                                            </telerik:RadPanelItem>
+                                            <telerik:RadPanelItem runat="server" ImageUrl="~/Images/MenuItem/Clock.png" Text=" Alisto "
+                                                NavigateUrl="~/Administracion/Salidas/Alisto/wf_ConsultaAlistos.aspx" Visible="false">
+                                            </telerik:RadPanelItem>
+                                            <telerik:RadPanelItem runat="server" ImageUrl="~/Images/MenuItem/van.png" Text=" Pedidos "
+                                                NavigateUrl="~/Administracion/Salidas/Pedido/wf_Pedidos.aspx" Visible="false">
+                                            </telerik:RadPanelItem>
+                                        </Items>
+                                    </telerik:RadPanelItem>
+                                </Items>
+                            </telerik:RadPanelItem>
+                            <%--Cierra Administración--%>
+
+                            <%--  CONTRATOS--%>
+                            <telerik:RadPanelItem runat="server" Text="Contratos" ImageUrl="~/Images/Ico/imageres_1040.ico" Visible="false">
+                                <Items>
+                                    <telerik:RadPanelItem runat="server" Text="Mantenimientos">
+                                        <Items>
+                                            <telerik:RadPanelItem runat="server" ImageUrl="~/Images/MenuItem/Help book 3d.png" NavigateUrl="~/AppsDiverscan/Contratos/Mantenimiento/wf_Contacto.aspx" Text="Contactos" Visible="false">
+                                            </telerik:RadPanelItem>
+                                            <telerik:RadPanelItem runat="server" ImageUrl="~/Images/MenuItem/Help book 3d.png" NavigateUrl="~/AppsDiverscan/Contratos/Mantenimiento/wf_CreditoEmpresa.aspx" Text="Crédito" Visible="false">
+                                            </telerik:RadPanelItem>
+                                            <telerik:RadPanelItem runat="server" ImageUrl="~/Images/MenuItem/Help book 3d.png" NavigateUrl="~/AppsDiverscan/Contratos/Mantenimiento/wf_DescuentoEmpresa.aspx" Text="Descuentos" Visible="false">
+                                            </telerik:RadPanelItem>
+                                            <telerik:RadPanelItem runat="server" ImageUrl="~/Images/MenuItem/Help book 3d.png" NavigateUrl="~/AppsDiverscan/Contratos/Mantenimiento/wf_Empresas.aspx" Text="Empresas (Clientes)" Visible="false">
+                                            </telerik:RadPanelItem>
+                                            <telerik:RadPanelItem runat="server" ImageUrl="~/Images/MenuItem/Help book 3d.png" NavigateUrl="~/AppsDiverscan/Contratos/Mantenimiento/wf_ImpuestoEmpresa.aspx" Text="Impuestos" Visible="false">
+                                            </telerik:RadPanelItem>
+                                            <telerik:RadPanelItem runat="server" ImageUrl="~/Images/MenuItem/Help book 3d.png" NavigateUrl="~/AppsDiverscan/Contratos/Mantenimiento/wf_IndustriaEmpresa.aspx" Text="Industrias" Visible="false">
+                                            </telerik:RadPanelItem>
+                                            <telerik:RadPanelItem runat="server" ImageUrl="~/Images/MenuItem/Help book 3d.png" NavigateUrl="~/AppsDiverscan/Contratos/Mantenimiento/wf_IndustriaEmpresa.aspx" Text="Paises" Visible="false">
+                                            </telerik:RadPanelItem>
+                                            <telerik:RadPanelItem runat="server" ImageUrl="~/Images/MenuItem/Help book 3d.png" NavigateUrl="~/AppsDiverscan/Contratos/Mantenimiento/wf_Productos.aspx" Text="Productos" Visible="false">
+                                            </telerik:RadPanelItem>
+                                            <telerik:RadPanelItem runat="server" ImageUrl="~/Images/MenuItem/Help book 3d.png" NavigateUrl="~/AppsDiverscan/Contratos/Mantenimiento/wf_SegmentacionEmpresas.aspx" Text="Segmentacion Empresa" Visible="false">
+                                            </telerik:RadPanelItem>
+                                            <telerik:RadPanelItem runat="server" ImageUrl="~/Images/MenuItem/Help book 3d.png" NavigateUrl="~/AppsDiverscan/Contratos/Mantenimiento/wf_TipoEmpresa.aspx" Text="Tipo Empresa" Visible="false">
+                                            </telerik:RadPanelItem>
+                                            <telerik:RadPanelItem runat="server" ImageUrl="~/Images/MenuItem/Help book 3d.png" NavigateUrl="~/AppsDiverscan/Contratos/Mantenimiento/wf_TiposInfluencia.aspx" Text="Tipo Relación" Visible="false">
+                                            </telerik:RadPanelItem>
+                                            <telerik:RadPanelItem runat="server" ImageUrl="~/Images/MenuItem/Help book 3d.png" NavigateUrl="~/AppsDiverscan/Contratos/Mantenimiento/VendedoresEmpresa.aspx" Text="Vendedores" Visible="false">
+                                            </telerik:RadPanelItem>
+                                        </Items>
+                                    </telerik:RadPanelItem>
+
+                                    <telerik:RadPanelItem runat="server" Text="Operaciones">
+                                        <Items>
+                                            <telerik:RadPanelItem runat="server" ImageUrl="~/Images/MenuItem/Help book 3d.png" NavigateUrl="~/AppsDiverscan/Contratos/Operaciones/wf_Contrato.aspx" Text="Contrato" Visible="false">
+                                            </telerik:RadPanelItem>
+                                        </Items>
+                                    </telerik:RadPanelItem>
+                                </Items>
+                            </telerik:RadPanelItem>
+                            <%--Cierra Contratos--%>
+
+                            <%--MANTENIMIENTOS--%>
+                            <telerik:RadPanelItem runat="server" Text="Mantenimientos" ImageUrl="~/Images/Ico/imageres_5350.ico">
+                                <Items>
+
+                                    <%--ARTICULOS--%>
+                                    <telerik:RadPanelItem runat="server" Text="Maestros" BackColor="AliceBlue" Font-Bold="True">
+                                        <Items>
+
+                                            <telerik:RadPanelItem runat="server" ImageUrl="~/Images/MenuItem/departmentstore.png" Text="Maestro Ubicaciones" Visible="true"
+                                                NavigateUrl="~/Mantenimiento/Articulos/wf_MaestroUbicaciones.aspx">
+                                            </telerik:RadPanelItem>
+
+                                            <telerik:RadPanelItem runat="server" ImageUrl="~/Images/MenuItem/departmentstore.png" Text="Maestro Sectores" Visible="true"
+                                                NavigateUrl="~/Mantenimiento/Articulos/wf_MaestroSectorBodega.aspx">
+                                            </telerik:RadPanelItem>
+
+                                            <telerik:RadPanelItem runat="server" ImageUrl="~/Images/MenuItem/departmentstore.png" Text="Familia Articulo" Visible="false"
+                                                NavigateUrl="~/Mantenimiento/Articulos/wf_FamiliaArticulo.aspx">
+                                            </telerik:RadPanelItem>
+
+                                            <telerik:RadPanelItem runat="server" NavigateUrl="~/Mantenimiento/Articulos/wf_seleccionPasillos.aspx" Text="Pasillos por sector" Visible="true">
+                                            </telerik:RadPanelItem>
+
+                                        </Items>
+                                    </telerik:RadPanelItem>
+
+                                    <%--DESPACHOS--%>
+                                    <telerik:RadPanelItem runat="server" Text="Despachos" BackColor="AliceBlue" Font-Bold="True">
+                                        <Items>
+
+                                            <telerik:RadPanelItem runat="server" ImageUrl="~/Images/Ico/imageres_5408.ico" Text="Destinos" Visible="true"
+                                                NavigateUrl="~/Mantenimiento/Despachos/wf_Destinos.aspx">
+                                            </telerik:RadPanelItem>
+
+                                            <telerik:RadPanelItem runat="server" ImageUrl="~/Images/MenuItem/departmentstore.png" Text="Transportistas" Visible="false"
+                                                NavigateUrl="~/Mantenimiento/Despachos/wf_Transportistas.aspx">
+                                            </telerik:RadPanelItem>
+                                        </Items>
+                                    </telerik:RadPanelItem>
+
+                                    <%--ANDENES--%>
+                                    <telerik:RadPanelItem runat="server" Text="Andenes" BackColor="AliceBlue" Font-Bold="True" Visible="false">
+                                        <Items>
+                                            <telerik:RadPanelItem runat="server" ImageUrl="~/Images/Ico/imageres_73.ico" NavigateUrl="~/Mantenimiento/Andenes/wf_MantenimientoAnden.aspx"
+                                                Text="Mantenimiento Andén" Visible="false">
+                                            </telerik:RadPanelItem>
+                                        </Items>
+                                    </telerik:RadPanelItem>
+                                </Items>
+                            </telerik:RadPanelItem>
+                            <%--Cierra Mantenimientos--%>
+
+                            <%--FLUJO DE TRABAJO--%>
+                            <telerik:RadPanelItem Text="Flujo de trabajo" ImageUrl="~/Images/Ico/imageres_1013.ico" Visible="false">
+                                <Items>
+                                    <telerik:RadPanelItem Text="Flujo de trabajo" BackColor="AliceBlue" ImageUrl="~/Images/Ico/imageres_1013.ico" Font-Bold="false">
+                                        <Items>
+                                            <telerik:RadPanelItem ImageUrl="~/Images/Ico/imageres_68.ico" Text="Procesos" NavigateUrl="~/FlujoDeTrabajo/wf_Procesos.aspx" Visible="true" />
+                                            <telerik:RadPanelItem ImageUrl="~/Images/Ico/imageres_5365.ico" Text="Flujos de procesos" NavigateUrl="~/FlujoDeTrabajo/wf_FlujosDeProceso.aspx" Visible="true" />
+                                        </Items>
+                                    </telerik:RadPanelItem>
+                                </Items>
+                            </telerik:RadPanelItem>
+                            <%--Cierra flujo de trabajo--%>
+
+                            <%--OPERACIONES--%>
+                            <telerik:RadPanelItem Text="Operación" ImageUrl="~/Images/Ico/imageres_6255.ico">
+                                <Items>
+                                    <%--INGRESOS--%>
+
+                                    <telerik:RadPanelItem Text="Ingresos" BackColor="AliceBlue" Font-Bold="True" ImageUrl="~/Images/Ico/imageres_5367.ico">
+
+                                        <Items>
+                                            <telerik:RadPanelItem runat="server" NavigateUrl="~/Operaciones/Ingresos/wf_OrdenesCompras.aspx"
+                                                Text="Orden de Compra" Visible="true">
+                                            </telerik:RadPanelItem>
+
+                                            <telerik:RadPanelItem runat="server" NavigateUrl="~/Operaciones/Ingresos/wf_SinOrdenCompra.aspx"
+                                                Text="Sin Orden de Compra" Visible="true">
+                                            </telerik:RadPanelItem>
+
+                                            <telerik:RadPanelItem runat="server" NavigateUrl="~/Operaciones/Ingresos/wf_CajaChica.aspx"
+                                                Text="Vale Caja Chica" Visible="true">
+                                            </telerik:RadPanelItem>
+                                        </Items>
+
+                                    </telerik:RadPanelItem>
+
+                                    <%--SALIDAS--%>
+                                    <telerik:RadPanelItem Text="Salidas" Font-Bold="True" ImageUrl="~/Images/Ico/imageres_5408.ico" BackColor="AliceBlue">
+                                        <Items>
+
+                                            <telerik:RadPanelItem runat="server" Text="Solicitud de Olas" Visible="true"
+                                                NavigateUrl="~/Operaciones/SolicitudDeOlas/wf_SolicitudDeOlas.aspx">
+                                            </telerik:RadPanelItem>
+
+                                            <telerik:RadPanelItem runat="server" NavigateUrl="~/Operaciones/Salidas/wf_AprobarSalida.aspx"
+                                                Text="Asignar Tareas" Visible="true">
+                                            </telerik:RadPanelItem>
+
+                                            <telerik:RadPanelItem runat="server" NavigateUrl="~/Operaciones/Certificacion/wf_Certificacion.aspx"
+                                                Text="Certificado" Visible="true">
+                                            </telerik:RadPanelItem>
+
+                                            <telerik:RadPanelItem runat="server" NavigateUrl="~/Operaciones/Certificacion/wfSSCCCertificados.aspx"
+                                                Text="SSCC Certificados" Visible="true">
+                                            </telerik:RadPanelItem>
+                                        </Items>
+                                    </telerik:RadPanelItem>
+
+                                    <%--SALIDAS--%>
+
+                                    <%--TRASLADOS--%>
+                                    <telerik:RadPanelItem Text="Traslados" Font-Bold="True" BackColor="AliceBlue" ImageUrl="~/Images/Ico/imageres_5333.ico">
+                                        <Items>
+                                            <%--<telerik:RadPanelItem runat="server" NavigateUrl="~/Operaciones/Traslados/wf_Traslados.aspx" Text="Traslados" Visible="false"></telerik:RadPanelItem>--%>
+                                            <telerik:RadPanelItem runat="server" NavigateUrl="~/Operaciones/Traslados/SolicitudTraslados/solicitud_traslado.aspx" Text="Solicitud Traslado a Bodegas" Visible="false"></telerik:RadPanelItem>
+                                            <telerik:RadPanelItem runat="server" NavigateUrl="~/Operaciones/Traslados/AdministracionTraslados/adminTraslados.aspx" Text="Administración Solicitudes Traslado a Bodegas" Visible="false"></telerik:RadPanelItem>
+
+                                        </Items>
+                                    </telerik:RadPanelItem>
+
+                                    <%--Pedidos Cursos--%>
+                                    <telerik:RadPanelItem Text="Pedidos Cursos" Font-Bold="true" BackColor="AliceBlue">
+                                        <Items>
+                                            <telerik:RadPanelItem runat="server" Text="Pedidos Cursos" Visible="true" NavigateUrl="~/Operaciones/Pedidos/PedidoCursos/pedidoCursos.aspx" />
+                                            <telerik:RadPanelItem runat="server" Text="Depuración de Pedidos Cursos" Visible="true" NavigateUrl="~/Operaciones/Pedidos/DepuracionPedidoCursos/depuracionPedidoCurso.aspx" />
+                                        </Items>
+                                    </telerik:RadPanelItem>
+
+                                    <%--Pedidos Administrativos--%>
+                                    <telerik:RadPanelItem Text="Pedidos Administrativos" Font-Bold="true" BackColor="AliceBlue">
+                                        <Items>
+                                            <telerik:RadPanelItem runat="server" Text="Pedidos Administrativos" Visible="true" NavigateUrl="~/Operaciones/Pedidos/PedidosAdministrativos/pedidoAdmin.aspx" />
+                                        </Items>
+                                    </telerik:RadPanelItem>
+                                </Items>
+                            </telerik:RadPanelItem>
+
+
+                            <%--CONSULTAS--%>
+                            <telerik:RadPanelItem Text="Consultas" ImageUrl="~/Images/MenuItem/List.png">
+                                <Items>
+
+                                    <%--ADMINISTRATIVO --%>
+
+                                    <telerik:RadPanelItem Text="Administrativo" Font-Bold="True" BackColor="AliceBlue" ImageUrl="~/Images/MenuItem/List.png">
+                                        <Items>
+                                            <telerik:RadPanelItem runat="server" NavigateUrl="~/Consultas/Administracion/wf_Consultar_Inventario.aspx" Text="Inventario" Visible="true"></telerik:RadPanelItem>
+                                            <telerik:RadPanelItem runat="server" NavigateUrl="~/Consultas/Administracion/ArticulosTransito.aspx" Text="Artículos Transito Bodega" Visible="true"></telerik:RadPanelItem>
+                                        </Items>
+                                    </telerik:RadPanelItem>
+
+
+                                    <%-- ARTICULOS --%>
+                                    <telerik:RadPanelItem Text="Artículos" Font-Bold="True" BackColor="AliceBlue" ImageUrl="~/Images/MenuItem/List.png">
+                                        <Items>
+                                            <telerik:RadPanelItem runat="server" NavigateUrl="~/Consultas/Articulos/wf_ConsultarMaestroArticulo.aspx" Text="Maestro Artículo" Visible="false"></telerik:RadPanelItem>
+                                        </Items>
+                                    </telerik:RadPanelItem>
+
+                                    <%--Proveedores --%>
+
+                                </Items>
+                            </telerik:RadPanelItem>
+
+                            <%--REPORTES--%>
+                            <telerik:RadPanelItem Text="Reportes" ImageUrl="~/Images/MenuItem/Report.png">
+                                <Items>
+
+                                    <telerik:RadPanelItem Text="Alisto" Font-Bold="True" BackColor="AliceBlue" ImageUrl="~/Images/MenuItem/List.png">
+                                        <Items>
+                                            <telerik:RadPanelItem NavigateUrl="~/Reportes/Alisto/wf_ReporteAsignacionAlisto.aspx"
+                                                Text="Asignación de Alisto" Visible="true" />
+
+                                        </Items>
+                                    </telerik:RadPanelItem>
+
+                                    <telerik:RadPanelItem Text="Artículos" Font-Bold="True" BackColor="AliceBlue" ImageUrl="~/Images/MenuItem/List.png">
+                                        <Items>
+                                            <telerik:RadPanelItem NavigateUrl="~/Reportes/wf_ArticulosDisponiblesBodega.aspx" Text="Artículos Disponibles Bodega" Visible="true"></telerik:RadPanelItem>
+                                         
+                                        </Items>
+                                    </telerik:RadPanelItem>
+
+                                    <telerik:RadPanelItem Text="Kardex" Font-Bold="True" BackColor="AliceBlue" ImageUrl="~/Images/MenuItem/List.png">
+                                        <Items>
+                                            <telerik:RadPanelItem NavigateUrl="~/Reportes/wf_kardexSkuDetalleTra.aspx" Text="Kardex por SKU" Visible="true"></telerik:RadPanelItem>
+                                          
+                                        </Items>
+                                    </telerik:RadPanelItem>
+
+                                    <telerik:RadPanelItem Text="Olas" Font-Bold="True" BackColor="AliceBlue" ImageUrl="~/Images/MenuItem/List.png">
+                                        <Items>
+                                            <telerik:RadPanelItem NavigateUrl="~/Reportes/OlaDisponibleFacturacion/wf_ReporteOlasFinalizadas.aspx" Text="Olas Finalizadas" Visible="true" />
+                                        </Items>
+                                    </telerik:RadPanelItem>
+
+                                    <telerik:RadPanelItem Text="Ordenes de Compra" Font-Bold="True" BackColor="AliceBlue" ImageUrl="~/Images/MenuItem/List.png">
+                                        <Items>
+                                            <telerik:RadPanelItem NavigateUrl="~/Reportes/OrdenesCompra/wf_ReporteOrdenesCompras.aspx" Text="Registradas / Abiertas" Visible="true"></telerik:RadPanelItem>
+                                        </Items>
+                                    </telerik:RadPanelItem>
+                                </Items>
+                            </telerik:RadPanelItem>
+
+
+                            <%--Eventos--%>
+                            <telerik:RadPanelItem Text="Eventos" PostBack="false" ImageUrl="~/Images/Logos/ico.png" Visible="False">
+                                <Items>
+                                    <telerik:RadPanelItem runat="server" ImageUrl="~/Images/warehouse.jpg" Text="TRACE ID"></telerik:RadPanelItem>
+                                </Items>
+                            </telerik:RadPanelItem>
+
+                            <%--Acerca de--%>
+                            <telerik:RadPanelItem Text="Acerca de" PostBack="false" ImageUrl="~/Images/Logos/ico.png" Visible="false"></telerik:RadPanelItem>
+
+                        </Items>
+                    </telerik:RadPanelBar>
+                </div>
+
+                <%--Menu Hand Held--%>
+                <telerik:RadMenu RenderMode="Lightweight" ID="RadMenu" runat="server" EnableRoundedCorners="true" ShowToggleHandle="true"
+                    EnableShadows="true" EnableTextHTMLEncoding="true">
+                    <Items>
+                        <telerik:RadMenuItem Text="Operaciones" NavigateUrl="DefaultCS.aspx?Page=Products">
+                            <Items>
+                                <telerik:RadMenuItem Text="Processar O.C" NavigateUrl="~/Operaciones/Ingresos/ProcesarOrdenCompra.aspx" />
+                                <telerik:RadMenuItem Text="Salir" NavigateUrl="~/Administracion/wf_Credenciales.aspx" />
+                            </Items>
+                        </telerik:RadMenuItem>
+                    </Items>
+                </telerik:RadMenu>
+                <%--End Menu Hand Held--%>
+
+                <%--Menu Hand Held IE--%>
+                <telerik:RadMenu RenderMode="Lightweight" ID="MenuIE" runat="server">
+                    <Items>
+                        <telerik:RadMenuItem Text="Procesar O.C" NavigateUrl="~/Operaciones/Ingresos/ProcesarOrdenCompra.aspx"></telerik:RadMenuItem>
+                    </Items>
+                </telerik:RadMenu>
+
+                <%--End Menu Hand Held IE--%>
+                <asp:ContentPlaceHolder ID="MainContent" runat="server" />
+            </div>
+        </div>
+    </form>
+</body>
+</html>

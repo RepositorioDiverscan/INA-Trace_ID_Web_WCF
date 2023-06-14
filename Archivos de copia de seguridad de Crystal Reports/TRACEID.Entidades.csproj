@@ -1,0 +1,224 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{7F85C5B8-7FE4-471F-98A9-2E6AAA9CF258}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Diverscan.MJP.Entidades</RootNamespace>
+    <AssemblyName>Diverscan.MJP.Entidades</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <HintPath>..\packages\CrystalDecisions.CrystalReports.Engine.1.0.0\lib\CrystalDecisions.CrystalReports.Engine.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalDecisions.ReportSource, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <HintPath>..\packages\CrystalDecisions.ReportSource.1.0.0\lib\CrystalDecisions.ReportSource.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalDecisions.Shared, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <HintPath>..\packages\CrystalDecisions.Shared.1.0.0\lib\CrystalDecisions.Shared.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalDecisions.Web, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL">
+      <HintPath>..\packages\CrystalDecisions.Web.1.0.1\lib\CrystalDecisions.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Alistos\EstadoAlisto.cs" />
+    <Compile Include="Calidad\RecepcionRecord.cs" />
+    <Compile Include="Calidad\RespuestasCalidad.cs" />
+    <Compile Include="Common\EstadoEnum.cs" />
+    <Compile Include="Common\IMessageUser.cs" />
+    <Compile Include="CustomEvent\UbicacionEtiquetaEvent.cs" />
+    <Compile Include="CustomException\MoreThanOneRecordException.cs" />
+    <Compile Include="Devolutions\DevolucionHeader\EDevolutionsHeader.cs" />
+    <Compile Include="Devolutions\DevolucionHeader\ResultGetDevolutionHeader.cs" />
+    <Compile Include="Devolutions\DevolutionProductLocation\EProductLocation.cs" />
+    <Compile Include="Devolutions\DevolutionsDetail\EDevolutionDetail.cs" />
+    <Compile Include="Devolutions\DevolutionsDetail\ResultGetDevolutionDetail.cs" />
+    <Compile Include="Devolutions\DevolutionProductLocation\EDevolutionProduct.cs" />
+    <Compile Include="EntidadesGS1.cs" />
+    <Compile Include="EntidadesWMS.cs" />
+    <Compile Include="CustomException\RecordNotFoundException.cs" />
+    <Compile Include="e_AprobarSalida.cs" />
+    <Compile Include="e_ArticuloGTIN.cs" />
+    <Compile Include="e_BitacoraWeb.cs" />
+    <Compile Include="e_Bitacora_OrdenCompra.cs" />
+    <Compile Include="e_CategoriaArticulo.cs" />
+    <Compile Include="e_Compania.cs" />
+    <Compile Include="e_Diagrama.cs" />
+    <Compile Include="e_DiferenciaInventario.cs" />
+    <Compile Include="e_HistoricoDemanda.cs" />
+    <Compile Include="e_ImportaExcel.cs" />
+    <Compile Include="e_InventarioCiclicoRecord.cs" />
+    <Compile Include="e_KardexReport.cs" />
+    <Compile Include="e_MenuApp.cs" />
+    <Compile Include="e_OPESALDetalleSolicitud.cs" />
+    <Compile Include="e_ParametrosWF.cs" />
+    <Compile Include="e_PreDetalleSolicitud.cs" />
+    <Compile Include="e_ProgramaPorUsuario.cs" />
+    <Compile Include="e_ProveedorReport.cs" />
+    <Compile Include="e_Reportes.cs" />
+    <Compile Include="e_Roles.cs" />
+    <Compile Include="e_TablasBaseDatos.cs" />
+    <Compile Include="e_TipoEmpaque.cs" />
+    <Compile Include="e_TipoUnidadMedida.cs" />
+    <Compile Include="e_Programa.cs" />
+    <Compile Include="GestorImpresiones\e_Almacen.cs" />
+    <Compile Include="GestorImpresiones\e_Bodega.cs" />
+    <Compile Include="GestorImpresiones\e_CatalogoCompraRed.cs" />
+    <Compile Include="GestorImpresiones\e_Estante.cs" />
+    <Compile Include="GestorImpresiones\e_Inventario.cs" />
+    <Compile Include="GestorImpresiones\e_Inventario_Movim.cs" />
+    <Compile Include="GestorImpresiones\e_LoteFechaProducto.cs" />
+    <Compile Include="GestorImpresiones\e_MaestroUbicaciones.cs" />
+    <Compile Include="GestorImpresiones\e_Requisicion.cs" />
+    <Compile Include="GTIN14VariableLogistic\EGTIN14VariableLogistic.cs" />
+    <Compile Include="GTIN14VariableLogistic\ResultGetGTIN14.cs" />
+    <Compile Include="HistoricoDemanda\HistoricoDemandaProveedorRecord.cs" />
+    <Compile Include="HistoricoDemanda\HistoricoDemandaRecord.cs" />
+    <Compile Include="HistoricoDemanda\SolicitudRestaurantesRecord.cs" />
+    <Compile Include="InventarioBasico\InventarioBasicoRecord.cs" />
+    <Compile Include="InventarioBasico\NombreIdArticuloRecord.cs" />
+    <Compile Include="Invertario\ArticuloCiclicoRealizarRecord.cs" />
+    <Compile Include="Invertario\ArticuloInventario.cs" />
+    <Compile Include="Invertario\ArticulosDisponibles.cs" />
+    <Compile Include="Invertario\BodegaFisica_SistemaRecord.cs" />
+    <Compile Include="Invertario\CantidadPorUbicacionArticuloRecord.cs" />
+    <Compile Include="Invertario\GS1Data.cs" />
+    <Compile Include="Invertario\IArticuloInventario.cs" />
+    <Compile Include="Invertario\ICantidadPorUbicacionArticuloRecord.cs" />
+    <Compile Include="Invertario\MaestroArticuloRecord.cs" />
+    <Compile Include="Invertario\RadGridDetalleOrdenCompra_GRID.cs" />
+    <Compile Include="Invertario\TomaFisicaInventario.cs" />
+    <Compile Include="Invertario\UbicacionesInventarioCiclicoRecord.cs" />
+    <Compile Include="Invertario\UbicacionesRecord.cs" />
+    <Compile Include="LogAjusteDeInventario.cs" />
+    <Compile Include="e_LogAjustesTRARecord.cs" />
+    <Compile Include="MaestroArticulo\EProductStorage.cs" />
+    <Compile Include="MaestroArticulo\e_ArticuloSinUnidadAlistoDefecto.cs" />
+    <Compile Include="MaestroArticulo\e_MaestroArticulo.cs" />
+    <Compile Include="MensajeRespuesta\Respuestas.cs" />
+    <Compile Include="MotivoAjusteInventario\AjusteSolicitudRecord.cs" />
+    <Compile Include="MotivoAjusteInventario\ArticuloRecord.cs" />
+    <Compile Include="MotivoAjusteInventario\ArticuloXSolicitudAjusteDetalle.cs" />
+    <Compile Include="MotivoAjusteInventario\ArticuloXSolicitudAjusteRecord.cs" />
+    <Compile Include="MotivoAjusteInventario\CentroCostosRegistro.cs" />
+    <Compile Include="MotivoAjusteInventario\DetalleSolicitudAjusteInventarioRecord.cs" />
+    <Compile Include="MotivoAjusteInventario\IdArticuloRecord.cs" />
+    <Compile Include="MotivoAjusteInventario\IUbicacionEtiquetaDataAcces.cs" />
+    <Compile Include="MotivoAjusteInventario\IUbicacionEtiquetaViewer.cs" />
+    <Compile Include="MotivoAjusteInventario\LogAjusteInventarioRecord.cs" />
+    <Compile Include="MotivoAjusteInventario\MotivoAjusteInventarioRecord.cs" />
+    <Compile Include="MotivoAjusteInventario\SolicitudAjusteInventarioRecord.cs" />
+    <Compile Include="e_ProcesarOrdenCompra.cs" />
+    <Compile Include="Operaciones\BuscarCompra.cs" />
+    <Compile Include="Operacion\Salidas\e_Articulos_SSCC_Procesado.cs" />
+    <Compile Include="Operacion\Salidas\e_Destino_Solicitud_SSCC_Asociado.cs" />
+    <Compile Include="Operacion\Salidas\e_SSCC_Zona_Transito_Por_Destino_Solicitud.cs" />
+    <Compile Include="OPESALMaestroSolicitud\EDetalleSalidaArticuloSector.cs" />
+    <Compile Include="OPESALMaestroSolicitud\EDetalleSalidaOrdenUsuario.cs" />
+    <Compile Include="OPESALMaestroSolicitud\EPrioridadOrden.cs" />
+    <Compile Include="OPESALMaestroSolicitud\ETareasUsuarioSolicitud.cs" />
+    <Compile Include="OPESALMaestroSolicitud\e_OPESALMaestroSolicitud.cs" />
+    <Compile Include="OPESALPreDetalleSolicitud\e_OPESALPreDetalleSolicitud.cs" />
+    <Compile Include="OPESALPreDetalleSolicitud\e_OPESALPreDetalleSolicitudArticulo.cs" />
+    <Compile Include="OrdenCompra\EDetailPurchaseOrder.cs" />
+    <Compile Include="OrdenCompra\EGetPucharseOrder.cs" />
+    <Compile Include="OrdenCompra\EstadoOrdenCompra.cs" />
+    <Compile Include="OrdenCompra\e_OrdenCompra.cs" />
+    <Compile Include="OrdenCompra\ResultGetDetailPurchaseOrder.cs" />
+    <Compile Include="PICKING\PickingRecord.cs" />
+    <Compile Include="ProcesarSolicitud\e_ArticulosPendientesSolicitud.cs" />
+    <Compile Include="ProcesarSolicitud\e_Insertapredetallesolicitud.cs" />
+    <Compile Include="ProcesarSolicitud\e_ProcesarSolicitud.cs" />
+    <Compile Include="ProcesarSolicitud\e_SSCCSolicitud.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Proveedores\ProveedoresRecord.cs" />
+    <Compile Include="Reportes\Articulos\e_ArticuloIdERP.cs" />
+    <Compile Include="Reportes\Articulos\e_ArticulosDisponiblesBodega.cs" />
+    <Compile Include="Reportes\Articulos\e_ArticulosDisponiblesBodegaTotales.cs" />
+    <Compile Include="Reportes\Despachos\e-Despacho.cs" />
+    <Compile Include="Reportes\Despachos\e_Detalle_Despacho_Por_Numero_Solicitud.cs" />
+    <Compile Include="Reportes\Despachos\e_Detalle_Despacho_Por_Numero_Solicitud_Reporte.cs" />
+    <Compile Include="Reportes\Despachos\e_Pedidos_Despacho.cs" />
+    <Compile Include="Reportes\DisponibilidadPorBodega\e_DisponibilidadArticulosPedidoBodega.cs" />
+    <Compile Include="Reportes\Entidad_Despacho.cs" />
+    <Compile Include="Reportes\Entidad_DetallePedidoTienda.cs" />
+    <Compile Include="Reportes\Entidad_PersonalAlisto.cs" />
+    <Compile Include="Reportes\e_ObtenerDevoluciones.cs" />
+    <Compile Include="Reportes\e_ObtenerOrdenesC.cs" />
+    <Compile Include="Reportes\IEntidad_Despacho.cs" />
+    <Compile Include="Reportes\IEntidad_OrdenC.cs" />
+    <Compile Include="Reportes\IEntidad_PersonalAlisto.cs" />
+    <Compile Include="Reportes\Kardex\e_Ajustes_Inventario_Articulo.cs" />
+    <Compile Include="Reportes\Kardex\e_ArticulosDespachadosPorLoteRangoFecha.cs" />
+    <Compile Include="Reportes\Kardex\e_KardexMacroArticulo.cs" />
+    <Compile Include="Reportes\Kardex\e_Orden_Compra.cs" />
+    <Compile Include="Reportes\Kardex\e_TrazabilidadBodegaArticulos.cs" />
+    <Compile Include="Rol\e_Rol.cs" />
+    <Compile Include="SSCC\SSCCRecord.cs" />
+    <Compile Include="Tareas\TareaUsuarioRecord.cs" />
+    <Compile Include="TRAIngresoSalidaArticulos\TRAIngresoSalidaArticulosRecord.cs" />
+    <Compile Include="Trazabilidad\ArticuloTrazabilidad.cs" />
+    <Compile Include="Trazabilidad\DespachosRecord.cs" />
+    <Compile Include="Trazabilidad\LotesRecord.cs" />
+    <Compile Include="Trazabilidad\TRARecordTrazabilidad.cs" />
+    <Compile Include="Usuarios\e_Usuarios.cs" />
+    <Compile Include="ValoresUsoComun.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Diverscan.MJP.Utilidades\TRACEID.Utilidades.csproj">
+      <Project>{c829bff2-98ab-4d2d-8364-7ee6b3005304}</Project>
+      <Name>TRACEID.Utilidades</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

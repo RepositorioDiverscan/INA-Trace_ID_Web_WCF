@@ -1,0 +1,33 @@
+Requerimiento:
+
+->Se necesita validar también si el proveedor cumple con la cantidad de la solicitud
+	Factores posibles:
+		->Se debe validar la FV más pronta.
+		->Si ninguno de los proveedores cumple con la cantidad ver
+			->Cual es el que tiene mayor cantidad despreciando la FV más antigua
+			pero siempre tomando el más pronto a vencer ejemplo.
+
+			hay Harina Solicitud: 1600
+
+			800 KG 01-02-18
+			1200 KG 01-03-18 **
+
+
+
+Solicitud: 125
+
+	200 JK 03
+	150 D  02
+	300 N  01
+
+
+
+
+Validaciones:
+->FV
+->Cantidad
+
+
+
+
+

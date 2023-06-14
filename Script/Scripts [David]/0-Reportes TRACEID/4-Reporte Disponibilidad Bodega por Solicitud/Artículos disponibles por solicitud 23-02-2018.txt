@@ -1,0 +1,23 @@
+#####################################
+Agregar una parte para resumen por artículo donde ejemplo
+
+Sería los artículos para los pedidos solicitados por día 
+
+Rango de fecha solicitudes 
+	[01-01-2000] a [01-01-2018]
+
+#Pedido		Tienda 
+1			Expresss
+				-Aceite: 10
+				-Cebolla: 10
+2			SanJose 
+				-Aceite 10 
+				-Cebolla 20 
+
+--Internamente los artículos se maneran por número solicitud
+
+--Crear un grid donde se tenga la cantidad total del artículo en todos los pedidos filtrados y la cantidad en sistema disponible para ese artículo.
+-->Agregar un check para poder mostrar unicamente donde la diferencia sea <=0
+Articulo		Cantidad pedidos		CantidadSistema		Diferencia
+-Aceite 		10						10
+-Cebolla		20						0

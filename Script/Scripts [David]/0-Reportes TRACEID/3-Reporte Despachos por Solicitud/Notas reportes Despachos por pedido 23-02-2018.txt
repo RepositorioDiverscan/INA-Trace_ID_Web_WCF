@@ -1,0 +1,18 @@
+<##############################################>
+Hacer un filtro de búsqueda para los pedidos 
+por
+
+	      [Nombre tienda y rango fecha]
+			  -->Cargar en un grid<--
+			  			  
+	-NUM PEDIDO
+	-Nombre Tienda
+	-Fecha
+<##############################################>
+
+
+El grid de detalle de despacho debe ir ordenado por sscc ascendentemente
+	--Ordenado por sscc etiqueta
+
+	--[V_GTIN13] Sacar CodUnidadMedida = UnidadMedida en el reporte
+

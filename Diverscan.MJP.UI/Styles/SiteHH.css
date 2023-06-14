@@ -1,0 +1,886 @@
+﻿/* DEFAULTS
+----------------------------------------------------------*/
+#CuerpoHtml {
+    padding:0;
+    margin:0;
+    height:100%;
+    background-color:white;
+}
+
+body   
+{
+     background-color:white;
+    margin: 0 auto;
+    font-size: 14px;
+    font-family: Cabin, Arial, 'Arial Unicode MS' , Helvetica, Sans-Serif;
+    font-weight: normal;
+    font-style: normal;
+    position: relative;
+    width: 100%;
+    min-height: 100%;
+    left: 0;
+    top: 0;
+    cursor: default;
+    overflow: auto;
+}
+
+
+.bodyInfo
+{
+    background-color:white;
+    /*margin: 0 auto;*/
+    font-size: 14px;
+    font-family: Cabin, Arial, 'Arial Unicode MS' , Helvetica, Sans-Serif;
+    font-weight: normal;
+    font-style: normal;
+    position: relative;
+    width: 100%;
+    min-height: 100%;
+    left: 0;
+    top: 0;
+    cursor: default;
+    overflow: auto;
+}
+
+
+.bodMJP
+{
+    background-color:white;   
+    font-size: 14px;
+    font-family: Cabin, Arial, 'Arial Unicode MS' , Helvetica, Sans-Serif;
+    font-weight: normal;
+    font-style: normal;
+    width: 100%;
+    min-height: 100%;
+    /*overflow-y:hidden;*/
+    
+}
+
+.bodDiver
+{
+    background: #abaab5; /*background: linear-gradient(top, #696D5F 0, #848877 184px, #F8F8F7 1050px) no-repeat;*/
+    background: -webkit-linear-gradient(top, #FFFFFF 0, #7384a7 800px, #425680 1050px) no-repeat;
+    background: -moz-linear-gradient(top, #FFFFFF 0, #7384a7 800px, #425680 1050px) no-repeat;
+    background: -o-linear-gradient(top, #FFFFFF 0, #7384a7 800px, #425680 1050px) no-repeat;
+    background: -ms-linear-gradient(top, #FFFFFF 0, #7384a7 800px, #425680 1050px) no-repeat; /*background: linear-gradient(top, #696D5F 0, #848877 184px, #F8F8F7 1050px) no-repeat;*/
+    -svg-background: linear-gradient(top, #FFFFFF 0, #7384a7 800px, #425680 1050px) no-repeat;
+    background-attachment: fixed !important;/*F8F8F7*/
+    margin: 0 auto;
+    font-size: 14px;
+    font-family: Cabin, Arial, 'Arial Unicode MS' , Helvetica, Sans-Serif;
+    font-weight: normal;
+    font-style: normal;
+    position: relative;
+    width: 100%;
+    min-height: 100%;
+    left: 0;
+    top: 0;
+    cursor: default;
+    overflow: auto;
+}
+
+
+p
+{
+    margin-bottom: 10px;
+    line-height: 1.6em;
+}
+
+/* HEADINGS   
+----------------------------------------------------------*/
+
+h1, h2, h3, h4, h5, h6
+{
+    font-size: 1.5em;
+    color: #666666;
+    font-variant: normal;
+    text-transform: none;
+    font-weight: 200;
+    margin-bottom: 0px;
+}
+
+h1
+{
+    font-size: 1.6em;
+    padding-bottom: 0px;
+    margin-bottom: 0px;
+}
+
+h2
+{
+    font-size: 1.5em;
+    font-weight: 600;
+}
+
+h3
+{
+    font-size: 1.2em;
+}
+
+h4
+{
+    font-size: 1.1em;
+}
+
+h5, h6
+{
+    font-size: 1em;
+}
+
+/* this rule styles <h1> and <h2> tags that are the 
+first child of the left and right table columns */
+.rightColumn > h1, .rightColumn > h2, .leftColumn > h1, .leftColumn > h2
+{
+    margin-top: 0px;
+}
+
+
+/* PRIMARY LAYOUT ELEMENTS   
+----------------------------------------------------------*/
+
+.page
+{
+    width: 100%;
+    height:100%;
+
+}
+
+
+.page2 {
+    width: 80%;
+    background-color: #fff;
+    position: relative;
+}
+
+.header
+{
+    width: 100%;
+      background: url("../Images/TraceID.jpg");
+}
+
+.headerInfo
+{
+    position: relative;
+    margin: 0px;
+    padding: 0px;
+    background: #197136;
+    width: 100%;
+}
+
+.headerDiver
+{
+    position: relative;
+    margin: 0px;
+    padding: 0px;
+    background: #e21d38;
+    width: 100%;
+}
+
+.headerMJP
+{
+    display:none;    
+}
+.header h1
+{
+    border-style: none;
+    border-color: inherit;
+    border-width: medium;
+    font-weight: 700;
+    margin: 0px;
+    padding: 0px 0px 0px 20px;
+    color: #f9f9f9;
+    line-height: 2em;
+    font-size: 2em;
+    width: 462px;
+}
+
+.main
+{
+    min-height: 420px;
+    min-width: 420px;
+    position: relative;
+    height: 100%;
+     
+}
+
+#UpdatePanel {
+    width:60%;
+    float:right;
+    margin:0;
+    padding:0;
+}
+
+.MenuTelerik {
+     display:none;
+   }
+
+.RadMenu {
+    display:none;       
+}
+
+.MenuIE6 {
+    display:block;
+}
+
+#RadPanelBar1{
+     width:100%;
+     background: url("../Images/fondo.png")repeat;
+     height:100%;
+}
+
+.RadPanelBar .rpImage {
+    height: 19px;
+}
+.RadPanelBar .rpLevel1 .rpImage {
+    height: 16px;
+}
+
+.Table1 {
+      background-image: url("../Images/fondo1.png");
+      background-size:175%;
+     -webkit-border-radius: 10%;
+     -moz-border-radius: 10%;
+      border-radius: 40px;
+      margin-top:5%;     
+      width:25%;   
+      text-align:center;
+    }
+
+.Table2 {
+     width:100%;   
+        }
+
+#LogoD {
+    float:left;
+    width:45%;
+}
+
+#RadtxtUsuario, #RadtxtContrasenna{
+      width:100%; 
+      font-size:150%;
+      text-align:center;
+      }
+
+#RadbtnLogin {
+       margin-top:5%;
+       margin-bottom:5%;
+       margin-left:5%;
+       background: rgb(3,57,117);
+       background-image: -webkit-linear-gradient(top, #033875, #033875);
+       background-image: -moz-linear-gradient(top, #033875, #033875);
+       background-image: -ms-linear-gradient(top, #033875, #033875);
+       background-image: -o-linear-gradient(top, #033875, #033875);
+       background-image: linear-gradient(to bottom, #033875, #033875);
+       -webkit-border-radius: 10%;
+       -moz-border-radius: 10%;
+       border-radius: 24px;
+       font-family: Arial;
+       color: #ffffff;
+       font-size: 20px;
+       padding: 10px 20px 10px 20px;
+       text-decoration: none;
+       border-color: rgb(3,57,117);
+}
+
+#RadbtnLogin:hover {
+  background: #3cb0fd;
+  background-image: -webkit-linear-gradient(top, #3cb0fd, #3498db);
+  background-image: -moz-linear-gradient(top, #3cb0fd, #3498db);
+  background-image: -ms-linear-gradient(top, #3cb0fd, #3498db);
+  background-image: -o-linear-gradient(top, #3cb0fd, #3498db);
+  background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
+  text-decoration: none;
+    border-color: #3cb0fd;
+}
+
+ #lblTitPass {
+   color:white;
+    font-size:150%;
+}
+
+#lblTitUusuario {
+    color:white;
+    font-size:150%;
+}
+
+.leftCol
+{
+    padding: 6px 0px;
+    margin: 12px 8px 8px 8px;
+    width: 200px;
+    min-height: 200px;
+}
+.footer {
+  float:left;
+  margin-left:20%;
+}
+
+    .footer h4 {
+        color:RGB(3,57,117);
+        text-align:center;
+        margin:0;
+        padding:0;
+    }
+
+
+/* TAB MENU   
+----------------------------------------------------------*/
+
+div.hideSkiplink
+{
+    color: #FFFFFF;
+    background-color:rgb(3,57,117);
+    width:100%;
+    text-decoration: none;
+}
+
+div.hideSkiplinkinfo
+{
+    color: #FFFFFF;
+    background-color:#006666;
+    width:100%;
+    text-decoration: none;
+}
+
+div.hideSkiplink a:hover, a:active, a:after, a:visited
+{
+    color: #FFFFFF;
+    text-decoration: none;
+
+}
+
+div.hideSkiplinkinfo a:hover, a:active, a:after, a:visited
+{
+    color: #FFFFFF;
+    text-decoration: none;
+
+}
+
+div.menu
+{
+    padding: 4px 0px 4px 8px;
+}
+
+div.menu ul
+{
+    list-style: none;
+    margin: 0px;
+    padding: 0px;
+    width: auto;
+}
+
+div.menu ul li a, div.menu ul li a:visited
+{
+    background-color: #465c71;
+    border: 1px #4e667d solid;
+    color: #dde4ec;
+    display: block;
+    line-height: 1.35em;
+    padding: 4px 20px;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+div.menu ul li a:hover
+{
+    background-color: #bfcbd6;
+    color: #465c71;
+    text-decoration: none;
+}
+
+div.menu ul li a:active
+{
+    background-color: #465c71;
+    color: #cfdbe6;
+    text-decoration: none;
+}
+
+/* FORM ELEMENTS   
+----------------------------------------------------------*/
+
+fieldset
+{
+    margin: 1em 0px;
+    padding: 1em;
+    border: 1px solid #ccc;
+}
+
+fieldset p 
+{
+    margin: 2px 12px 10px 10px;
+}
+
+fieldset.login label, fieldset.register label, fieldset.changePassword label
+{
+    display: block;
+}
+
+fieldset label.inline 
+{
+    display: inline;
+}
+
+legend 
+{
+    font-size: 1.1em;
+    font-weight: 600;
+    padding: 2px 4px 8px 4px;
+}
+
+input.textEntry 
+{
+    width: 320px;
+    border: 1px solid #ccc;
+}
+
+input.passwordEntry 
+{
+    width: 320px;
+    border: 1px solid #ccc;
+}
+
+div.accountInfo
+{
+    width: 42%;
+}
+
+/* MISC  
+----------------------------------------------------------*/
+
+.clear
+{
+    clear: both;
+}
+
+.title
+{
+   width: 100%;
+}
+
+.tblLogo {
+    width:100%;
+}
+
+.loginDisplay
+{
+  color: rgb(3,57,117);
+  float:right;
+}
+
+.loginDisplay td
+{
+ font-size:75%;
+
+}
+
+.loginDisplay a:link
+{
+    color:rgb(3,57,117);
+}
+
+.loginDisplay a:visited
+{
+    color:black;
+}
+
+.loginDisplay a:hover
+{
+    color: red;
+}
+
+.failureNotification
+{
+    font-size: 1.2em;
+    color: Red;
+}
+
+.bold
+{
+    font-weight: bold;
+}
+
+.submitButton
+{
+    text-align: right;
+    padding-right: 10px;
+}
+
+/* LOGIN   
+----------------------------------------------------------*/
+
+.LoginContenedor
+{
+    height: 420px; 
+    width: 100%; 
+    text-align: center; 
+    display: table;
+   
+}
+
+#LoginContenido
+{
+   border: solid 2px #aaa;
+   height: 150px;
+   display: table-cell;
+   vertical-align: middle;
+   margin: 0 auto;
+   width: 100%;
+}
+
+/* ----------------------------------------------------------*/
+
+#LogoDiv 
+{
+    margin: 40px 0px 0px 0px;
+    width: 100%;
+    height: 100px;
+    background-image: url("../Images/Logos/DiverscanLogo.png"); /*---- tamaño de la imagen: 289px x 100px-------*/
+    background-size: 200px 60px;
+    background-position: right;
+    right: 0px;
+    position: inherit ;
+    background-repeat: no-repeat;
+}
+
+a img
+{
+    border: none;
+}
+
+.EsconderCelda {
+    display: none;
+}
+
+.centrarMoverabajo {
+    text-align: center;
+    margin-top: 6%;
+}
+
+.LogoCrede {
+    width:100%;}
+
+#imgLodoMJP {
+    display:none;
+}
+
+.tblMenu {
+    width:20%;
+    float:left;
+    list-style:none;
+    background: url("../Images/fondo.png")repeat;
+    padding-bottom:1.7%;
+}
+
+.tblMenu img {
+    width:27%;
+}
+
+#MenuNavigate {
+    display:none;
+}
+
+.RadLabel {
+    color:white;
+}
+
+.Panel
+{
+    background-color: lightyellow;
+}
+
+.PanelTitulo
+{
+    background-color: RGB(125,165,224);
+}
+
+.TituloPanelTitulo
+{
+    background-color:RGB(125,165,224);   
+    font-size: 1em;
+    color:white;
+    font-variant: normal;
+    text-transform: none;
+    font-weight: 200;
+    margin-bottom: 0px;
+}
+
+.TituloPanelVista
+{
+    font-size: 1.5em;
+    color: white;
+    font-variant: normal;
+    text-transform: none;
+    font-weight: 200;
+    margin-bottom: 0px;
+}
+
+.TituloPanelVistaDetalle
+{
+    display:none;
+}
+
+#example .demo-container {
+    width: 700px;
+    height: 300px;
+    left: 250px;
+}
+ 
+.content-image {
+    width: 220px;
+    height: 46px;
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    margin-left: -110px;
+    margin-top: 10px;
+}
+
+
+.WindowContenedor
+{
+    margin-left: 0%;
+     width:52%;   
+}
+
+.TabContainer
+{
+  height:100%;
+   
+}
+
+.TexboxNormal
+{
+    background-color: lightgray;
+}
+
+.TextBoxBusqueda
+{
+    background-color: yellow;
+    text-align: right;
+}
+
+.GridRowOver_[SkinName]
+{
+background-color: orange;
+cursor:pointer;
+}
+
+/*Estilo para diagrama*/
+
+#example .demo-container {
+    width: 1000px;
+}
+#example .demo-container h2 {
+    color: #686868;
+    font-size: 1.1em;
+    margin-left: 200px;
+    clear: both;
+}
+#toolbox {
+    margin-left:5px;
+    float: left;
+    width: 180px;
+    font-family: 'Segoe UI';
+    background-color: #f3f3f3;
+    border: 2px solid #e8e8e8;
+    padding-bottom: 1em;
+}
+#toolbox .item {
+    margin: 0.5em 0.5em;
+    margin-bottom: 0;
+
+}
+#toolbox h4 {
+    text-align: center;
+    text-transform: uppercase;
+    color: #686868;
+    border: 0;
+    font-weight: bold;
+}
+#toolbox .footer {
+    margin-top: 1em;
+    text-align: center;
+    text-transform: uppercase;
+    color: #686868;
+}
+.item {
+    font-family: 'Segoe UI';
+    cursor: pointer;
+}
+ 
+#button-container {
+    clear: left;
+    float: left;
+    margin-top: 1em;
+    width: 165px;
+    text-align: center;
+}
+ 
+.k-diagram {
+    font-family: 'Segoe UI';
+    margin-left: 200px;
+}
+
+/*RadListBox*/
+
+.demo-container {
+    text-align: center;
+}
+ 
+.wrapper {
+    display: inline;
+    display: inline-block;
+    zoom: 1;
+}
+ 
+.RadListBox {
+    width:205px;     
+}
+
+.TextBoxBusqueda {
+     Width: 85px;
+}
+
+.Tabs {
+  Width:100px;
+    font-size:10px;
+}
+
+ .btnAccion1 {
+    Width :10%;
+    font-size:10px;
+    }
+
+    .btnAccion2 {
+    Width :10%;
+    font-size:10px;
+    }
+
+ #HeadLoginView {
+        display:none;
+    } 
+
+ #Primero {
+        width:100%;
+        float:left;
+    }
+        
+    #Segundo {
+        width:100%;
+        float:right;       
+    }
+
+      .Labels {
+        font-size:10px;
+    }
+
+      .TextBoxBusqueda {
+     Width: 20px;
+    }
+
+      
+    .detail-title {
+    font-size:8px;
+    }
+
+    .rgDataDiv {
+        display:none;
+    }
+
+
+
+	 /*CSS HAND HELD RESPONSIVE*/
+
+@media screen and ( max-width:240px) {
+
+    .headerMJP{       
+    /*background: url("../Images/TraceIDHH.jpg");*/
+    display:none;
+                }     
+
+    #HeadLoginView {
+        display:none;
+    } 
+
+    #imgLodoMJP {
+    display:none;
+                }
+
+    #MenuNavigate {
+    display:none;
+                }
+
+    .MenuTelerik {
+    display:none;
+   }
+
+    .RadMenu {
+       display:none;       
+    }
+
+      .RadMenu1 {
+       display:none;       
+    }
+
+    .Tabs {
+    Width:100px;
+    font-size:10px;
+    }
+
+    .WindowContenedor
+    {
+     margin-left: 0%;
+     width:55%;   
+    }    
+
+    #Primero {
+        width:100%;
+        float:left;
+    }
+        
+    #Segundo {
+        width:100%;
+        float:right;       
+    }
+
+    .RadListBox {
+        width:205px;        
+        }
+
+    .Labels {
+        font-size:10px;
+    }
+
+    .TextBoxBusqueda {
+     Width: 20px;
+    }
+
+    .detail-title {
+    font-size:8px;
+    }
+
+    .TituloPanelVistaDetalle {
+        display:none;
+    }
+
+    .TabContainer {
+        height:100%;
+    }
+
+    .rgDataDiv {
+        display:none;
+    }
+
+    .btnAccion1 {
+    Width :10%;
+    font-size:10px;
+    }
+
+    .btnAccion2 {
+    Width :10%;
+    font-size:10px;
+    }
+
+
+
+}

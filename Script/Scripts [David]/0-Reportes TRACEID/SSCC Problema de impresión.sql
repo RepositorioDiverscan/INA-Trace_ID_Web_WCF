@@ -1,0 +1,16 @@
+--SELECT * FROM ADMConsecutivosSSCC SSCC ORDER BY SSCC.FechaRegistro DESC
+--UPDATE ADMConsecutivosSSCC 
+--	SET SSCCGenerado = 174452390000006591
+--WHERE ADMConsecutivosSSCC.idConsecutivoSSCC = 659
+--GO
+--Eliminación de SSCC Dañados
+--SELECT * FROM ADMConsecutivosSSCC SSCC ORDER BY SSCC.FechaRegistro DESC
+--DELETE FROM ADMConsecutivosSSCC WHERE idConsecutivoSSCC > 479
+--SELECT * FROM ADMConsecutivosSSCC SSCC ORDER BY SSCC.FechaRegistro DESC
+
+--UPDATE ADMConsecutivosSSCC 
+--SET  SSCCGenerado = P.SSCCGenerado
+----SELECT * 
+--FROM ADMConsecutivosSSCC AS R
+--INNER JOIN [ADMConsecutivosSSCC_aux] AS P 
+--       ON R.idConsecutivoSSCC = P.idConsecutivoSSCC

@@ -1,0 +1,457 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{EE1EF192-9089-4689-ACC2-22922A485E47}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Diverscan.MJP.AccesoDatos</RootNamespace>
+    <AssemblyName>Diverscan.MJP.AccesoDatos</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CodeUtilities">
+      <HintPath>..\LibreriasExternas\CodeUtilities.dll</HintPath>
+    </Reference>
+    <Reference Include="EAN128, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\LibreriasExternas\EAN128.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common, Version=5.0.414.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Practices.EnterpriseLibrary\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Data, Version=5.0.414.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Practices.EnterpriseLibrary\Microsoft.Practices.EnterpriseLibrary.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Security.Cryptography, Version=5.0.414.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Practices.EnterpriseLibrary\Microsoft.Practices.EnterpriseLibrary.Security.Cryptography.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Practices.EnterpriseLibrary\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity, Version=2.0.414.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Practices.EnterpriseLibrary\Microsoft.Practices.Unity.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.Interception, Version=2.0.414.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Practices.EnterpriseLibrary\Microsoft.Practices.Unity.Interception.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel.DomainServices.EntityFramework">
+      <HintPath>..\packages\System.ServiceModel.DomainServices\System.ServiceModel.DomainServices.EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Telerik.Web.Spreadsheet">
+      <HintPath>..\Recursos\Telerik.Web.Spreadsheet.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Web.UI">
+      <HintPath>..\Recursos\Telerik.Web.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Web.UI.Skins">
+      <HintPath>..\Recursos\Telerik.Web.UI.Skins.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Web.UI.Skins">
+      <HintPath>..\lib\RCAJAX\2016.1.113.40\Telerik.Web.UI.Skins.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Administracion\da_BitacoraWeb.cs" />
+    <Compile Include="Administracion\da_Compania.cs" />
+    <Compile Include="Administracion\da_Credenciales.cs" />
+    <Compile Include="Administracion\da_Roles.cs" />
+    <Compile Include="AjusteInventarioPromocion\EAjusteInventarioPromoDe.cs" />
+    <Compile Include="AjusteInventarioPromocion\EAjusteInventarioPromoEnc.cs" />
+    <Compile Include="AjusteInventario\AjusteDeInventarioDataAcces.cs" />
+    <Compile Include="AjusteInventario\ArticuloXSolicitudAjusteDBA.cs" />
+    <Compile Include="AjusteInventario\DAjusteInventario.cs" />
+    <Compile Include="AjusteInventario\DetalleArticulo_DBA.cs" />
+    <Compile Include="AjusteInventario\EAjusteInventario.cs" />
+    <Compile Include="AjusteInventario\eAjusteInventarioDe.cs" />
+    <Compile Include="AjusteInventario\eAjusteInventarioEn.cs" />
+    <Compile Include="AjusteInventario\ESolicitudAjusteInventario.cs" />
+    <Compile Include="AjusteInventario\LogAjustesTRA_DBA.cs" />
+    <Compile Include="AjusteInventario\NAjusteInventario.cs" />
+    <Compile Include="AjusteInventario\SolicitudAjusteInventario_DBA.cs" />
+    <Compile Include="AjusteInventario\UbicacionEtiquetaDataAcces.cs" />
+    <Compile Include="Alistos\da_EstadoSuspencion.cs" />
+    <Compile Include="Consultas\DConsultarMaestroArticulo.cs" />
+    <Compile Include="Consultas\DGetArticuloXubicacion.cs" />
+    <Compile Include="Consultas\DInventario.cs" />
+    <Compile Include="Devolutions\da_SolicitudDevolucion.cs" />
+    <Compile Include="Operaciones\EDetalleReporteOC.cs" />
+    <Compile Include="Operaciones\eIngresoCajaChica.cs" />
+    <Compile Include="Operaciones\eReporteICCh.cs" />
+    <Compile Include="Operaciones\eReporteOC.cs" />
+    <Compile Include="Operaciones\eReporteSOC.cs" />
+    <Compile Include="Operaciones\eSinOrdenCompra.cs" />
+    <Compile Include="Operaciones\IngresosCajaChica.cs" />
+    <Compile Include="Operaciones\IngresosSinOrdenesCompras.cs" />
+    <Compile Include="Operaciones\SinOrdenCompra.cs" />
+    <Compile Include="Pedidos\Admin\DBPedidosAdmin.cs" />
+    <Compile Include="Pedidos\Admin\EEncabezadoPedidoAdmin.cs" />
+    <Compile Include="Pedidos\DepuracionPedidoCurso\DB_DepuracionPedido.cs" />
+    <Compile Include="Despacho\DDespacho.cs" />
+    <Compile Include="Despacho\EArticuloDespacho.cs" />
+    <Compile Include="Despacho\EOlaDespacho.cs" />
+    <Compile Include="Despacho\NDespacho.cs" />
+    <Compile Include="Emo\DEmo.cs" />
+    <Compile Include="Emo\EEmo.cs" />
+    <Compile Include="Emo\NEmo.cs" />
+    <Compile Include="GestionPedido\Bodegas\EBodegasGPedidos.cs" />
+    <Compile Include="GestionPedido\CajaChica\ECajaChica.cs" />
+    <Compile Include="GestionPedido\CajaChica\EDetalleCajaChica.cs" />
+    <Compile Include="GestionPedido\CajaChica\EEncabezadosCajaChica.cs" />
+    <Compile Include="GestionPedido\PedidoOriginal\EPedidoOriginalDetalle.cs" />
+    <Compile Include="GestionPedido\PedidoOriginal\EPedidoOriginalEncabezado.cs" />
+    <Compile Include="GestionPedido\DBAGestionPedido.cs" />
+    <Compile Include="GestionPedido\SolicitudAlistos\EDetalleAlisto.cs" />
+    <Compile Include="GestionPedido\SolicitudAlistos\EEncabezadoAlisto.cs" />
+    <Compile Include="GestionPedido\SolicitudAlistos\ESolicitudAlisto.cs" />
+    <Compile Include="GestionPedido\SolicitudTraslado\EDetalleSolicitudTraslado.cs" />
+    <Compile Include="GestionPedido\SolicitudTraslado\EEncabezadoSolicitudTraslado.cs" />
+    <Compile Include="GestionPedido\SolicitudTraslado\ESolicitudTraslado.cs" />
+    <Compile Include="Invoiced\DInvoiced.cs" />
+    <Compile Include="Invoiced\EInvoiced.cs" />
+    <Compile Include="Invoiced\ExistenciasBodegaGeneral\DExistenciasBodega.cs" />
+    <Compile Include="Invoiced\ExistenciasBodegaGeneral\EExistenciasBodega.cs" />
+    <Compile Include="Invoiced\ExistenciasBodegaGeneral\NExistenciasBodega.cs" />
+    <Compile Include="Invoiced\NInvoiced.cs" />
+    <Compile Include="Invoiced\PedidoFacturasTransportista\DPedidoFacturasTransportista.cs" />
+    <Compile Include="Invoiced\PedidoFacturasTransportista\EPedidoFacturasTransportista.cs" />
+    <Compile Include="Invoiced\PedidoFacturasTransportista\NPedidoFacturasTransportista.cs" />
+    <Compile Include="Operacion\DespachoPedidos\Entidades\EMaestroFacturadoProducto.cs" />
+    <Compile Include="Operacion\TrasladoBodegas\DBTrasladoBodegas.cs" />
+    <Compile Include="Pedidos\Cursos\DBPedidosCursos.cs" />
+    <Compile Include="Pedidos\Cursos\EDetallePedido.cs" />
+    <Compile Include="Pedidos\Cursos\EEncabezadoPedidoCurso.cs" />
+    <Compile Include="Pedidos\DepuracionPedidoCurso\DB_DepuracionPedido.cs" />
+    <Compile Include="RecpecionHH\DetalleRecepcion\EDetalleRecepcion.cs" />
+    <Compile Include="RecpecionHH\DetalleRecepcion\EListDetalleRecepcion.cs" />
+    <Compile Include="RecpecionHH\DetalleRecepcion\ResultadoDetalleRecepcion.cs" />
+    <Compile Include="RecpecionHH\DevolucionInmediata\da_DevolucionInmediata.cs" />
+    <Compile Include="RecpecionHH\DevolucionProducto\EDevolcionProducto.cs" />
+    <Compile Include="RecpecionHH\DevolucionProducto\ResultadoDevolucionProducto.cs" />
+    <Compile Include="RecpecionHH\FinalizarProducto\EFinalizarRecepcionProducto.cs" />
+    <Compile Include="RecpecionHH\FinalizarProducto\ResultadoFinalizarRecepcionProducto.cs" />
+    <Compile Include="RecpecionHH\NRecepcionHH.cs" />
+    <Compile Include="RecpecionHH\ProductoRecibido\EProductoRecibido.cs" />
+    <Compile Include="RecpecionHH\ProductoRecibido\ResultadoInsertarProductoRecibido.cs" />
+    <Compile Include="RecpecionHH\RecepcionHH_DBA.cs" />
+    <Compile Include="RecpecionHH\RechazoProducto\ERechazoProducto.cs" />
+    <Compile Include="RecpecionHH\RechazoProducto\ResultadoRechazoProducto.cs" />
+    <Compile Include="RecpecionHH\ResultadoRecepcionHH.cs" />
+    <Compile Include="Reportes\Alisto\da_Alisto.cs" />
+    <Compile Include="Reportes\Alisto\Entidad\EListObtenerAsignacionAlisto.cs" />
+    <Compile Include="Reportes\Alisto\Entidad\EObtenerAsignacionAlisto.cs" />
+    <Compile Include="Reportes\Alisto\RecargaGuanacaste\Entidad\EListObtenerRecargaBodegaGuanacaste.cs" />
+    <Compile Include="Reportes\Alisto\RecargaGuanacaste\Entidad\EObtenerRecargaGuanacaste.cs" />
+    <Compile Include="Reportes\Certificacion\da_Certificacion.cs" />
+    <Compile Include="Reportes\Certificacion\AsignoCertificacion\EAsignacionCertificacion.cs" />
+    <Compile Include="Reportes\Certificacion\AsignoCertificacion\EListAsignacionCertificacion.cs" />
+    <Compile Include="Reportes\Certificacion\SSCCSINOFinalizado\EListSSCCSINOFinalizado.cs" />
+    <Compile Include="Reportes\Certificacion\SSCCSINOFinalizado\ESSCCSINOFinalizado.cs" />
+    <Compile Include="Reportes\Cliente\EListObtenerCliente.cs" />
+    <Compile Include="Reportes\Cliente\EObtenerCliente.cs" />
+    <Compile Include="Reportes\da_kardexSKU.cs" />
+    <Compile Include="Reportes\da_ReporteDespachadoVsRecibido.cs" />
+    <Compile Include="Reportes\da_ReporteSolicitudDevolucion.cs" />
+    <Compile Include="Reportes\EListObtenerUbicacion.cs" />
+    <Compile Include="Reportes\EObtenerUbicacion.cs" />
+    <Compile Include="Reportes\Inventario\UbicacionSku\Entidad\EListObtenerUbicacionSku.cs" />
+    <Compile Include="Reportes\Inventario\UbicacionSku\Entidad\EObtenerUbicacionSku.cs" />
+    <Compile Include="Reportes\Inventario\UnidadDisponibleTIDSAP\Entidad\EListUnidadDisponibleTIDSAP.cs" />
+    <Compile Include="Reportes\Inventario\UnidadDisponibleTIDSAP\Entidad\EUnidadDisponibleTIDSAP.cs" />
+    <Compile Include="Reportes\KardexXSkuTIDSAP\Entidad\EKardexSkuTIDSAP.cs" />
+    <Compile Include="Reportes\KardexXSkuTIDSAP\Entidad\EListKardexSkuSAP.cs" />
+    <Compile Include="Reportes\KardexXSkuTIDSAP\Entidad\EListKardexSkuTID.cs" />
+    <Compile Include="Reportes\KardexXSkuTIDSAP\KardexXSkuTIDSAPDBA.cs" />
+    <Compile Include="Reportes\OlasFinalizadas\DOlaFinalizada.cs" />
+    <Compile Include="Reportes\Ola\DespachoOla\EListObtenerDespachoMercaderia.cs" />
+    <Compile Include="Reportes\Ola\DespachoOla\EObtenerDespachoMercaderia.cs" />
+    <Compile Include="Reportes\Ola\DisponibleFcturacion\EListObtenerOlasDisponiblesFacturacion.cs" />
+    <Compile Include="Reportes\Ola\DisponibleFcturacion\EObtenerOlasDisponiblesFacturacion.cs" />
+    <Compile Include="Reportes\Ola\da_ReportesOla.cs" />
+    <Compile Include="Reportes\Ola\ReportePedidoSinOla\EListBodega.cs" />
+    <Compile Include="Reportes\Ola\ReportePedidoSinOla\EListPedidoSinOla.cs" />
+    <Compile Include="Reportes\Ola\ReportePedidoSinOla\EPedidosSinOla.cs" />
+    <Compile Include="Reportes\IReportes.cs" />
+    <Compile Include="Reportes\Inventario\da_Inventario.cs" />
+    <Compile Include="Reportes\Inventario\RotacionInventario\Entidad\EListRotacionInventario.cs" />
+    <Compile Include="Reportes\Inventario\RotacionInventario\Entidad\ERotacionInventario.cs" />
+    <Compile Include="Reportes\TransitoMercaderia\da_Transito.cs" />
+    <Compile Include="Reportes\TransitoMercaderia\Entidad\EListObtenerTransitoMercaderia.cs" />
+    <Compile Include="Reportes\TransitoMercaderia\Entidad\EObtenerTransitoMercaderia.cs" />
+    <Compile Include="Reportes\Traslado\da_Traslado.cs" />
+    <Compile Include="Reportes\Traslado\Entidad\EListObtenerTrasladoMercaderia.cs" />
+    <Compile Include="Reportes\Traslado\Entidad\EObtenerTrasladoMercaderia.cs" />
+    <Compile Include="Reportes\VencimientoProducto\da_VencimientoProducto.cs" />
+    <Compile Include="Reportes\VencimientoProducto\Entidades\EListVencimientoProducto.cs" />
+    <Compile Include="Reportes\VencimientoProducto\Entidades\EVencimientoProducto.cs" />
+    <Compile Include="Sincronizador\da_Sincronizador.cs" />
+    <Compile Include="SSCC\EDetalleSSCCCertificado.cs" />
+    <Compile Include="SSCC\EDetalleSSCCOla.cs" />
+    <Compile Include="SSCC\EEncabezadoOlaSSCC.cs" />
+    <Compile Include="Alistos\EEncabezadoSalida.cs" />
+    <Compile Include="Alistos\EEnlist.cs" />
+    <Compile Include="Alistos\EInsertarArticuloAlisto.cs" />
+    <Compile Include="Alistos\EstadoAlistos.cs" />
+    <Compile Include="Alistos\IEstadoAlistos.cs" />
+    <Compile Include="Alistos\NAlistos.cs" />
+    <Compile Include="AprobarDespacho\da_AprobarDespacho.cs" />
+    <Compile Include="AprobarSalida\da_AprobarSalida.cs" />
+    <Compile Include="Articulos\DAArticulos.cs" />
+    <Compile Include="Articulos\EArticuloId.cs" />
+    <Compile Include="Articulos\InfoArticulo\ArticuloBaseInfo.cs" />
+    <Compile Include="Articulos\InfoArticulo\ArticuloInfoGetter.cs" />
+    <Compile Include="Articulos\InfoArticulo\ResultGetInfoArticulo.cs" />
+    <Compile Include="Articulos\NArticulos.cs" />
+    <Compile Include="Bodega\EBodega.cs" />
+    <Compile Include="Bodega\EnumBodegas.cs" />
+    <Compile Include="Bodega\EZonaAndroid.cs" />
+    <Compile Include="Bodega\WSEArticulo.cs" />
+    <Compile Include="Calidad\RecepcionDBA.cs" />
+    <Compile Include="Calidad\RepuestasCalidadPorLoteDBA.cs" />
+    <Compile Include="CategoriaArticulo\CategoriaArticuloDBA.cs" />
+    <Compile Include="Certificación\d_Certificacion.cs" />
+    <Compile Include="Certificación\eCertificacionDe.cs" />
+    <Compile Include="Certificación\eCertificacionEn.cs" />
+    <Compile Include="Certificación\E_CertificacionDetalle.cs" />
+    <Compile Include="Certificación\N_Certificacion.cs" />
+    <Compile Include="DataTableExtensions.cs" />
+    <Compile Include="DbContextExtensions.cs" />
+    <Compile Include="DetalleOrdenCompra\DDetalleOrdenC.cs" />
+    <Compile Include="DetalleOrdenCompra\EArticulos.cs" />
+    <Compile Include="DetalleOrdenCompra\NDetalleOrdenC.cs" />
+    <Compile Include="Devolutions\DDevolutionsDetail.cs" />
+    <Compile Include="Devolutions\DDevolutionsHeader.cs" />
+    <Compile Include="Devolutions\DDevolutionsProductLocation.cs" />
+    <Compile Include="Devolutions\EDevolucionDe.cs" />
+    <Compile Include="Devolutions\EDevolucionEn.cs" />
+    <Compile Include="DisponibleBodegaWebService\EDisponibleBodega.cs" />
+    <Compile Include="DisponibleBodegaWebService\WSDisponibleBodega.cs" />
+    <Compile Include="Existencias\ExistenciasPorArticulo.cs" />
+    <Compile Include="GTIN14VariableLogistic\DGTIN14VariableLogistic.cs" />
+    <Compile Include="HistoricoDemanda\HistoricoDemandaDBA.cs" />
+    <Compile Include="HistoricoDemanda\SolicitudRestaurantesDBA.cs" />
+    <Compile Include="InventarioBasico\AjusteInventarioBasicoDBA.cs" />
+    <Compile Include="InventarioBasico\ArticulosInventarioBasicoDBA.cs" />
+    <Compile Include="InventarioBasico\CopiaSistemaArticuloDBA.cs" />
+    <Compile Include="InventarioBasico\InventarioBasicoDBA.cs" />
+    <Compile Include="Inventario\AjusteInventarioCiclicoDBA.cs" />
+    <Compile Include="Inventario\ArticulosInventarioCiclicoRealizarDBA.cs" />
+    <Compile Include="Inventario\CantidadArticuloSAPDBA.cs" />
+    <Compile Include="Inventario\CopiaSistemaArticuloCiclicoDBA.cs" />
+    <Compile Include="Inventario\InventarioCiclicoDBA.cs" />
+    <Compile Include="Inventario\MaestroArticuloDBA.cs" />
+    <Compile Include="Inventario\N_AjusteInventarioCiclico.cs" />
+    <Compile Include="Inventario\TomaFisicaInventarioDBA.cs" />
+    <Compile Include="Inventario\UbicacionesInventarioCiclicoDBA.cs" />
+    <Compile Include="InyeccionDeDependencias\Reportes\InyeccionReportes.cs" />
+    <Compile Include="Kardex\KardexInfoBase.cs" />
+    <Compile Include="MaestroArticulo\da_MaestroArticulo.cs" />
+    <Compile Include="Bodega\DAConsultas.cs" />
+    <Compile Include="Bodega\EArticulo.cs" />
+    <Compile Include="Bodega\EProveedor.cs" />
+    <Compile Include="Bodega\EZona.cs" />
+    <Compile Include="Bodega\NConsultas.cs" />
+    <Compile Include="MaestroArticulo\EMinPicking.cs" />
+    <Compile Include="MotivoAjusteInventario\CentroCostosDBA.cs" />
+    <Compile Include="MotivoAjusteInventario\ConsultaMotivoAjusteInvertario.cs" />
+    <Compile Include="MotivoAjusteInventario\LogAjusteInventarioBD.cs" />
+    <Compile Include="MotorDecision\da_MotorDecision.cs" />
+    <Compile Include="Operaciones\DetalleFacturado.cs" />
+    <Compile Include="Operaciones\eDetalleFacturado.cs" />
+    <Compile Include="Operaciones\EDetalleOrdenC.cs" />
+    <Compile Include="Operaciones\eOrdenCompra.cs" />
+    <Compile Include="Operaciones\NegocioOperaciones.cs" />
+    <Compile Include="Operaciones\OCDetalleRechazo.cs" />
+    <Compile Include="Operaciones\OrdenesCompras.cs" />
+    <Compile Include="Operacion\DespachoPedidos\DepachoDePedidosDBA.cs" />
+    <Compile Include="Operacion\DespachoPedidos\Entidades\EDetalleFacturadoTrazabilidad.cs" />
+    <Compile Include="Operacion\DespachoPedidos\Entidades\EMaestroSolicitudFacturado.cs" />
+    <Compile Include="Operacion\DespachoPedidos\Entidades\E_ListadoDetalleOla.cs" />
+    <Compile Include="Operacion\DespachoPedidos\Entidades\E_ListadoOlasFactura.cs" />
+    <Compile Include="Operacion\DespachoPedidos\IDespachoDePedidos.cs" />
+    <Compile Include="Operacion\Salidas\da_OperacionSalidasDBA.cs" />
+    <Compile Include="OPESALMaestroSolicitud\da_OPESALMaestroSolicitud.cs" />
+    <Compile Include="OPESALMaestroSolicitud\GetOrdersToEnlist.cs" />
+    <Compile Include="OPESALPreDetalleSolicitud\da_OPESALPreDetalleSolicitud.cs" />
+    <Compile Include="OrdenCompa\da_DetalleOrdenCompra.cs" />
+    <Compile Include="OrdenCompa\da_PreDetalleSolicitud.cs" />
+    <Compile Include="OrdenCompra\EstadoOrdenC.cs" />
+    <Compile Include="OrdenCompra\GetPurchaseOrderDBA.cs" />
+    <Compile Include="OrdenCompra\IEstadoOrdenC.cs" />
+    <Compile Include="OrdenCompra\IPurchaseOrders.cs" />
+    <Compile Include="OrdenCompra\PurchaseOrdersImpl.cs" />
+    <Compile Include="PICKING\ConsultaArticulosPicking.cs" />
+    <Compile Include="ProcesarRecepcionUbicacion\da_ProcesarRecepcionUbicacion.cs" />
+    <Compile Include="ProcesarSolicitud\da_DetalleSSCCArticuloSolicitud.cs" />
+    <Compile Include="ProcesarSolicitud\da_InsertaPreDetalleSolicitud.cs" />
+    <Compile Include="ProcesarSolicitud\da_ProcesarSolicitud.cs" />
+    <Compile Include="Programa\da_Programa.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Proveedores\ProveedoresDBA.cs" />
+    <Compile Include="Recaudo\DJornadaCerrar.cs" />
+    <Compile Include="Recaudo\DJornadaRecaudo.cs" />
+    <Compile Include="Recaudo\DRecaudoDetalle.cs" />
+    <Compile Include="Recaudo\DRecaudoEncabezado.cs" />
+    <Compile Include="Recaudo\EJornadaRecaudo.cs" />
+    <Compile Include="Recaudo\ERecaudoDetalle.cs" />
+    <Compile Include="Recaudo\ERecaudoEncabezado.cs" />
+    <Compile Include="ReflectionExtensions.cs" />
+    <Compile Include="Reportes\ArticuloGTINDBA.cs" />
+    <Compile Include="Reportes\da_BusquedaDestino.cs" />
+    <Compile Include="Reportes\da_BusquedaOrdenC.cs" />
+    <Compile Include="Reportes\da_Destino.cs" />
+    <Compile Include="Reportes\da_ArticulosDisponiblesBodega.cs" />
+    <Compile Include="Reportes\da_AuditoriaReport.cs" />
+    <Compile Include="Reportes\da_DespachosDBA.cs" />
+    <Compile Include="Reportes\da_DiferenciaInventario.cs" />
+    <Compile Include="Reportes\da_DisponibilidadArticulosPedidoBodega.cs" />
+    <Compile Include="Reportes\da_HistoricoDemanda.cs" />
+    <Compile Include="Reportes\da_KardexReport.cs" />
+    <Compile Include="Reportes\da_KardexReportesDBA.cs" />
+    <Compile Include="Reportes\da_ProveedorReport.cs" />
+    <Compile Include="Reportes\EArticulo.cs" />
+    <Compile Include="Reportes\NReporte.cs" />
+    <Compile Include="Reportes\Reporte Ajuste de Inventario\EObtenerArticulosPromocion.cs" />
+    <Compile Include="Reportes\Reporte Ajuste de Inventario\EObtieneArticulosSolicitud.cs" />
+    <Compile Include="Reportes\Reporte Ajuste de Inventario\IObtenerPromociones.cs" />
+    <Compile Include="Reportes\Reporte Ajuste de Inventario\NObtenerEncabezadoPromocion.cs" />
+    <Compile Include="Reportes\Reporte Ajuste de Inventario\ObtenerPromociones.cs" />
+    <Compile Include="Reportes\ReporteDespacho.cs" />
+    <Compile Include="Reportes\ReporteDespacho_DB.cs" />
+    <Compile Include="Reportes\TRALoteFechasDBA.cs" />
+    <Compile Include="Reportes\Trazabilidad\Entidades\EAjusteInventario.cs" />
+    <Compile Include="Reportes\Trazabilidad\Entidades\EConsultaArticulos.cs" />
+    <Compile Include="Reportes\Trazabilidad\Entidades\EListadoTrazabilidad.cs" />
+    <Compile Include="Reportes\Trazabilidad\Entidades\ETrazabilidadOrdenCompra.cs" />
+    <Compile Include="Reportes\Trazabilidad\ITrazabilidadDBA.cs" />
+    <Compile Include="Reportes\Trazabilidad\TrazabilidadDBA.cs" />
+    <Compile Include="Roles\da_Roles.cs" />
+    <Compile Include="RolUsuarioHH\DRolUsuarioHH.cs" />
+    <Compile Include="RolUsuarioHH\ERolUsuarioHH.cs" />
+    <Compile Include="RolUsuarioHH\NRolUsuarioHH.cs" />
+    <Compile Include="SolicitudBODEGA\ISolicitudBodega.cs" />
+    <Compile Include="SolicitudBODEGA\SolicitudBodegaDBA.cs" />
+    <Compile Include="SolicitudDeOla\E_ListadoDetallesMaestro.cs" />
+    <Compile Include="SolicitudDeOla\E_ListadoOlasCreadas.cs" />
+    <Compile Include="SolicitudDeOla\E_ListadoPreMaestro.cs" />
+    <Compile Include="SolicitudDeOla\E_ListadoRutas.cs" />
+    <Compile Include="SolicitudDeOla\E_ListadoSolicitudesEliminarOla.cs" />
+    <Compile Include="SolicitudDeOla\ISolicitudDeOla.cs" />
+    <Compile Include="SolicitudDeOla\SolicituDeOlaDBA.cs" />
+    <Compile Include="SSCC\ConsultarSSCC.cs" />
+    <Compile Include="SSCC\ERevertirArticuloSSCC.cs" />
+    <Compile Include="SSCC\NSSCC.cs" />
+    <Compile Include="SSCC\ResultGetSSCCS.cs" />
+    <Compile Include="SSCC\ResultGetSSCC.cs" />
+    <Compile Include="SSCC\ResultGetSSCCDespatch.cs" />
+    <Compile Include="SSCC\ResultGetSSCCProducts.cs" />
+    <Compile Include="SSCC\ESSCC.cs" />
+    <Compile Include="Tareas\TareaUsuarioDBA.cs" />
+    <Compile Include="TomasFisicas\eTomaFiscaEn.cs" />
+    <Compile Include="TomasFisicas\eTomaFisicaDe.cs" />
+    <Compile Include="TRAIngresoSalidaArticulos\ConsultasTRA.cs" />
+    <Compile Include="TRAIngresoSalidaArticulos\TRAIngresoSalida_DBA.cs" />
+    <Compile Include="TRAIngresoSalidaArticulos\TRAResumenDBA.cs" />
+    <Compile Include="TransitoBodega\DArticuloTransitoBodega.cs" />
+    <Compile Include="TransitoBodega\EArticuloTransitoBodega.cs" />
+    <Compile Include="Transportista\DTransportista.cs" />
+    <Compile Include="Transportista\ETransportista.cs" />
+    <Compile Include="Transportista\NTransportista.cs" />
+    <Compile Include="Traslados\da_Traslados.cs" />
+    <Compile Include="Traslados\ETraslado.cs" />
+    <Compile Include="Traslados\ManejoExcepciones\GuardarMensajeError.cs" />
+    <Compile Include="Traslados\NTraslado.cs" />
+    <Compile Include="Traslados\Utilities\MensajeXUsuario.cs" />
+    <Compile Include="Trazabilidad\ArticuloTrazabilidadDBA.cs" />
+    <Compile Include="Trazabilidad\DATransitoCantidadEntrada.cs" />
+    <Compile Include="Trazabilidad\DespachosDBA.cs" />
+    <Compile Include="Trazabilidad\ETrazabilidadCantidadEntrada.cs" />
+    <Compile Include="Trazabilidad\LotesDBA.cs" />
+    <Compile Include="Trazabilidad\NTransitoCantidadEntrada.cs" />
+    <Compile Include="UsoGeneral\AyudanteSP.cs" />
+    <Compile Include="UsoGeneral\da_ConsultaDummy.cs" />
+    <Compile Include="Usuarios\da_Usuarios.cs" />
+    <Compile Include="Vehiculo\DVehiculo.cs" />
+    <Compile Include="Vehiculo\EVehiculo.cs" />
+    <Compile Include="Vehiculo\NVehiculo.cs" />
+    <Compile Include="Vehiculo\ResultGetVehiculo.cs" />
+    <Compile Include="Vehiculo\SEVehiculo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Diverscan.MJP.Entidades\TRACEID.Entidades.csproj">
+      <Project>{7f85c5b8-7fe4-471f-98a9-2e6aaa9cf258}</Project>
+      <Name>TRACEID.Entidades</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Diverscan.MJP.Utilidades\TRACEID.Utilidades.csproj">
+      <Project>{C829BFF2-98AB-4D2D-8364-7EE6B3005304}</Project>
+      <Name>TRACEID.Utilidades</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

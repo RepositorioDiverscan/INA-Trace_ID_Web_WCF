@@ -1,0 +1,4 @@
+###########################################
+Para recepciones agregar el número de orden de compra:
+
+Para alistos agregar el número de solicitud
