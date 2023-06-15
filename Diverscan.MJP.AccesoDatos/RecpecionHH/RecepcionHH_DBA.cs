@@ -102,8 +102,9 @@ namespace Diverscan.MJP.AccesoDatos.RecpecionHH
         {
             var db = DatabaseFactory.CreateDatabase("MJPConnectionString");
             var dbCommand = db.GetStoredProcCommand("SP_FinishDetailPO");
-            db.AddInParameter(dbCommand, "@IdDetalleOrdenCompra", DbType.Int32, finalizar.IdDetalleOrdenCompra);
+            db.AddInParameter(dbCommand, "@IdDetalleIngreso", DbType.Int32, finalizar.IdDetalleIngreso);
             db.AddInParameter(dbCommand, "@numFactura", DbType.String, finalizar.NumFactura);
+            db.AddInParameter(dbCommand, "@TipoIngreso", DbType.String, finalizar.TipoIngreso);
             db.AddOutParameter(dbCommand, "@Resultado", DbType.String, 150);
             db.ExecuteNonQuery(dbCommand);
 

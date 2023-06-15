@@ -190,7 +190,7 @@ namespace Diverscan.MJP.UI.Operaciones.Ingresos
                     GlobalidMaestroSinOrdenCompra = str;
                     List<EDetalleOrdenC> listDetalleSinOrdenCompra;
                     NegocioOperaciones negocioOperaciones = new NegocioOperaciones();
-                    listDetalleSinOrdenCompra = negocioOperaciones.ObtenerDetalleOrdenCompras(str, idBodega);
+                    listDetalleSinOrdenCompra = negocioOperaciones.ObtenerDetalleSinOrdenCompra(str, idBodega);
                     _SOCDetalle = listDetalleSinOrdenCompra;
                     RadGridDetalleIngreso.DataSource = listDetalleSinOrdenCompra;
                     RadGridDetalleIngreso.DataBind();

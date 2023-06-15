@@ -9,17 +9,22 @@ namespace Diverscan.MJP.AccesoDatos.RecpecionHH.FinalizarProducto
     [DataContract]
     public class EFinalizarRecepcionProducto
     {
-        private long _idDetalleOrdenCompra;
+        private long _idDetalleIngreso;
         private string _numFactura;
+        private short _tipoIngreso;
 
-        public EFinalizarRecepcionProducto(long idDetalleOrdenCompra, string numFactura)
+        public EFinalizarRecepcionProducto(long idDetalleIngreso, string numFactura, short tipoIngreso)
         {
-            IdDetalleOrdenCompra = idDetalleOrdenCompra;
-            NumFactura = numFactura;
+            _idDetalleIngreso = idDetalleIngreso;
+            _numFactura = numFactura;
+            _tipoIngreso = tipoIngreso;
         }
+
         [DataMember]
-        public long IdDetalleOrdenCompra { get => _idDetalleOrdenCompra; set => _idDetalleOrdenCompra = value; }
+        public long IdDetalleIngreso { get => _idDetalleIngreso; set => _idDetalleIngreso = value; }
         [DataMember]
         public string NumFactura { get => _numFactura; set => _numFactura = value; }
+        [DataMember]
+        public short TipoIngreso { get => _tipoIngreso; set => _tipoIngreso = value; }
     }
 }
