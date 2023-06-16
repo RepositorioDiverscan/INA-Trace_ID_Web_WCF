@@ -15,6 +15,7 @@ namespace Diverscan.MJP.AccesoDatos.RecpecionHH.ProductoRecibido
         decimal _cantidad;
         string _lote;
         string _fechaVencimiento;
+        short _tipoIngreso;
         string _ubicacion;
 
         [DataMember]
@@ -31,5 +32,7 @@ namespace Diverscan.MJP.AccesoDatos.RecpecionHH.ProductoRecibido
         public string FechaVencimiento { get => _fechaVencimiento; set => _fechaVencimiento = value; }
         [DataMember]
         public string Ubicacion { get => _ubicacion; set => _ubicacion = value; }
+        [DataMember]
+        public short TipoIngreso { get => _tipoIngreso; set => _tipoIngreso = value; }
     }
 }

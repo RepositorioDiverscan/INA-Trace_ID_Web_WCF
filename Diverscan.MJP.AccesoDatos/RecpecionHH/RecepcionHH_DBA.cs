@@ -26,6 +26,7 @@ namespace Diverscan.MJP.AccesoDatos.RecpecionHH
             db.AddInParameter(dbCommand, "@Lote", DbType.String, productoRecibido.Lote);
             db.AddInParameter(dbCommand, "@FechaVecimiento", DbType.String, productoRecibido.FechaVencimiento);
             db.AddInParameter(dbCommand, "@Ubicacion", DbType.String, productoRecibido.Ubicacion);
+            db.AddInParameter(dbCommand, "@TipoIngreso", DbType.Int16, productoRecibido.TipoIngreso);
             db.AddOutParameter(dbCommand, "@Resultado", DbType.String, 150);
             db.ExecuteNonQuery(dbCommand);
 
