@@ -76,6 +76,7 @@ namespace Diverscan.MJP.AccesoDatos.Operaciones
                     datos.IdInterno = reader["idInterno"].ToString();
                     datos.GTIN = reader["GTIN"].ToString();
                     datos.DescripcionRechazo = reader["DescripcionRechazo"].ToString();
+                    datos.numFactura = reader["numFactura"].ToString();
                     datos.CantidadBodega = Convert.ToInt32(reader["CantidadBodega"].ToString());
 
                     string CantidadaRechaz = reader["CantidadRechazados"].ToString();
