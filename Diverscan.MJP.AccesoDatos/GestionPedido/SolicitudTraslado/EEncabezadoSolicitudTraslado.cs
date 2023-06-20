@@ -22,18 +22,18 @@ namespace Diverscan.MJP.AccesoDatos.GestionPedido.SolicitudTraslado
         //Constructor
         public EEncabezadoSolicitudTraslado(IDataReader reader)
         {
-            _idSolicitudTrasladoBodega = Convert.ToInt32(reader["IdSolicitudTrasladoBodega"]);
-            _idUsuarioSolicita = Convert.ToInt32(reader["idUsuarioSolicita"]);
-            _nombreSolicitante = (string) reader["NombreSolicitante"];
-           // _idUsuarioProcesa = Convert.ToInt32(reader["IDUsuarioProcesa"]);
-           // _nombreProcesa = (string)reader["NombreProcesa"];
-           // _idBodegaOrigen = Convert.ToInt32(reader["NombreBodegaOrigen"]);
+            _idSolicitudTrasladoBodega = Convert.ToInt32(reader["Solicitud"]);
+            _idUsuarioSolicita = Convert.ToInt32(reader["IDUsuarioSolicita"]);
+            _nombreSolicitante = (string) reader["NombreSolicita"];
+            _idUsuarioProcesa = Convert.ToInt32(reader["IDUsuarioProcesa"]);
+            _nombreProcesa = (string)reader["NombreProcesa"];
+            _idBodegaOrigen = Convert.ToInt32(reader["Origen"]);
             _nombreBodegaOrigen = (string)reader["NombreBodegaOrigen"];
-           // _idBodegaDestino = Convert.ToInt32(reader["Destino"]);
+            _idBodegaDestino = Convert.ToInt32(reader["Destino"]);
             _nombreBodegaDestino = (string)reader["NombreBodegaDestino"];
-            _idPedidoOriginal = Convert.ToInt32(reader["IdPedidoOriginal"]);
+            //_idPedidoOriginal = Convert.ToInt32(reader["IdPedidoOriginal"]);
             _estado = (string)reader["Estado"];
-            _fechaRegistro = (DateTime)reader["FechaRegistro"];
+            _fechaRegistro = (DateTime)reader["Fecha"];
         }
 
         //Metodos Get y Set
