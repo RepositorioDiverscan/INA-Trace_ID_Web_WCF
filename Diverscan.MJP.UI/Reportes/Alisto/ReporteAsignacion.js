@@ -56,6 +56,7 @@
                             { data: 'UnidadesAsignadas' },
                             { data: 'UnidadesPendiente' },
                             { data: 'EstadoSSCC' },
+                            { data: 'SPorcAlisto' },
                         ],
                         destroy: true,
                         languaje: {

@@ -42,6 +42,7 @@
                         <th>Unidades Asignadas</th>
                         <th>Unidades Pendientes</th>
                         <th>Estado SSCC</th>
+                        <th>Porcentaje de Alisto</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -53,6 +54,7 @@
                         <td>{{alisto.UnidadesAsignadas}}</td>
                         <td>{{alisto.UnidadesPendientes}}</td>
                          <td>{{alisto.EstadoSSCC}}</td>
+                        <td>{{alisto.SPorcAlisto}}</td>
                     </tr>
                 </tbody>
             </table>
