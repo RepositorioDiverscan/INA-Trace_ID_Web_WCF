@@ -49,34 +49,46 @@
                 f2: self.dtF2,
 
             }, function (data) {
-                self.listakardex = JSON.parse(data);
-                //Crear la tabla de JQuery con los datos asignados
-                $(document).ready(function () {
-                    $('#table_listakardex').DataTable({
-                        data: self.listakardex,
-                        columns: [
 
-                            { data: 'IdTrazabilidad' },
-                            { data: 'IdUbicacion' },
-                            { data: 'Ubicacion' },
-                            { data: 'IdMetodoAccion' },
-                            { data: 'MetodoDescripcion' },
-                            { data: 'Cantidad' },
-                            { data: 'Saldo' },
-                            { data: 'FechaRegistro' },
-                            { data: 'Lote' },
-                            { data: 'FechaVencimiento' },
-                            { data: 'IdInterno' },
-                            { data: 'Nombre' },
+                if (self.sku == '')
+                {
+                    self.MostrarMensaje("Debe ingresar un Id Interno");
+                }
+                else if (data == "El Id Interno no existe")
+                {
+                    self.MostrarMensaje(data);
+                }
+                else
+                {
+                    self.listakardex = JSON.parse(data);
+                    //Crear la tabla de JQuery con los datos asignados
+                    $(document).ready(function () {
+                        $('#table_listakardex').DataTable({
+                            data: self.listakardex,
+                            columns: [
 
-                        ],
-                        destroy: true,
-                        language: {
-                            url: 'https://cdn.datatables.net/plug-ins/1.12.1/i18n/es-ES.json',
-                        },
+                                { data: 'IdTrazabilidad' },
+                                { data: 'IdUbicacion' },
+                                { data: 'Ubicacion' },
+                                { data: 'IdMetodoAccion' },
+                                { data: 'MetodoDescripcion' },
+                                { data: 'Cantidad' },
+                                { data: 'Saldo' },
+                                { data: 'FechaRegistro' },
+                                { data: 'Lote' },
+                                { data: 'FechaVencimiento' },
+                                { data: 'IdInterno' },
+                                { data: 'Nombre' },
 
+                            ],
+                            destroy: true,
+                            language: {
+                                url: 'https://cdn.datatables.net/plug-ins/1.12.1/i18n/es-ES.json',
+                            },
+
+                        });
                     });
-                });
+                }
 
                 document.getElementById("DivTablalistakardex").style.display = "block";
 
