@@ -9,17 +9,8 @@ namespace Diverscan.MJP.AccesoDatos.Pedidos.Cursos
     public class EDetallePedido
     {
         //Atributos
-        private int _detalle;
-        private int _idArticulo;
-        private string _idInternoArticulo;
-        private string _nombreArticulo;
-        private int _cantidad;
-        private int _estado;
-        private int _cantidadOriginal;
-        private int _idBodega;
-        private string _nombreBodega;
-        private int _cantidadDisponibleBodega;
-
+        private int _detalle, _idArticulo, _cantidad, _estado, _cantidadOriginal, _idBodega, _cantidadDisponibleBodega, _diferencia;
+        private string _idInternoArticulo, _nombreArticulo, _nombreBodega;
 
         //Constructor
         public EDetallePedido(IDataReader reader)
@@ -34,6 +25,7 @@ namespace Diverscan.MJP.AccesoDatos.Pedidos.Cursos
             _idBodega = Convert.ToInt32(reader["IDBodega"]);
             _nombreBodega = Convert.ToString(reader["Bodega"]);
             _cantidadDisponibleBodega = Convert.ToInt32(reader["CantidadDisponibleBodega"]);
+            _diferencia = Convert.ToInt32(reader["Diferencia"]);
         }
 
         //Métodos Get and Set
@@ -47,6 +39,7 @@ namespace Diverscan.MJP.AccesoDatos.Pedidos.Cursos
         public int IdBodega { get => _idBodega; set => _idBodega = value; }
         public string NombreBodega { get => _nombreBodega; set => _nombreBodega = value; }
         public int CantidadDisponibleBodega { get => _cantidadDisponibleBodega; set => _cantidadDisponibleBodega = value; }
+        public int Diferencia { get => _diferencia; set => _diferencia = value; }
     }
 
 }

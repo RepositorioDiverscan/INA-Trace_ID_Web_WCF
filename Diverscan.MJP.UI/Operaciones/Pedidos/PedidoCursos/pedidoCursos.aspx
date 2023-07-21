@@ -39,9 +39,11 @@
                                     <i class="fa-solid fa-eye text-info" style="font-size: 20px !important; cursor: pointer;"></i>
                                 </span>             
                                 
+                                <div id="enviarDepurar">
                                 <span title="Enviar a Depurar Pedido" class="mr-3 ml-3" style="cursor: pointer;" @click="depurarPedido(encabezado.Pedido)">
                                     <i class="fa-solid fa-share text-success" style="font-size: 20px !important;"></i>
                                 </span>
+                                </div>
 
                                 <span title="Anular Pedido"  style="cursor: pointer;" @click="anularPedido(encabezado.Pedido)">
                                     <i class="fa-solid fa-ban text-danger" style="font-size: 20px !important;"></i>
@@ -66,6 +68,7 @@
                             <th>Nombre Artículo</th>
                             <th>Cantidad Solicitada</th>
                             <th>Cantidad en Bodega</th>
+                            <th>Diferencia</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -74,6 +77,7 @@
                             <td>{{detalle.NombreArticulo}}</td>
                             <td>{{detalle.Cantidad}}</td>
                             <td>{{detalle.CantidadDisponibleBodega}}</td>
+                            <td>{{detalle.Diferencia}}</td>
                         </tr>
                     </tbody>
                 </table>
