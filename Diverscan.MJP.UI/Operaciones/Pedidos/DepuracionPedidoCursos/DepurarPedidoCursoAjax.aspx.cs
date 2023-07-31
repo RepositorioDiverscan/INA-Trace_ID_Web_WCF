@@ -49,6 +49,20 @@ namespace Diverscan.MJP.UI.Operaciones.Pedidos
                     var respuesta = dB_DepuracionPedido.ModificarCantidadPedido(idPedidoOriginal, idArticulo, cantidadModificar, accion);
                     Response.Write(respuesta);
                     break;
+
+                //Caso para Aceptar los Pedidos de un Curso 
+                case "AceptarPedidoCurso":
+                    var IdPedidoOriginalAceptar = Convert.ToInt32(Request.Form["IdPedidoOriginal"]);
+                    var respuestaAceptar = dB_DepuracionPedido.AprobarPedidoCurso(IdPedidoOriginalAceptar);
+                    Response.Write(respuestaAceptar);
+                    break;
+
+                //Caso para Anular Pedidos Cursos
+                case "AnularPedidoCurso":
+                    var IdPedidoOriginalAnular = Convert.ToInt32(Request.Form["IdPedidoOriginal"]);
+                    var respuestaAnular = dB_DepuracionPedido.anularPedidoCurso(IdPedidoOriginalAnular);
+                    Response.Write(respuestaAnular);
+                    break;
             }
 
         }

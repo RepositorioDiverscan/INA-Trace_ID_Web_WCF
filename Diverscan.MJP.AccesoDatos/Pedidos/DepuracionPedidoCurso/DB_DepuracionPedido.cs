@@ -79,6 +79,58 @@ namespace Diverscan.MJP.AccesoDatos.DepuracionPedido
             }
         }
 
+        public string AprobarPedidoCurso(int idPedidoOriginal)
+        {
+            try
+            {
+                //Conectarse a la BD y especificar el SP a ejecutar
+                var db = DatabaseFactory.CreateDatabase("MJPConnectionString");
+                var dbCommand = db.GetStoredProcCommand("SP_IngresarOlaPedidoCurso");
+
+                //Enviar los parametros del SP
+                db.AddInParameter(dbCommand, "@idPedidoOriginal", DbType.Int64, idPedidoOriginal);
+                db.AddOutParameter(dbCommand, "@resultado", DbType.String, 200);
+
+                //Ejecutar el SP
+                db.ExecuteNonQuery(dbCommand);
+
+                //Retornar el mensaje de resultado
+                string resultado = dbCommand.Parameters["@resultado"].Value.ToString();
+                return resultado;
+            }
+            catch (Exception ex)
+            {
+                //Mensaje en caso de error
+                return ex.Message;
+            }
+        }
+
+        //Método para anular el pedido de curso
+        public string anularPedidoCurso(int idPedidoOriginal)
+        {
+            try
+            {
+                //Conectarse a la BD y especificar el SP a ejecutar
+                var db = DatabaseFactory.CreateDatabase("MJPConnectionString");
+                var dbCommand = db.GetStoredProcCommand("SP_AnularPedidoCurso");
+
+                //Enviar los parametros del SP
+                db.AddInParameter(dbCommand, "@idPedidoOriginal", DbType.Int64, idPedidoOriginal);
+                db.AddOutParameter(dbCommand, "@resultado", DbType.String, 200);
+
+                //Ejecutar el SP
+                db.ExecuteNonQuery(dbCommand);
+
+                //Retornar el mensaje de resultado
+                string resultado = dbCommand.Parameters["@resultado"].Value.ToString();
+                return resultado;
+            }
+            catch (Exception ex)
+            {
+                //Mensaje en caso de error
+                return ex.Message;
+            }
+        }
 
     }
 }

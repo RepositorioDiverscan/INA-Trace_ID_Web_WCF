@@ -50,7 +50,7 @@ namespace Diverscan.MJP.AccesoDatos.Pedidos.Admin
         }
 
 
-        //Método para anular el pedido de curso
+        //Método para anular el pedido admin
         public string anularPedidoCurso(int idPedidoOriginal)
         {
             try

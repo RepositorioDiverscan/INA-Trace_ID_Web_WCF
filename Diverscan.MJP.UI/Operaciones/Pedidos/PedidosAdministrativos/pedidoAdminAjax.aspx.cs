@@ -47,7 +47,7 @@ namespace Diverscan.MJP.UI.Operaciones.Pedidos.PedidosAdministrativos
                     break;
 
 
-                //Caso para Anular Pedidos Cursos
+                //Caso para Anular Pedidos Admin
                 case "AnularPedidoCurso":
                     var IdPedidoOriginalAnular = Convert.ToInt32(Request.Form["IdPedidoOriginal"]);
                     var respuestaAnular = dBPedidosAdmin.anularPedidoCurso(IdPedidoOriginalAnular);
@@ -55,7 +55,7 @@ namespace Diverscan.MJP.UI.Operaciones.Pedidos.PedidosAdministrativos
                     break;
 
 
-                //Caso para Aceptar los Pedidos de un Curso 
+                //Caso para Aceptar los Pedidos Admin
                 case "AceptarPedidoAdmin":
                     var IdPedidoOriginalAceptar = Convert.ToInt32(Request.Form["IdPedidoOriginal"]);
                     var respuestaAceptar = dBPedidosAdmin.AprobarPedidoAdmin(IdPedidoOriginalAceptar);

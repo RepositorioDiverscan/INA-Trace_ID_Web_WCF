@@ -35,6 +35,8 @@
                             <td>{{encabezado.NombreUsuario}}</td>
                             <td>{{encabezado.NombreProfesor}}</td>
                             <td>
+                                <div style="display:flex" >   
+
                                 <span title="Ver detalle" @click="ObtenerDetallePedidos(encabezado.Pedido)">
                                     <i class="fa-solid fa-eye text-info" style="font-size: 20px !important; cursor: pointer;"></i>
                                 </span>             
@@ -48,6 +50,7 @@
                                 <span title="Anular Pedido"  style="cursor: pointer;" @click="anularPedido(encabezado.Pedido)">
                                     <i class="fa-solid fa-ban text-danger" style="font-size: 20px !important;"></i>
                                 </span>
+                                </div>
                             </td>
                         </tr>
                     </tbody>

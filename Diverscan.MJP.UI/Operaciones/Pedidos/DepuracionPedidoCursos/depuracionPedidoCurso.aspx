@@ -35,6 +35,14 @@
                             <span title="Ver detalle" @click="CargarDetalles(pedido.Pedido)">
                                 <i class="fa-solid fa-eye text-info" style="font-size: 20px !important; cursor: pointer;"></i>
                             </span>
+
+                            <span title="Aprobar Solicitud" class="ml-2 mr-2" @click="aprobarPedido(pedido.Pedido)">
+                                    <i class="fa-solid fa-dolly text-success" style="font-size: 20px !important; cursor: pointer;"></i>
+                                </span>  
+
+                            <span title="Anular Pedido"  style="cursor: pointer;" @click="anularPedido(pedido.Pedido)">
+                                    <i class="fa-solid fa-ban text-danger" style="font-size: 20px !important;"></i>
+                            </span>
                         </td>
                     </tr>
                 </tbody>
