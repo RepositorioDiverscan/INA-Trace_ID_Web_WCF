@@ -12,32 +12,38 @@ namespace Diverscan.MJP.Entidades.InventarioBasico
     public class InventarioBasicoRecord
     {
         long _idInventarioBasico;
-        string _nombre;
-        string _descripcion;
+        string _idFamilia;
+        string _familia;
+        short _idTipoInventario;
+        string _tipoInventario;
         DateTime _fechaPorAplicar;
         bool _estado;
         string _fechaPorAplicarAndroid;
-        string _idInternoBodega;
+        string _bodega;
         bool _trazableBodega;
+        int _idUsuario;
+        string _Usuario;
 
         public InventarioBasicoRecord()
         {
         }
 
-        public InventarioBasicoRecord(string nombre, string descripcion,DateTime fechaPorAplicar)
+        public InventarioBasicoRecord(string idFamilia, short idTipoInventario, int idUsuario, DateTime fechaPorAplicar)
         {
-            _nombre = nombre;
-            _descripcion = descripcion;
+            _idFamilia = idFamilia;
+            _idTipoInventario = idTipoInventario;
             _fechaPorAplicar = fechaPorAplicar;
+            _idUsuario = idUsuario;
         }
 
         public InventarioBasicoRecord(IDataReader reader)
         {
             _idInventarioBasico = long.Parse(reader["IdInventarioBasico"].ToString());
-            _nombre = reader["Nombre"].ToString();
-            _descripcion = reader["Descripcion"].ToString();
+            _idFamilia = reader["idInterno"].ToString();
+            _tipoInventario = reader["TipoInventario"].ToString();
             _fechaPorAplicar = DateTime.Parse(reader["FechaPorAplicar"].ToString());
             _estado = Convert.ToBoolean(reader["Estado"]);
+            _Usuario = reader["Usuario"].ToString();
         }
 
         [DataMember]
@@ -46,17 +52,24 @@ namespace Diverscan.MJP.Entidades.InventarioBasico
             get { return _idInventarioBasico; }
             set { _idInventarioBasico = value; }
         }
-        [DataMember]
-        public string Nombre
+
+        public short IdTipoInventario
         {
-            get { return _nombre; }
-            set { _nombre = value; }
+            get { return _idTipoInventario; }
+            set { _idTipoInventario = value; }
+        }
+
+        [DataMember]
+        public string IdFamilia
+        {
+            get { return _idFamilia; }
+            set { _idFamilia = value; }
         }
         [DataMember]
-        public string Descripcion
+        public string TipoInventario
         {
-            get { return _descripcion; }
-            set { _descripcion = value; }
+            get { return _tipoInventario; }
+            set { _tipoInventario = value; }
         }
         
         public DateTime FechaPorAplicar
@@ -94,8 +107,17 @@ namespace Diverscan.MJP.Entidades.InventarioBasico
             set => _fechaPorAplicarAndroid = value;
         }
         [DataMember]
-        public string IdInternoBodega { get => _idInternoBodega; set => _idInternoBodega = value; }
+        public string Bodega { get => _bodega; set => _bodega = value; }
+
         [DataMember]
         public bool TrazableBodega { get => _trazableBodega; set => _trazableBodega = value; }
+       
+        [DataMember]
+        public string Usuario { get => _Usuario; set => _Usuario = value; }
+
+        public int IdUsuario { get => _idUsuario; set => _idUsuario = value; }
+
+        [DataMember]
+        public string Familia { get => _familia; set => _familia = value; }
     }
 }

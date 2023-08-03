@@ -3,8 +3,7 @@ using Microsoft.Practices.EnterpriseLibrary.Data;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
+using System.Data.SqlClient;
 
 namespace Diverscan.MJP.AccesoDatos.InventarioBasico
 {
@@ -20,8 +19,9 @@ namespace Diverscan.MJP.AccesoDatos.InventarioBasico
                 var dbCommand = dbTse.GetStoredProcCommand("SP_IngresarInventarioBasico");
 
                 //Agregar los parámetros necesarios
-                dbTse.AddInParameter(dbCommand, "@Nombre", DbType.String, inventarioBasicoRecord.Nombre);
-                dbTse.AddInParameter(dbCommand, "@Descripcion", DbType.String, inventarioBasicoRecord.Descripcion);
+                dbTse.AddInParameter(dbCommand, "@IdFamilia", DbType.String, inventarioBasicoRecord.IdFamilia);
+                dbTse.AddInParameter(dbCommand, "@IdTipoInventario", DbType.String, inventarioBasicoRecord.IdTipoInventario);
+                dbTse.AddInParameter(dbCommand, "@IdUsuario", DbType.Int32, inventarioBasicoRecord.IdUsuario);
                 dbTse.AddInParameter(dbCommand, "@FechaPorAplicar", DbType.DateTime, inventarioBasicoRecord.FechaPorAplicar);
                 dbTse.AddInParameter(dbCommand, "@idBodega", DbType.Int32, idBodega);
                 dbTse.AddOutParameter(dbCommand, "@resultado", DbType.String, 200);
@@ -32,12 +32,13 @@ namespace Diverscan.MJP.AccesoDatos.InventarioBasico
                 //Retornar el mensaje de resultado
                 string resultado = dbCommand.Parameters["@resultado"].Value.ToString();
                 return resultado;
-            } catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 //Mensaje en caso de error
                 return ex.Message;
             }
-           
+
         }
 
         public List<InventarioBasicoRecord> ObtenerInventarioBasicoRecords(DateTime fechaInicio, DateTime fechaFin)
@@ -49,13 +50,13 @@ namespace Diverscan.MJP.AccesoDatos.InventarioBasico
             dbTse.AddInParameter(dbCommand, "@FechaFin", DbType.DateTime, fechaFin);
 
             List<InventarioBasicoRecord> records = new List<InventarioBasicoRecord>();
-    
+
             using (var reader = dbTse.ExecuteReader(dbCommand))
             {
                 while (reader.Read())
                 {
                     records.Add(new InventarioBasicoRecord(reader));
-                 
+
                 }
             }
             return records;
@@ -75,7 +76,7 @@ namespace Diverscan.MJP.AccesoDatos.InventarioBasico
 
             //Crear una lista de la clase de inventarios
             List<InventarioBasicoRecord> records = new List<InventarioBasicoRecord>();
-    
+
             //Ejecutar el comando
             using (var reader = dbTse.ExecuteReader(dbCommand))
             {
@@ -84,11 +85,13 @@ namespace Diverscan.MJP.AccesoDatos.InventarioBasico
                 {
                     InventarioBasicoRecord inventario = new InventarioBasicoRecord();
                     inventario.IdInventarioBasico = long.Parse(reader["IdInventarioBasico"].ToString());
-                    inventario.Nombre = reader["Nombre"].ToString();
-                    inventario.Descripcion = reader["Descripcion"].ToString();
+                    inventario.IdFamilia = reader["idInterno"].ToString();
+                    inventario.Familia = reader["Familia"].ToString();
+                    inventario.TipoInventario = reader["TipoInventario"].ToString();
                     inventario.FechaPorAplicar = DateTime.Parse(reader["FechaPorAplicar"].ToString());
                     inventario.Estado = Convert.ToBoolean(reader["Estado"]);
-                    inventario.IdInternoBodega = reader["idInterno"].ToString();
+                    inventario.Bodega = reader["nombre"].ToString();
+                    inventario.Usuario = reader["Usuario"].ToString();
                     inventario.TrazableBodega = Convert.ToBoolean(reader["trazable"]);
                     records.Add(inventario); //Agregar a la lista el objeto de la clase
                 }
@@ -116,12 +119,33 @@ namespace Diverscan.MJP.AccesoDatos.InventarioBasico
                 //Retornar el mensaje de resultado
                 string resultado = dbCommand.Parameters["@resultado"].Value.ToString();
                 return resultado;
-            } catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 //Mensaje en caso de error
                 return ex.Message;
             }
 
-}
+        }
+
+        public DataTable cargaUsuarios(int idBodega)
+        {
+            var dbTse = DatabaseFactory.CreateDatabase("MJPConnectionString");
+            var dbCommand = dbTse.GetStoredProcCommand("SP_ObtenerUsuario");
+            dbTse.AddInParameter(dbCommand, "@IdBodega", DbType.Int32, idBodega);
+
+            try
+            {
+                DataSet ds = dbTse.ExecuteDataSet(dbCommand);
+
+                DataTable dt = ds.Tables[0];
+
+                return dt;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }  
+        }
     }
 }

@@ -3,8 +3,10 @@ using Diverscan.MJP.Entidades.InventarioBasico;
 using Diverscan.MJP.Negocio.InventarioBasico;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Reflection;
 using System.Web.UI;
+using System.Web.UI.WebControls;
 
 namespace Diverscan.MJP.UI.Administracion.Inventario
 {
@@ -12,6 +14,8 @@ namespace Diverscan.MJP.UI.Administracion.Inventario
     {
         //Instancia de la variable global de los usuario
         e_Usuario UsrLogged = new e_Usuario();
+
+        DataTable dt;
 
         //Método de carga de la página
         protected void Page_Load(object sender, EventArgs e)
@@ -31,6 +35,7 @@ namespace Diverscan.MJP.UI.Administracion.Inventario
                 _rdpFechaPorAplicar.SelectedDate = DateTime.Now;
                 _rdpFechaInicio.SelectedDate = DateTime.Now;
                 _rdpFechaFin.SelectedDate = DateTime.Now;
+                cargarCombos();
             }
         }
 
@@ -73,14 +78,19 @@ namespace Diverscan.MJP.UI.Administracion.Inventario
         private void Agregar(int idBodega)
         {
             //Comprobar que los campos no estén vacios
-            if (string.IsNullOrEmpty(_txtNombre.Text)) //Nombre
+            if (string.IsNullOrEmpty(txtFamilia.Text)) //Nombre
             {
-                Mensaje("info", "Debe ingresar el nombre del inventario", "");
+                Mensaje("info", "Debe ingresar el numero de Familia", "");
                 return;
             } 
-            else if (string.IsNullOrEmpty(_txtDescripcion.Text)) //Descripción
+            else if (lstTipoInventario.SelectedIndex == 0) //TipoInventario
             {
-                Mensaje("info", "Debe ingresar una descripción del inventario", "");
+                Mensaje("info", "Debe seleccionar un Tipo de inventario", "");
+                return;
+            }
+            else if (lstUsarios.SelectedIndex == 0) //TipoInventario
+            {
+                Mensaje("info", "Debe seleccionar un Usuario", "");
                 return;
             }
             else
@@ -89,21 +99,22 @@ namespace Diverscan.MJP.UI.Administracion.Inventario
                 DateTime fechaAplicar = _rdpFechaPorAplicar.SelectedDate ?? DateTime.Now;
                 
                 //Invocar la capa lógica para insertar el inventario
-                String resultado = N_InventarioBasico.InsertLogAjusteDeInventario(new InventarioBasicoRecord(_txtNombre.Text, _txtDescripcion.Text, fechaAplicar), idBodega);
+                String resultado = N_InventarioBasico.InsertLogAjusteDeInventario(new InventarioBasicoRecord(txtFamilia.Text,Convert.ToInt16(lstTipoInventario.SelectedValue), Convert.ToInt32(lstUsarios.SelectedValue), fechaAplicar), idBodega);
 
                 //Comprobar el valor del resultado 
                 if(resultado == "Insertado")
                 {
                     Mensaje("ok", "Inventario agregado correctamente", "");
+
+                    //Limpiar los campos del formulario
+                    txtFamilia.Text = "";
+                    lstTipoInventario.SelectedIndex = 0;
+                    lstUsarios.SelectedIndex = 0;
                 }
                 else
                 {
                     Mensaje("error", resultado, "");
                 }
-
-                //Limpiar los campos del formulario
-                _txtNombre.Text = "";
-                _txtDescripcion.Text = "";
             }
         }
 
@@ -168,6 +179,23 @@ namespace Diverscan.MJP.UI.Administracion.Inventario
             {
                 ViewState["InventarioBasicoRecords"] = value; //Agregar los valores 
             }
+        }
+
+
+        public void cargarCombos() 
+        {
+            int idBodega = UsrLogged.IdBodega;
+
+            dt = N_InventarioBasico.ObtenerUsuarios(idBodega);
+
+            lstUsarios.DataSource = dt;
+            lstUsarios.DataTextField = "Nombre"; // El nombre de la columna que será mostrada en el ComboBox
+            lstUsarios.DataValueField = "IdUsuario"; // El valor asociado a cada elemento del ComboBox
+            lstUsarios.DataBind();
+
+            lstTipoInventario.Items.Insert(0, new ListItem("Selecciona una opción", ""));
+
+            lstUsarios.Items.Insert(0, new ListItem("Selecciona una opción", ""));
         }
 
 

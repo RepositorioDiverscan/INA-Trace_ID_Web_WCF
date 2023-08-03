@@ -87,22 +87,22 @@ namespace Diverscan.MJP.UI.Administracion.Inventario
         protected global::System.Web.UI.UpdatePanel UpdatePanel1;
 
         /// <summary>
-        /// _lblNombre control.
+        /// _lblFamilia control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label _lblNombre;
+        protected global::System.Web.UI.WebControls.Label _lblFamilia;
 
         /// <summary>
-        /// _txtNombre control.
+        /// txtFamilia control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox _txtNombre;
+        protected global::System.Web.UI.WebControls.TextBox txtFamilia;
 
         /// <summary>
         /// _lblFechaPorAplicar control.
@@ -123,22 +123,40 @@ namespace Diverscan.MJP.UI.Administracion.Inventario
         protected global::Telerik.Web.UI.RadDatePicker _rdpFechaPorAplicar;
 
         /// <summary>
-        /// _lblDescripcion control.
+        /// _lblTipoInventario control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label _lblDescripcion;
+        protected global::System.Web.UI.WebControls.Label _lblTipoInventario;
 
         /// <summary>
-        /// _txtDescripcion control.
+        /// lstTipoInventario control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox _txtDescripcion;
+        protected global::System.Web.UI.WebControls.DropDownList lstTipoInventario;
+
+        /// <summary>
+        /// Usuario control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label Usuario;
+
+        /// <summary>
+        /// lstUsarios control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList lstUsarios;
 
         /// <summary>
         /// _btnAgregar control.

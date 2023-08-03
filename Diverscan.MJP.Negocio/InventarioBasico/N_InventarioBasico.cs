@@ -2,6 +2,7 @@
 using Diverscan.MJP.Entidades.InventarioBasico;
 using System;
 using System.Collections.Generic;
+using System.Data;
 
 namespace Diverscan.MJP.Negocio.InventarioBasico
 {
@@ -39,6 +40,13 @@ namespace Diverscan.MJP.Negocio.InventarioBasico
             //Instanciar la capa de BD y retornar el método de cierre
             InventarioBasicoDBA inventarioBasicoDBA = new InventarioBasicoDBA();
             return inventarioBasicoDBA.CerrarInventarioBasico(idInventarioBasico);
+        }
+
+        public static DataTable ObtenerUsuarios(int idBodega) 
+        {    
+            InventarioBasicoDBA inventarioBasicoDBA = new InventarioBasicoDBA();
+            DataTable dt = inventarioBasicoDBA.cargaUsuarios(idBodega);
+            return dt;
         }
 
 
