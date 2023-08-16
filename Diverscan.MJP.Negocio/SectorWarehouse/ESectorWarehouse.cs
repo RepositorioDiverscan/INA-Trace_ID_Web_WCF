@@ -11,9 +11,7 @@ namespace Diverscan.MJP.Negocio.SectorWarehouse
     {
         private readonly int _idSectorWarehouse;
         private int _idBodega;
-        private string _idInternoBodega;
-        private string _name;
-        private string _description;
+        private string _idInternoBodega, _name, _description, _activo;
         private bool _active;
 
         public ESectorWarehouse(int idSectorWarehouse, int idBodega, string name, string description, bool active)
@@ -40,7 +38,7 @@ namespace Diverscan.MJP.Negocio.SectorWarehouse
             _idInternoBodega = reader["idInternoBodega"].ToString();
             _name = reader["nombre"].ToString();
             _description = reader["descripcion"].ToString();
-            _active = Convert.ToBoolean(reader["activo"].ToString());
+            _activo = reader["activo"].ToString();
         }
 
         public int IdSectorWarehouse => _idSectorWarehouse;
@@ -48,6 +46,7 @@ namespace Diverscan.MJP.Negocio.SectorWarehouse
         public string Name { get => _name; set => _name = value; }        
         public string Description { get => _description; set => _description = value; }
         public bool Active { get => _active; set => _active = value; }
+        public string Activo { get => _activo; set => _activo = value; }
         public string IdInternoBodega { get => _idInternoBodega; set => _idInternoBodega = value; }
     }
 }

@@ -1,28 +1,12 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Configuration;
-using System.ServiceModel;
-using System.Web.Script.Serialization;
 using System.Web.UI;
-using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
-using System.Xml;
 using Diverscan.MJP.Entidades;
 using Diverscan.MJP.Negocio.MotorDecisiones;
-using Diverscan.MJP.Negocio.Administracion;
-using Diverscan.MJP.Negocio.UsoGeneral;
-using Diverscan.MJP.Negocio.Programa;
-using Diverscan.MJP.Utilidades;
-using Diverscan.Visitas.Utilidades;
 using Telerik.Web.UI;
-using Telerik.Web.UI.PersistenceFramework;
 using System.Linq;
 using System.Data;
-using System.Data.SqlClient;
-using System.Reflection;
-using Meta.Numerics.Matrices; //https://metanumerics.codeplex.com/
-using Meta.Numerics.Statistics;
 using System.Diagnostics;
 
 
@@ -312,6 +296,7 @@ namespace Diverscan.MJP.Negocio.UsoGeneral
                     CamposValues = CamposValues.Substring(0, CamposValues.Length - 2) + ")";
 
                     string ConsultaSQL = "insert into " + TblMantenimiento + CampoColumnas + " values " + CamposValues;
+
                     if (n_ConsultaDummy.PushData(ConsultaSQL, idUsuario))
                     {
                         if  (Contenedor.NamingContainer.ToString () == "xx")

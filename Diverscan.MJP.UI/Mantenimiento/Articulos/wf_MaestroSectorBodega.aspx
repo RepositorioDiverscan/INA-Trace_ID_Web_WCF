@@ -89,7 +89,11 @@
 
                 <telerik:GridBoundColumn UniqueName="Description"
                     SortExpression="Description" HeaderText="Descripción" DataField="Description"  Visible="true">
-                </telerik:GridBoundColumn>                                                              
+                </telerik:GridBoundColumn>   
+                
+                <telerik:GridBoundColumn UniqueName="Activo"
+                    SortExpression="Activo" HeaderText="Activo" DataField="Activo"  Visible="true" HeaderStyle-Width="12%">
+                </telerik:GridBoundColumn> 
 
             </Columns>
         </MasterTableView>   

@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Diverscan.MJP.Utilidades;
 using Diverscan.MJP.Entidades;
-using Microsoft.Practices.EnterpriseLibrary.Data;
 using System.Data;
 using System.Data.SqlClient;
-using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Configuration;
 
@@ -99,10 +93,8 @@ namespace Diverscan.MJP.AccesoDatos.UsoGeneral
             SqlConnection conn = new SqlConnection(ConnString);
             try
             {
-                string query = Query;
-
                 SqlDataAdapter adapter = new SqlDataAdapter();
-                adapter.SelectCommand = new SqlCommand(query, conn);
+                adapter.SelectCommand = new SqlCommand(Query, conn);
 
                 adapter.SelectCommand.CommandTimeout = 2000;
 
@@ -240,8 +232,9 @@ namespace Diverscan.MJP.AccesoDatos.UsoGeneral
 
         public static bool PushData(string SQL, string idUsuario)
         {
-            String ConnString = ConfigurationManager.ConnectionStrings["MJPConnectionString"].ConnectionString;
+            string ConnString = ConfigurationManager.ConnectionStrings["MJPConnectionString"].ConnectionString;
             SqlConnection conn = new SqlConnection(ConnString);
+
             try
             {
                 conn.Open();
