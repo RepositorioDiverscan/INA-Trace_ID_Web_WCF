@@ -193,7 +193,15 @@
                                                     <td >     
                                                         <asp:TextBox CssClass="TexboxNormal" ID="txtNombre0" runat="server" Width="150px" AutoCompleteType="Disabled" ></asp:TextBox>   
                                                     </td>
-                                                    </tr>                             
+                                                    </tr>   
+                                                    <tr>
+                                                    <td>
+                                                        <asp:Label ID="lbl_idInterno" runat="server" Text="Id Interno"></asp:Label> 
+                                                    </td>
+                                                    <td >     
+                                                        <asp:TextBox CssClass="TexboxNormal" ID="txtidInterno" runat="server" Width="150px" AutoCompleteType="Disabled" ></asp:TextBox>   
+                                                    </td>
+                                                    </tr> 
                                                     <tr>
                                                     <td>
                                                         <asp:Label ID="Label5" runat="server" Text="Descripción"></asp:Label>

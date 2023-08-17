@@ -232,7 +232,7 @@ namespace Diverscan.MJP.AccesoDatos.UsoGeneral
 
         public static bool PushData(string SQL, string idUsuario)
         {
-            string ConnString = ConfigurationManager.ConnectionStrings["MJPConnectionString"].ConnectionString;
+            String ConnString = ConfigurationManager.ConnectionStrings["MJPConnectionString"].ConnectionString;
             SqlConnection conn = new SqlConnection(ConnString);
 
             try
