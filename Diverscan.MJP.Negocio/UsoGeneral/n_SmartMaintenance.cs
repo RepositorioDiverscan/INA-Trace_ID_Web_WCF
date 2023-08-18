@@ -182,8 +182,6 @@ namespace Diverscan.MJP.Negocio.UsoGeneral
                             {
                                 if (ccc is TextBox)
                                 {
-
-                                  
                                     TextBox TxtB = (TextBox)ccc;
                                     if (TxtB.CssClass != "TextBoxBusqueda")
                                     {
@@ -268,6 +266,11 @@ namespace Diverscan.MJP.Negocio.UsoGeneral
                 }
                 decimal PorcCoincidencia = (decimal.Parse(CantConcidencias.ToString()) / decimal.Parse(NombreCampo.Count.ToString()) * 100);
 
+                if (TblMantenimiento == "ADMDestino")
+                {
+                    NombreCampo.Add("idUsuario");
+                    ValoresCampo.Add(idUsuario);
+                }     
 
                 //if ()  // if (PorcCoincidencia > ToleranciaAgregar)
                 if (PorcCoincidencia > ToleranciaAgregar)
@@ -790,7 +793,7 @@ namespace Diverscan.MJP.Negocio.UsoGeneral
                 // le quita el ddlid
                 DD.DataValueField = ID;
                 DD.DataBind();
-                DD.Items.Insert(0, new ListItem("--Seleccionar--"));
+                //DD.Items.Insert(0, new ListItem("--Seleccionar--"));
                 ///Aqui se debe seleccionar la compania por defecto que tenga el usuario asignada, y si es ID=BASE,
                 return Mensaje;
             }
@@ -851,7 +854,7 @@ namespace Diverscan.MJP.Negocio.UsoGeneral
                                             DDL.DataTextField = "Nombre";
                                             DDL.DataValueField = "idHoraDia";
                                             DDL.DataBind();
-                                            DDL.Items.Insert(0, new ListItem("--Seleccionar--"));
+                                            //DDL.Items.Insert(0, new ListItem("--Seleccionar--"));
 
                                         }
 

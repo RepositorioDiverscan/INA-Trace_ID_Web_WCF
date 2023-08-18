@@ -7,15 +7,15 @@
     
 
                 <script type='text/javascript'>
-                        function DisplayLoadingImage1() {
-                            document.getElementById("loading1").style.display = "block";
-                        }
-                        function DisplayLoadingImage2() {
-                            document.getElementById("loading2").style.display = "block";
-                        }
-                        function DisplayLoadingImage3() {
-                            document.getElementById("loading3").style.display = "block";
-                        }
+                    function DisplayLoadingImage1() {
+                        document.getElementById("loading1").style.display = "block";
+                    }
+                    function DisplayLoadingImage2() {
+                        document.getElementById("loading2").style.display = "block";
+                    }
+                    function DisplayLoadingImage3() {
+                        document.getElementById("loading3").style.display = "block";
+                    }
                 </script>
 
      <asp:Panel ID="Panel4" runat="server" >   
@@ -256,13 +256,13 @@
                                                     <asp:Label ID="Label21" runat="server" Text="|||"></asp:Label>
                                                     <asp:Button ID ="BtnEditar3" runat ="server" Text ="Editar" Width ="150px"  OnClientClick="DisplayLoadingImage3()" OnClick="BtnEditar3_Click" /> 
                                                     <asp:Label ID="Label20" runat="server" Text="|||"></asp:Label>
-                                                    <asp:Button ID="Btnlimpiar3" runat="server" Text="Limpiar"  OnClientClick="DisplayLoadingImage3()" OnClick ="Btnlimpiar3_Click" />   
-                                                       
+                                                    <asp:Button ID="Btnlimpiar3" runat="server" Text="Limpiar"  OnClientClick="DisplayLoadingImage3()" OnClick ="Btnlimpiar3_Click" />  
+                 
                                                  <h1></h1>
 
                                                 <div style="background-position:center; background-position-x:center; background-position-y:center; z-index:1000; position:absolute; margin-left:auto; margin-right:auto; left:0; right:0; ">
                                                 <center>
-                                                     <img id="loading3" src="../../Images/loading.gif"" style="width:80px;height:80px; display:none;" >
+                                                     <img id="loading3" src="../../Images/loading.gif""; style="width:80px;height:80px; display:none;" >
                                                 </center>
                                                  </div>
 
@@ -276,22 +276,25 @@
                                                     <asp:Button runat="server" ID="Button4" Text="Buscar"  OnClientClick="DisplayLoadingImage3()" OnClick="btnBuscar_Click"  />
                                                 </td>
                                                 </tr>
+
                                                 <tr> 
                                                 <td>
-                                                    <asp:Label ID="Label12" runat="server" Text="Destino"></asp:Label> 
+                                                    <asp:Label ID="Label11" runat="server" Text="Destino"></asp:Label> 
                                                 </td>
                                                 <td>
                                                     <asp:DropDownList ID="ddlidDestino" Class="TexboxNormal"  runat="server" Width="200px" AutoPostBack="false"></asp:DropDownList>
                                                 </td>
                                                 </tr>
+
                                                 <tr>
                                                 <td>
-                                                    <asp:Label ID="Label11" runat="server" Text="Nombre"></asp:Label> 
+                                                    <asp:Label ID="Label12" runat="server" Text="Nombre"></asp:Label> 
                                                 </td>
                                                 <td >     
                                                     <asp:TextBox CssClass="TexboxNormal" ID="txtNombre00" runat="server" Width="250px" AutoCompleteType="Disabled" ></asp:TextBox>   
                                                 </td>
-                                                </tr>  
+                                                </tr> 
+                                                    
                                                  <tr> 
                                                 <td>
                                                     <asp:Label ID="Label13" runat="server" Text="Dia"></asp:Label> 
@@ -300,6 +303,7 @@
                                                     <asp:DropDownList ID="ddlidDia" Class="TexboxNormal"  runat="server" Width="200px" AutoPostBack="false"></asp:DropDownList>
                                                 </td>
                                                 </tr> 
+
                                                  <tr> 
                                                 <td>
                                                     <asp:Label ID="Label14" runat="server" Text="Hora Min"></asp:Label> 
@@ -308,6 +312,7 @@
                                                     <asp:DropDownList ID="ddlidHoraMinima" Class="TexboxNormal"  runat="server" Width="200px" AutoPostBack="false"></asp:DropDownList>
                                                 </td>
                                                 </tr>
+
                                                 <tr> 
                                                 <td>
                                                     <asp:Label ID="Label16" runat="server" Text="Hora Max"></asp:Label> 
@@ -315,7 +320,8 @@
                                                 <td>
                                                     <asp:DropDownList ID="ddlidHoraMaxima" Class="TexboxNormal"  runat="server" Width="200px" AutoPostBack="false"></asp:DropDownList>
                                                 </td>
-                                                </tr>                                                                                   
+                                                </tr> 
+                                                    
                                                 </table>  
                                               
                                                 </ContentTemplate>

@@ -136,29 +136,6 @@ namespace Diverscan.MJP.UI.Mantenimiento.Despachos
                 Msj = n_SmartMaintenance.CargarDDL(ddlidDia, e_TablasBaseDatos.TblDiaSemana(), UsrLogged.IdUsuario, false);
                 if (Msj[1] != "") Mensaje(Msj[0], Msj[1], "");
 
-                //Msj = n_SmartMaintenance.CargarDDL(ddlidHoraMinima, e_TablasBaseDatos.TblHorasDia(), UsrLogged.IdUsuario, false);
-                //if (Msj[1] != "") Mensaje(Msj[0], Msj[1], "");
-
-                //Msj = n_SmartMaintenance.CargarDDL(ddlidHoraMaxima, e_TablasBaseDatos.TblHorasDia(), UsrLogged.IdUsuario, false);
-                //if (Msj[1] != "") Mensaje(Msj[0], Msj[1], "");
-
-                //string Sql1 = "select IdCompania, Nombre from [TRACEID].[dbo].[ADMCompania] WHERE idCompania = 'AMCO'  order by Nombre";
-                //n_WMS.CargarDropGood(ddlIdCompania, Sql1, "0");
-
-                //string Sql2 = "select idTipoDestino, Nombre from [TRACEID].[dbo].[ADMTipoDestino] WHERE idCompania = 'AMCO'  order by Nombre";
-                //n_WMS.CargarDropGood(ddlidTipoDestino, Sql2, "0");
-
-                //string Sql3 = "select idDestino, Nombre from [TRACEID].[dbo].[ADMDestino] WHERE idCompania = 'AMCO'  order by Nombre";
-                //n_WMS.CargarDropGood(ddlidDestino, Sql3, "0");
-
-                //string Sql4 = "select idDia, Nombre from [TRACEID].[dbo].[ADMDiaSemana] order by Nombre";
-                //n_WMS.CargarDropGood(ddlidDia, Sql4, "0");
-
-                //string Sql5 = "select idHoraDia, Nombre as ddlidHoraMinima from [TRACEID].[dbo].[ADMHorasDia] order by Nombre";
-                //n_WMS.CargarDropGood(ddlidHoraMinima, Sql5, "0");
-
-                //string Sql6 = "select idHoraDia, Nombre as ddlidHoraMaxima from [TRACEID].[dbo].[ADMHorasDia] order by Nombre";
-                //n_WMS.CargarDropGood(ddlidHoraMaxima, Sql6, "0");
 
                 n_SmartMaintenance.CargarDDLsHoras(Panel3);
             }
@@ -294,6 +271,16 @@ namespace Diverscan.MJP.UI.Mantenimiento.Despachos
             var Panel = Ctr.Parent.Parent.Parent;
             string[] Msj = n_SmartMaintenance.AgregarDatos(Panel, e_TablasBaseDatos.TblDestino(), ToleranciaAgregar, UsrLogged.IdUsuario);
             if (Msj[1] != "") Mensaje(Msj[0], Msj[1], "");
+
+            if (Msj[1].Equals("Dato ingresado exitosamente"))
+            {
+                ddlidTipoDestino.SelectedValue = "--Seleccionar--";
+                txtNombre0.Text = string.Empty;
+                txtidInterno.Text = string.Empty;
+                txmDescripcion0.Text = string.Empty;
+                txmDireccion.Text = string.Empty;
+            }
+
         }
 
         protected void btnEditar2_Click(object sender, EventArgs e)
