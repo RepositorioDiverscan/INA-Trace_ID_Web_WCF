@@ -35,8 +35,8 @@
                         columns: [
 
                             { data: 'IdInventarioBasico' },
-                            { data: 'Nombre' },
-                            { data: 'Descripcion' },
+                            { data: 'Familia' },
+                            { data: 'TipoInventario' },
                             { data: 'FechaPorAplicar' },
                             { data: 'Estado' },
                             

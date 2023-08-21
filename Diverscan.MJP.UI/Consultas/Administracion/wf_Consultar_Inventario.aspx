@@ -23,22 +23,23 @@
              </div>
         <!--Tabla de EncabezadosInventario-->
         <div class="table-responsive mt-5 mb-5" id="DivlistaEncabezadoInventario" >
-            <table class="table mb-4 text-center" id="table_listaEncabezadoInventario">
+            <table class="table mb-2 text-left" id="table_listaEncabezadoInventario">
                 <thead style="background-color: #2E5C8E" class="text-white">
                     <tr>
                         <th>Id Inventario</th>
-                        <th>Nombre</th>
-                        <th>Descripcion</th>
+                        <th>Familia</th>
+                        <th>Tipo de Inventario</th>
                         <th>Fecha por Aplicar</th>
                         <th>Estado</th>
+                        <th></th>
                         
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="(a, key) in listaEncabezadoInventario" :key="key">
                         <td>{{a.IdInventarioBasico}}</td>
-                        <td>{{a.Nombre}}</td>
-                        <td>{{a.Descripcion}}</td>
+                        <td>{{a.Familia}}</td>
+                        <td>{{a.TipoInventario}}</td>
                         <td>{{a.FechaPorAplicar}}</td>
                         <td>{{a.Estado}}</td>
                         
