@@ -133,7 +133,7 @@
                         IdPedidoOriginal: idPedido
                     }, function (data) {
                         self.ObtenerEncabezadosPedidos();
-                        self.mostrarMensaje(data)
+                        self.mostrarMensaje(data);
                     });
                 }
             })

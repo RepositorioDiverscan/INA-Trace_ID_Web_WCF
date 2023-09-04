@@ -588,7 +588,7 @@ namespace Diverscan.MJP.UI.Administracion.Inventario
             _inventarioBasicoRecords = N_InventarioBasico.ObtenerTodosInventarioBasicoRecords(fechaInicio, fechaFin, idBodega);
             //Obtener la información de la lista de los inventarios y pasarla al _ddlInventariosBasicos
             _ddlInventariosBasicos.DataSource = _inventarioBasicoRecords;
-            _ddlInventariosBasicos.DataTextField = "Nombre";
+            _ddlInventariosBasicos.DataTextField = "TipoInventario";
             _ddlInventariosBasicos.DataValueField = "IdInventarioBasico";
             _ddlInventariosBasicos.DataBind();
         }

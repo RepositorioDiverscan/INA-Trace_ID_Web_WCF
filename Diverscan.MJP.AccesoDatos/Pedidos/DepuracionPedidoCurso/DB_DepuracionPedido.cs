@@ -95,8 +95,7 @@ namespace Diverscan.MJP.AccesoDatos.DepuracionPedido
                 db.ExecuteNonQuery(dbCommand);
 
                 //Retornar el mensaje de resultado
-                string resultado = dbCommand.Parameters["@resultado"].Value.ToString();
-                return resultado;
+                return dbCommand.Parameters["@resultado"].Value.ToString();
             }
             catch (Exception ex)
             {
