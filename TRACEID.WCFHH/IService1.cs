@@ -377,12 +377,12 @@ namespace TRACEID.WCF
          UriTemplate = "InTransferProduct")]
         string InTransferProduct(int IdArticulo, string Lote, string FechaVencimiento, int IdUbicacionOrigen,int IdUbicacionDestino, int Cantidad, int IdUsuario, int IdMetodoAccionEntrada);
 
-        //[OperationContract]
-        //[WebInvoke(Method = "POST",
-        //  BodyStyle = WebMessageBodyStyle.Wrapped,
-        //  ResponseFormat = WebMessageFormat.Json,
-        //  UriTemplate = "GetMinPicking")]
-        //List<EMinPicking> GetMinPicking(int IdBodega);
+        [OperationContract]
+        [WebInvoke(Method = "POST",
+          BodyStyle = WebMessageBodyStyle.Wrapped,
+          ResponseFormat = WebMessageFormat.Json,
+          UriTemplate = "GetMinPicking")]
+        List<EMinPicking> GetMinPicking(int IdBodega);
 
         //[OperationContract]
         //[WebInvoke(Method = "POST",

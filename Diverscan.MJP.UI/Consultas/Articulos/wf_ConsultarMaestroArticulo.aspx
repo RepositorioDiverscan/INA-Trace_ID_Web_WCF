@@ -26,7 +26,6 @@
                         <th>SKU</th>
                         <th>Nombre</th>
                         <th>GTIN</th>
-                        <th>Nombre Bodega</th>
                         <th>Familia Articulo</th>
                         <th>Contenido</th>
                         <th>Unidad Medida</th>
@@ -42,7 +41,6 @@
                         <td>{{a.IdInterno}}</td>
                         <td>{{a.Nombre}}</td>
                         <td>{{a.Gtin}}</td>
-                        <td>{{a.NombreBodega}}</td>
                         <td>{{a.NombreFamilia}}</td>
                         <td>{{a.Contenido}}</td>
                         <td>{{a.Unidad_Medida}}</td>

@@ -27,13 +27,24 @@
                             { data: 'IdInterno' },
                             { data: 'Nombre' },
                             { data: 'Gtin' },
-                            { data: 'NombreBodega' },
                             { data: 'NombreFamilia' },
                             { data: 'Contenido' },
                             { data: 'Unidad_Medida' },
                             { data: 'Activo' },
                             { data: 'FechaRegistro' },
 
+                        ],
+                        columnDefs: [
+                            {
+                                targets: 7, // Índice de la columna "Activo"
+                                render: function (data) {
+                                    if (data) {
+                                        return '<i class="fas fa-check"></i>'; // Icono de check
+                                    } else {
+                                        return '<i class="fas fa-times"></i>'; // Icono de x
+                                    }
+                                }
+                            }
                         ],
                         destroy: true,
                         language: {
