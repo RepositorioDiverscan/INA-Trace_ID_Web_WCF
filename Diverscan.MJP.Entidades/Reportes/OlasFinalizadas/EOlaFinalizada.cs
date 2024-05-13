@@ -9,21 +9,21 @@ namespace Diverscan.MJP.Entidades.Reportes.OlasFinalizadas
    public  class EOlaFinalizada
     {
         //Atributos
-        private DateTime _fecha;
+        private string _fecha;
         private int _idOla;
         private string _diasFinalizados;
         private string _avance;
         public EOlaFinalizada(IDataReader reader)
         {
 
-            Fecha = Convert.ToDateTime(reader["Fecha"]);
+            Fecha = Convert.ToString(reader["Fecha"]);
             IdOla = Convert.ToInt32(reader["idOla"]);
             DiasFinalizados = Convert.ToString(reader["DiasFinalizados"]);
             Avance = Convert.ToString(reader["Avance"]);
            
         }
 
-        public DateTime Fecha { get => _fecha; set => _fecha = value; }
+        public string Fecha { get => _fecha; set => _fecha = value; }
         public int IdOla { get => _idOla; set => _idOla = value; }
         public string DiasFinalizados { get => _diasFinalizados; set => _diasFinalizados = value; }
         public string Avance { get => _avance; set => _avance = value; }
