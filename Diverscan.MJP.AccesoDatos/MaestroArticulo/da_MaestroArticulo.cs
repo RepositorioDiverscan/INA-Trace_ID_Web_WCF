@@ -222,16 +222,17 @@ namespace Diverscan.MJP.AccesoDatos.MaestroArticulo
         {
             string resultado = "0";
 
-            var dbTse = DatabaseFactory.CreateDatabase("MJPConnectionString");
-            var dbCommand = dbTse.GetStoredProcCommand("SP_GETINFOBOD");
-            dbTse.AddInParameter(dbCommand, "@P_IDBOD", DbType.Int32, ID);
+            if (!(ID == 0))
+            {
+                var dbTse = DatabaseFactory.CreateDatabase("MJPConnectionString");
+                var dbCommand = dbTse.GetStoredProcCommand("SP_GETINFOBOD");
+                dbTse.AddInParameter(dbCommand, "@P_IDBOD", DbType.Int32, ID);
 
-            var resul = dbTse.ExecuteReader(dbCommand);
-            resul.Read();
-            resultado = resul["Abreviatura"].ToString().Trim();
-
+                var resul = dbTse.ExecuteReader(dbCommand);
+                resul.Read();
+                resultado = resul["Abreviatura"].ToString().Trim();
+            }
             return resultado;
-
         }
 
         public List<EMinPicking> GetMinPicking(int IdBodega)

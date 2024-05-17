@@ -40,6 +40,7 @@ namespace Diverscan.MJP.UI.Mantenimiento.Articulos
         public int ToleranciaAgregar = 95;
         RadGridProperties radGridProperties = new RadGridProperties();
         DataTable dt;
+        private bool isSuperAdmin;
 
         #endregion
 
@@ -54,11 +55,27 @@ namespace Diverscan.MJP.UI.Mantenimiento.Articulos
             }
             if (!IsPostBack)
             {
+                //Se valida si el rol del usuario es SuperAdmin
+                if (!(UsrLogged.IdRoles.Equals("0")))
+                {
+                    RadPageView3.Selected = true;
+
+                    RadTabStrip1.Visible = false;
+
+                    ddlidBodega.SelectedValue = UsrLogged.IdBodega.ToString();
+                    ddlidBodega.Enabled = false;
+
+                    isSuperAdmin = false;
+                }
+                else
+                {
+                    isSuperAdmin = true;
+                }
+
                 CargarDDLS();
                 FillDDBodega();
                 enviaFront();
             }
-
         }
 
         #endregion
@@ -91,7 +108,7 @@ namespace Diverscan.MJP.UI.Mantenimiento.Articulos
                 Msj = n_SmartMaintenance.CargarDDL(ddlidAlmacen, e_TablasBaseDatos.TblAlmacenes(), UsrLogged.IdUsuario, true);
                 if (Msj[1] != "") Mensaje(Msj[0], Msj[1], "");
 
-                //Msj = n_SmartMaintenance.CargarDDL(ddlidBodega, e_TablasBaseDatos.VistaBodegaCompania(), UsrLogged.IdUsuario, true);
+                Msj = n_SmartMaintenance.CargarDDL(ddlidBodega, e_TablasBaseDatos.VistaBodegaCompania(), UsrLogged.IdUsuario, true);
                 if (Msj[1] != "") Mensaje(Msj[0], Msj[1], "");
 
                 Msj = n_SmartMaintenance.CargarDDL(ddlidZona, e_TablasBaseDatos.TblZonas(), UsrLogged.IdUsuario, false);
@@ -111,8 +128,12 @@ namespace Diverscan.MJP.UI.Mantenimiento.Articulos
             ddlidBodega.DataTextField = "Nombre";
             ddlidBodega.DataValueField = "IdBodega";
             ddlidBodega.DataBind();
-            ddlidBodega.Items.Insert(0, new ListItem("--Seleccione--", "0"));
-            ddlidBodega.Items[0].Attributes.Add("disabled", "disabled");
+
+            if (isSuperAdmin)
+            {
+                ddlidBodega.Items.Insert(0, new ListItem("--Seleccione--", "0"));
+                ddlidBodega.Items[0].Attributes.Add("disabled", "disabled");
+            }
         }
 
         private void ControlVersion()
@@ -206,36 +227,52 @@ namespace Diverscan.MJP.UI.Mantenimiento.Articulos
 
         protected void btnAgregar_Click(object sender, EventArgs e)
         {
-            System.Web.UI.Control Ctr = (System.Web.UI.Control)sender;
-            var Panel = Ctr.Parent.Parent.Parent;
-            string[] Msj = n_SmartMaintenance.AgregarDatos(Panel, e_TablasBaseDatos.TblAlmacenes(), ToleranciaAgregar, UsrLogged.IdUsuario);
-            if (Msj[1] != "") Mensaje(Msj[0], Msj[1], "");
-            CargarDDLS();
-            LimpiarAlmacen();
-            CargarAlmacen("", true);
+            if (!(txtAbreviatura.Text == string.Empty || txtnombre.Text == string.Empty || txtdescripcion.Text == string.Empty))
+            {
+                System.Web.UI.Control Ctr = (System.Web.UI.Control)sender;
+                var Panel = Ctr.Parent.Parent.Parent;
+                string[] Msj = n_SmartMaintenance.AgregarDatos(Panel, e_TablasBaseDatos.TblAlmacenes(), ToleranciaAgregar, UsrLogged.IdUsuario);
+                if (Msj[1] != "") Mensaje(Msj[0], Msj[1], "");
+                CargarDDLS();
+                LimpiarAlmacen();
+                CargarAlmacen("", true);
+            }
+            else
+            {
+                Mensaje("error", "Debe de agregar la información solicitada.", "");
+            }
         }
 
         protected void btnAgregar2_Click(object sender, EventArgs e)
         {
-            Control Ctr = (Control)sender;
-            var Panel = Ctr.Parent.Parent.Parent;
-            string[] Msj = n_SmartMaintenance.AgregarDatos(Panel, e_TablasBaseDatos.TblBodegas(), ToleranciaAgregar, UsrLogged.IdUsuario);
-            if (Msj[1] != "") Mensaje(Msj[0], Msj[1], "");
-            CargarDDLS();
-            LimpiarBodega();
-            CargarBodega("", true);
+            if (!(txtAbreviatura0.Text == string.Empty || txtnombre0.Text == string.Empty || txtdescripcion0.Text == string.Empty))
+            {
+                Control Ctr = (Control)sender;
+                var Panel = Ctr.Parent.Parent.Parent;
+                string[] Msj = n_SmartMaintenance.AgregarDatos(Panel, e_TablasBaseDatos.TblBodegas(), ToleranciaAgregar, UsrLogged.IdUsuario);
+                if (Msj[1] != "") Mensaje(Msj[0], Msj[1], "");
+                CargarDDLS();
+                LimpiarBodega();
+                CargarBodega("", true);
+            }
+            else
+            {
+                Mensaje("error", "Debe de agregar la información solicitada.", "");
+            }
+
         }
         ///Agregar una bueva ubicaciones
         protected void btnAgregar3_Click(object sender, EventArgs e)
         {
             try
             {
-
-
-                if (ddlidBodega.SelectedIndex <= 0)
+                if (isSuperAdmin)
                 {
-                    Mensaje("error", "Debe seleccionar la bodega.", "");
-                    return;
+                    if (ddlidBodega.SelectedIndex <= 0)
+                    {
+                        Mensaje("error", "Debe seleccionar la bodega.", "");
+                        return;
+                    }
                 }
 
                 if (ddlidZona.SelectedIndex <= 0)
@@ -249,6 +286,7 @@ namespace Diverscan.MJP.UI.Mantenimiento.Articulos
                     Mensaje("error", "Debe ingresar todos los datos.", "");
                     return;
                 }
+
                 System.Web.UI.Control Ctr = (Control)sender;
                 var Panel = Ctr.Parent.Parent.Parent;
                 string[] Msj = n_SmartMaintenance.AgregarDatos(Panel, e_TablasBaseDatos.TblMaestroUbicaciones(), ToleranciaAgregar, UsrLogged.IdUsuario);
@@ -263,19 +301,24 @@ namespace Diverscan.MJP.UI.Mantenimiento.Articulos
                 Mensaje("error", "Ops! Ha ocurrido un Error." + ex.Message, "");
                 throw;
             }
-
-
         }
 
         protected void btnAgregar4_Click(object sender, EventArgs e)
         {
-            System.Web.UI.Control Ctr = (System.Web.UI.Control)sender;
-            var Panel = Ctr.Parent.Parent.Parent;
-            string[] Msj = n_SmartMaintenance.AgregarDatos(Panel, e_TablasBaseDatos.TblZonas(), ToleranciaAgregar, UsrLogged.IdUsuario);
-            if (Msj[1] != "") Mensaje(Msj[0], Msj[1], "");
-            CargarDDLS();
-            LimpiarZona();
-            CargarZona("", true);
+            if (!(txtAbreviatura00.Text == string.Empty || txtnombre00.Text == string.Empty || txtdescripcion00.Text == string.Empty))
+            {
+                System.Web.UI.Control Ctr = (System.Web.UI.Control)sender;
+                var Panel = Ctr.Parent.Parent.Parent;
+                string[] Msj = n_SmartMaintenance.AgregarDatos(Panel, e_TablasBaseDatos.TblZonas(), ToleranciaAgregar, UsrLogged.IdUsuario);
+                if (Msj[1] != "") Mensaje(Msj[0], Msj[1], "");
+                CargarDDLS();
+                LimpiarZona();
+                CargarZona("", true);
+            }
+            else
+            {
+                Mensaje("error", "Debe de agregar la información solicitada.", "");
+            }
         }
 
         protected void btnEditar2_Click(object sender, EventArgs e)
@@ -499,7 +542,7 @@ namespace Diverscan.MJP.UI.Mantenimiento.Articulos
         private void LimpiarAlmacen()
         {
             txtidAlmacen.Text = "";
-            ddlidCompania.SelectedValue = "--Seleccionar--";
+            //ddlidCompania.SelectedValue = "--Seleccionar--";
             txtAbreviatura.Text = "";
             txtnombre.Text = "";
             txtdescripcion.Text = "";
@@ -593,7 +636,7 @@ namespace Diverscan.MJP.UI.Mantenimiento.Articulos
         private void LimpiarBodega()
         {
             txtidBodega.Text = "";
-            ddlidAlmacen.SelectedValue = "--Seleccionar--";
+            //ddlidAlmacen.SelectedValue = "--Seleccionar--";
             txtAbreviatura0.Text = "";
             txtnombre0.Text = "";
             txtdescripcion0.Text = "";
@@ -788,6 +831,8 @@ namespace Diverscan.MJP.UI.Mantenimiento.Articulos
 
         private void CargarUbicacion(string buscar, bool pestana)
         {
+            isSuperAdmin = UsrLogged.IdRoles.Equals("0") ? true : false;
+
             try
             {
                 n_WMS wms = new n_WMS();
@@ -795,10 +840,20 @@ namespace Diverscan.MJP.UI.Mantenimiento.Articulos
                 string SQL = "";
                 string idCompania = wms.getIdCompania(UsrLogged.IdUsuario);
 
-                SQL = "EXEC SP_BuscarUbicacion '" + idCompania + "', '" + buscar + "'";
+                //Se valida si es SuperAdmin.
+                if (isSuperAdmin)
+                {
+                    SQL = "EXEC SP_BuscarUbicacionXIdBodega '" + idCompania + "', '" + buscar + "', " + 1;
+                }
+                else
+                {
+                    SQL = "EXEC SP_BuscarUbicacionXIdBodega '" + idCompania + "', '" + buscar + "', " + UsrLogged.IdBodega;
+                }
+
+                //SQL = "EXEC SP_BuscarUbicacion '" + idCompania + "', '" + buscar + "'";  --> Antes el SP era SP_BuscarUbicacion porque no se necesitaba que filtraba las ubicaciones por bodega según el usuario.
                 DSDatos = n_ConsultaDummy.GetDataSet(SQL, UsrLogged.IdUsuario);
                 dt = DSDatos.Tables[0];
-                
+
 
                 RadGridUbicacion.DataSource = DSDatos;
                 if (pestana)
@@ -815,8 +870,10 @@ namespace Diverscan.MJP.UI.Mantenimiento.Articulos
         private void LimpiarUbicacion()
         {
             txtidUbicacion.Text = "";
-            ddlidBodega.SelectedIndex = 0;
-            ddlidZona.SelectedValue = "--Seleccionar--";
+
+            if (isSuperAdmin) ddlidBodega.SelectedIndex = 0;
+
+            //ddlidZona.SelectedValue = "--Seleccionar--";
             txtestante.Text = "";
             txtnivel.Text = "";
             txtcolumna.Text = "";
@@ -833,6 +890,11 @@ namespace Diverscan.MJP.UI.Mantenimiento.Articulos
             btnAgregarUbicacion.Visible = true;
             btnEditarUbicacion.Visible = false;
             txtdescripcion000.Text = "";
+
+            if (!(isSuperAdmin))
+            {
+                ddlidBodega.SelectedValue = UsrLogged.IdBodega.ToString();
+            }
         }
 
         protected void RadGridUbicacion_NeedDataSource(object sender, Telerik.Web.UI.GridNeedDataSourceEventArgs e)
@@ -840,7 +902,6 @@ namespace Diverscan.MJP.UI.Mantenimiento.Articulos
             try
             {
                 CargarUbicacion(txtSearchUbicacion.Text.ToString().Trim(), false);
-                //CargarUbicacion("", false);
             }
             catch (Exception ex)
             {

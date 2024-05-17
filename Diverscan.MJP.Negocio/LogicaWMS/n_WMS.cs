@@ -50,7 +50,7 @@ namespace Diverscan.MJP.Negocio.LogicaWMS
             string respuesta = "";
             try
             {
-                SQL = "SELECT " + e_TblUsuarios.IdCompania() + " FROM " + e_BaseDatos.NombreBD() + "." + e_BaseDatos.Esquema() + "." + e_TablasBaseDatos.TblUsuarios() + " WHERE " + e_TblUsuarios.IdUsario() + " = '" + idUsuario + "'";
+                SQL = "SELECT " + e_TblUsuarios.IdCompania() + " FROM [" + e_BaseDatos.NombreBD() + "].[" + e_BaseDatos.Esquema() + "].[" + e_TablasBaseDatos.TblUsuarios() + "] WHERE " + e_TblUsuarios.IdUsario() + " = '" + idUsuario + "'";
                 respuesta = n_ConsultaDummy.GetUniqueValue(SQL, idUsuario);
 
                 return respuesta;

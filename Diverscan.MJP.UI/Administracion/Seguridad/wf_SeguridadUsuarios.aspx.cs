@@ -42,11 +42,12 @@ namespace Diverscan.MJP.UI.Administracion.Seguridad
         static string StrConexion = ConfigurationManager.ConnectionStrings["MJPConnectionString"].Name;
         public int ToleranciaAgregar = 80;
         string Pagina = "";
+        private bool isSuperAdmin;
         RadGridProperties radGridProperties = new RadGridProperties();
 
         private DataSet _dsUsuarios
         {
-            get 
+            get
             {
                 var data = ViewState["dsUsuarios"] as DataSet;
                 if (data == null)
@@ -104,18 +105,35 @@ namespace Diverscan.MJP.UI.Administracion.Seguridad
             if (UsrLogged == null)
             {
                 Response.Redirect("~/Administracion/wf_Credenciales.aspx");
-            }       
+            }
             if (!IsPostBack)
             {
-                Session["update"] = Server.UrlEncode(System.DateTime.Now.ToString()); 
+                if (!(UsrLogged.IdRoles.Equals("0")))
+                {
+                    RadTabStrip1.Visible = false;
+
+                    ddBodega.SelectedValue = UsrLogged.IdBodega.ToString();
+                    ddBodega.Enabled = false;
+
+                    //Se carga el ddl de zonas con la bodega del usuario logueado.
+                    FillDDSectores(UsrLogged.IdBodega);
+
+                    isSuperAdmin = false;
+                }
+                else
+                {
+                    isSuperAdmin = true;
+                }
+
+                Session["update"] = Server.UrlEncode(System.DateTime.Now.ToString());
                 CargarDDLS();
                 FillDDBodega();
-                CargarUsuarios("", true);
+                CargarUsuarios("", true, UsrLogged.IdRoles);
                 //CargarFormularios();
             }
         }
-     
-        public static string[] GetUsers(string prefix) 
+
+        public static string[] GetUsers(string prefix)
         {
             n_Usuario n_usuario = new n_Usuario();
             return n_usuario.GetUsers(prefix).ToArray();
@@ -164,6 +182,11 @@ namespace Diverscan.MJP.UI.Administracion.Seguridad
 
         protected void btnEditar_Click(object sender, EventArgs e)
         {
+            if (!(isSuperAdmin))
+            {
+                ddSector.Items.Insert(0, new ListItem("--Seleccione--", "0"));
+            }
+
             try
             {
                 var MD5 = System.Security.Cryptography.MD5.Create();
@@ -182,23 +205,25 @@ namespace Diverscan.MJP.UI.Administracion.Seguridad
                 bool esta_bloqueado = chkESTA_BLOQUEADO.Checked;
                 string nombre = txtNOMBRE_PILA.Text.ToString().Trim();
                 string apellidos = txtAPELLIDOS_PILA.Text.ToString().Trim();
+
                 int IdBodega = 0;
-
-                if (ddBodega.SelectedIndex==0)
-                {
-                    Mensaje("error", "Debe seleccionar una bodega!!!", "");
-                    return;
-                } else
-                    IdBodega = Convert.ToInt32(ddBodega.SelectedIndex.ToString());
-
-                int idSector = 0;
-                if (ddSector.SelectedIndex == 0)
+                if (ddBodega.SelectedIndex == 0)
                 {
                     Mensaje("error", "Debe seleccionar una bodega!!!", "");
                     return;
                 }
                 else
-                    idSector = Convert.ToInt32(ddSector.SelectedValue.ToString());
+                    IdBodega = Convert.ToInt32(ddBodega.SelectedValue);
+                
+
+                int idSector = 0;
+                if (ddSector.SelectedIndex == 0)
+                {
+                    Mensaje("error", "Debe seleccionar una sector!!!", "");
+                    return;
+                }
+                else
+                    idSector = Convert.ToInt32(ddSector.SelectedValue);
 
                 if ((Contrasenna != RepitaContrasenna))
                 {
@@ -225,7 +250,7 @@ namespace Diverscan.MJP.UI.Administracion.Seguridad
                             Resultado = "Usuario editado correctamente";
                             CargarDDLS();
                             LimpiarUsuarios();
-                            CargarUsuarios("", true);
+                            CargarUsuarios("", true, UsrLogged.IdRoles);
                         }
                         else if (Resultado == "Email")
                         {
@@ -295,7 +320,7 @@ namespace Diverscan.MJP.UI.Administracion.Seguridad
                         SQL = "EXEC SP_InsertarUsuario '" + idCompania + "', '" + Usuario + "', '" + Contrasenna + "', '" +
                         idRol + "', '" + email + "', '" + comentario + "', '" + esta_bloqueado + "', '" + nombre + "', '" +
                         apellidos + "'" + ", '" + IdBodega + "'" + ", '" + idSector + "'";
-                        
+
                         Resultado = n_ConsultaDummy.GetUniqueValue(SQL, UsrLogged.IdUsuario);
 
                         if (Resultado == "Ok")
@@ -303,7 +328,7 @@ namespace Diverscan.MJP.UI.Administracion.Seguridad
                             Resultado = "Usuario insertado correctamente";
                             CargarDDLS();
                             LimpiarUsuarios();
-                            CargarUsuarios("", true);
+                            CargarUsuarios("", true, UsrLogged.IdRoles);
                         }
                         else if (Resultado == "Email")
                         {
@@ -376,36 +401,36 @@ namespace Diverscan.MJP.UI.Administracion.Seguridad
         }
 
         protected void btnAgregar2_Click(object sender, EventArgs e)
-         {
-             Control Ctr = (Control)sender;
-             var Panel = Ctr.Parent.Parent.Parent;
-             string[] Msj = n_SmartMaintenance.AgregarDatos(Panel, e_TablasBaseDatos.TBLAccesosporRol(), ToleranciaAgregar, UsrLogged.IdUsuario);
-             if (Msj[1] != "") Mensaje(Msj[0], Msj[1], "");
-             CargarDDLS();
-         }
+        {
+            Control Ctr = (Control)sender;
+            var Panel = Ctr.Parent.Parent.Parent;
+            string[] Msj = n_SmartMaintenance.AgregarDatos(Panel, e_TablasBaseDatos.TBLAccesosporRol(), ToleranciaAgregar, UsrLogged.IdUsuario);
+            if (Msj[1] != "") Mensaje(Msj[0], Msj[1], "");
+            CargarDDLS();
+        }
 
         protected void btnEditar3_Click(object sender, EventArgs e)
-         {
-             Control Ctr = (Control)sender;
-             var Panel = Ctr.Parent.Parent.Parent;
-             string[] Msj = n_SmartMaintenance.EditarDatos(Panel, e_TablasBaseDatos.TblRoles(), UsrLogged.IdUsuario);
-             if (Msj[1] != "") Mensaje(Msj[0], Msj[1], "");
-             CargarDDLS();
-             LimpiarRol();
-             CargarRoles2();
-         }
+        {
+            Control Ctr = (Control)sender;
+            var Panel = Ctr.Parent.Parent.Parent;
+            string[] Msj = n_SmartMaintenance.EditarDatos(Panel, e_TablasBaseDatos.TblRoles(), UsrLogged.IdUsuario);
+            if (Msj[1] != "") Mensaje(Msj[0], Msj[1], "");
+            CargarDDLS();
+            LimpiarRol();
+            CargarRoles2();
+        }
 
         protected void btnAgregar3_Click(object sender, EventArgs e)
-         {
-             Control Ctr = (Control)sender;
-             var Panel = Ctr.Parent.Parent.Parent;
-             string[] Msj = n_SmartMaintenance.AgregarDatos(Panel, e_TablasBaseDatos.TblRoles(), ToleranciaAgregar, UsrLogged.IdUsuario);
-             if (Msj[1] != "") Mensaje(Msj[0], Msj[1], "");
-             CargarDDLS();
-             LimpiarRol();
-             CargarRoles2();
-         }
-       
+        {
+            Control Ctr = (Control)sender;
+            var Panel = Ctr.Parent.Parent.Parent;
+            string[] Msj = n_SmartMaintenance.AgregarDatos(Panel, e_TablasBaseDatos.TblRoles(), ToleranciaAgregar, UsrLogged.IdUsuario);
+            if (Msj[1] != "") Mensaje(Msj[0], Msj[1], "");
+            CargarDDLS();
+            LimpiarRol();
+            CargarRoles2();
+        }
+
         protected void btnBuscar_Click(object sender, EventArgs e)
         {
             //n_WMS wms = new n_WMS();
@@ -418,7 +443,7 @@ namespace Diverscan.MJP.UI.Administracion.Seguridad
             //RadGrid1.DataSource = ListUsuarios;
             //RadGrid1.DataBind();
 
-            CargarUsuarios(txtSearch.Text.ToString().Trim(), false);
+            CargarUsuarios(txtSearch.Text.ToString().Trim(), false, UsrLogged.IdRoles);
         }
 
         private void LimpiarRol()
@@ -426,7 +451,7 @@ namespace Diverscan.MJP.UI.Administracion.Seguridad
             txtidRol.Text = "";
             txtNombre.Text = "";
             txtDescripcion0.Text = "";
-            ddlIdCompania0.SelectedValue = "--Seleccionar--";
+            //ddlIdCompania0.SelectedValue = "--Seleccionar--";
 
             Button3.Visible = true;
             Button4.Visible = false;
@@ -444,7 +469,7 @@ namespace Diverscan.MJP.UI.Administracion.Seguridad
         {
             LimpiarUsuarios();
             txtSearch.Text = "";
-            CargarUsuarios("", true);
+            CargarUsuarios("", true, UsrLogged.IdRoles);
         }
 
         protected void Btnlimpiar2_Click(object sender, EventArgs e)
@@ -485,7 +510,7 @@ namespace Diverscan.MJP.UI.Administracion.Seguridad
         {
             this.RegisterUpdatePanel3(sender as UpdatePanel);
         }
-        
+
         void UpdatePanel5_Unload(object sender, EventArgs e)
         {
             this.RegisterUpdatePanel5(sender as UpdatePanel);
@@ -539,12 +564,12 @@ namespace Diverscan.MJP.UI.Administracion.Seguridad
 
         #region ControlRadGrid
 
-        protected void RadGridRoles_NeedDataSource(object sender, Telerik.Web.UI.GridNeedDataSourceEventArgs e) 
+        protected void RadGridRoles_NeedDataSource(object sender, Telerik.Web.UI.GridNeedDataSourceEventArgs e)
         {
             CargarRoles();
         }
 
-        public void CargarRoles() 
+        public void CargarRoles()
         {
             n_WMS wms = new n_WMS();
 
@@ -568,7 +593,7 @@ namespace Diverscan.MJP.UI.Administracion.Seguridad
             RadGridRoles.DataBind();
         }
 
-        protected void RadGridRoles_ItemCommand(object source, GridCommandEventArgs e) 
+        protected void RadGridRoles_ItemCommand(object source, GridCommandEventArgs e)
         {
             if (e.CommandName == "RowClick")
             {
@@ -583,7 +608,7 @@ namespace Diverscan.MJP.UI.Administracion.Seguridad
             }
         }
 
-        protected void btnBuscarRoles_Click(object sender, EventArgs e) 
+        protected void btnBuscarRoles_Click(object sender, EventArgs e)
         {
             n_WMS wms = new n_WMS();
 
@@ -605,7 +630,7 @@ namespace Diverscan.MJP.UI.Administracion.Seguridad
         {
             //radGridProperties.FormatearColumnas(RadGrid3);
         }
-       
+
 
         /// <summary>
         /// Evento que se dispara cuando se hace click sobre el checkbox. El checbox se crea desde el inicio
@@ -698,7 +723,7 @@ namespace Diverscan.MJP.UI.Administracion.Seguridad
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-       
+
 
         #endregion //EventosFrontEnd
 
@@ -776,22 +801,32 @@ namespace Diverscan.MJP.UI.Administracion.Seguridad
 
         #region Usuarios
 
-        private void CargarUsuarios(string buscar, bool pestana)
+        private void CargarUsuarios(string buscar, bool pestana, string idRol)
         {
             try
             {
                 n_WMS wms = new n_WMS();
-               
+
                 string SQL = "";
                 string idCompania = wms.getIdCompania(UsrLogged.IdUsuario);
 
-                SQL = "EXEC SP_BuscarUsuario '" + idCompania + "', '" + buscar + "'";
+                //Se valida si es SuperAdmin.
+                if (isSuperAdmin)
+                {
+                    SQL = "EXEC SP_BuscarUsuarioXIdBodega '" + idCompania + "', '" + buscar + "', " + 1;
+                }
+                else
+                {
+                    SQL = "EXEC SP_BuscarUsuarioXIdBodega '" + idCompania + "', '" + buscar + "', " + UsrLogged.IdBodega;
+                }
+
+                //SQL = "EXEC SP_BuscarUsuario '" + idCompania + "', '" + buscar + "'";
                 _dsUsuarios = n_ConsultaDummy.GetDataSet(SQL, UsrLogged.IdUsuario);
 
                 RadGridUsuarios.DataSource = _dsUsuarios;
                 //if (pestana)
                 //{
-                    RadGridUsuarios.DataBind();
+                RadGridUsuarios.DataBind();
                 //}
             }
             catch (Exception ex)
@@ -803,12 +838,12 @@ namespace Diverscan.MJP.UI.Administracion.Seguridad
         private void LimpiarUsuarios()
         {
             txtIDUSUARIO.Text = "";
-            ddlIdCompania.SelectedValue = "--Seleccionar--";
+            //ddlIdCompania.SelectedValue = "--Seleccionar--";
             txtUsuario.Text = "";
             txtNOMBRE_PILA.Text = "";
             txtAPELLIDOS_PILA.Text = "";
             txtEMAIL.Text = "";
-            ddlidRol.SelectedValue = "--Seleccionar--";
+            //ddlidRol.SelectedValue = "--Seleccionar--";
             txtCONTRASENNA.Text = "";
             txtRepitacontraseña.Text = "";
             txtCOMENTARIO.Text = "";
@@ -825,8 +860,15 @@ namespace Diverscan.MJP.UI.Administracion.Seguridad
             Label5.Visible = true;
             txtRepitacontraseña.Visible = true;
 
-            ddBodega.SelectedIndex = 0;
-            ddSector.Items.Clear();
+            if (isSuperAdmin)
+            {
+                ddBodega.SelectedIndex = 0;
+                ddSector.Items.Clear();
+            }
+            else
+            {
+                FillDDSectores(UsrLogged.IdBodega);
+            }
         }
 
         protected void btnBuscarUsuarios_Click(object sender, EventArgs e)
@@ -834,7 +876,7 @@ namespace Diverscan.MJP.UI.Administracion.Seguridad
             try
             {
                 LimpiarUsuarios();
-                CargarUsuarios(txtSearch.Text.ToString().Trim(), true);
+                CargarUsuarios(txtSearch.Text.ToString().Trim(), true, UsrLogged.IdRoles);
                 //txtSearch.Text = "";
             }
             catch (Exception ex)
@@ -884,7 +926,7 @@ namespace Diverscan.MJP.UI.Administracion.Seguridad
                     txtRepitacontraseña.Text = "";
                     txtCOMENTARIO.Text = item["COMENTARIO"].Text.Replace("&nbsp;", "");
                     chkESTA_BLOQUEADO.Checked = bloqueado; //ESTA_BLOQUEADO          
-                    int IdBod = ListBodegas.Find(x => x.Nombre == item["NOMBRE_BODEGA"].Text.Replace("&nbsp;", "")).IdBodega;                   
+                    int IdBod = ListBodegas.Find(x => x.Nombre == item["NOMBRE_BODEGA"].Text.Replace("&nbsp;", "")).IdBodega;
                     ddBodega.SelectedValue = IdBod.ToString();
 
                     btnAgregar.Visible = false;
@@ -903,7 +945,7 @@ namespace Diverscan.MJP.UI.Administracion.Seguridad
 
                     string nameSector = item["NOMBRE_SECTOR"].Text.Replace("&nbsp;", "");
                     FillDDSectores(IdBod);
-                    ddSector.SelectedValue = ""+_listaSectores.Find(x=>x.Name == nameSector).IdSectorWarehouse;
+                    ddSector.SelectedValue = "" + _listaSectores.Find(x => x.Name == nameSector).IdSectorWarehouse;
 
                 }
             }
@@ -916,7 +958,7 @@ namespace Diverscan.MJP.UI.Administracion.Seguridad
         private void FillDDBodega()
         {
             NConsultas nConsultas = new NConsultas();
-            ListBodegas=nConsultas.GETBODEGAS();
+            ListBodegas = nConsultas.GETBODEGAS();
             ddBodega.DataSource = ListBodegas;
             ddBodega.DataTextField = "Nombre";
             ddBodega.DataValueField = "IdBodega";
@@ -1283,7 +1325,7 @@ namespace Diverscan.MJP.UI.Administracion.Seguridad
 
         protected void ddBodega_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (ddBodega.SelectedIndex >0)
+            if (ddBodega.SelectedIndex > 0)
             {
                 FillDDSectores(Convert.ToInt32(ddBodega.SelectedValue));
             }
