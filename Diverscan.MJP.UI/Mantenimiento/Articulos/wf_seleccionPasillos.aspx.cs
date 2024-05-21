@@ -17,6 +17,7 @@ namespace Diverscan.MJP.UI.Mantenimiento.Articulos
     public partial class wf_seleccionPasillos : System.Web.UI.Page
     {
         e_Usuario UsrLogged = new e_Usuario();
+        private bool isSuperAdmin;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -28,11 +29,27 @@ namespace Diverscan.MJP.UI.Mantenimiento.Articulos
             if (!IsPostBack)
             {
                 Session["update"] = Server.UrlEncode(System.DateTime.Now.ToString());
-             
+
+                //Se valida si el rol del usuario es SuperAdmin
+                if (!(UsrLogged.IdRoles.Equals("0")))
+                {
+                    ddBodega.Visible = false;
+                    lblBodega.Visible = false;
+
+                    CargarDropPasillos(UsrLogged.IdBodega);
+                    CargarDropSubSector(UsrLogged.IdBodega);
+
+                    isSuperAdmin = false;
+                }
+                else
+                {
+                    FillDDBodega();
+                    isSuperAdmin = true;
+                }
+
                 HideColumnsRadGrids();
-                FillDDBodega();
             }
-         
+
         }
 
         private void FillDDBodega()
@@ -69,7 +86,7 @@ namespace Diverscan.MJP.UI.Mantenimiento.Articulos
         {
             ddBodega.Items[0].Attributes["disabled"] = "disabled";
             CargarDropPasillos(Convert.ToInt32(ddBodega.SelectedValue));
-           CargarDropSubSector(Convert.ToInt32(ddBodega.SelectedValue));
+            CargarDropSubSector(Convert.ToInt32(ddBodega.SelectedValue));
         }
 
         private void CargarDropPasillos(int idBodega)
@@ -83,10 +100,10 @@ namespace Diverscan.MJP.UI.Mantenimiento.Articulos
                 ddEstante.DataSource = ListEstante;
                 ddEstante.DataTextField = "estante";
                 ddEstante.DataValueField = "estante";
-                ddEstante.DataBind();  
+                ddEstante.DataBind();
                 ddEstante.Items.Insert(0, new ListItem("--Seleccione--", "0"));
                 ddEstante.Items[0].Attributes["disabled"] = "disabled";
-               
+
             }
             catch (Exception ex)
             {
@@ -101,7 +118,7 @@ namespace Diverscan.MJP.UI.Mantenimiento.Articulos
         {
             try
             {
-                int cont=0;
+                int cont = 0;
                 int IdUbicacion, idSubsector;
                 for (int i = 0; i < RadGridPasillo.Items.Count; i++)
                 {
@@ -119,11 +136,11 @@ namespace Diverscan.MJP.UI.Mantenimiento.Articulos
 
                         InsertUbicacionPorSector(idSubsector, IdUbicacion);
 
-                        ListgvPasillos.RemoveAll(x=>x.IdUbicacion == IdUbicacion);
+                        ListgvPasillos.RemoveAll(x => x.IdUbicacion == IdUbicacion);
 
                     }
                 }
-           
+
                 RadGridSubSector.Rebind();
 
                 RadGridPasillo.Rebind();
@@ -157,8 +174,8 @@ namespace Diverscan.MJP.UI.Mantenimiento.Articulos
                             ));
 
                         DeleteUbicacionPorSector(idSubsector, IdUbicacion);
-                        ListgvSectores.RemoveAll(x=> x.IdUbicacion == IdUbicacion);
-                      
+                        ListgvSectores.RemoveAll(x => x.IdUbicacion == IdUbicacion);
+
                     }
                 }
                 //RadGridPasillo.DataSource = ListgvPasillos;
@@ -182,7 +199,8 @@ namespace Diverscan.MJP.UI.Mantenimiento.Articulos
         {
             try
             {
-                if (ListgvPasillos.Count>0) {
+                if (ListgvPasillos.Count > 0)
+                {
                     RadGridPasillo.DataSource = ListgvPasillos;
                     RadGridPasillo.DataBind();
                 }
@@ -199,7 +217,8 @@ namespace Diverscan.MJP.UI.Mantenimiento.Articulos
         {
             try
             {
-                if (ListgvSectores.Count>0) {
+                if (ListgvSectores.Count > 0)
+                {
                     RadGridSubSector.DataSource = ListgvSectores;
                     RadGridSubSector.DataBind();
                 }
@@ -239,10 +258,18 @@ namespace Diverscan.MJP.UI.Mantenimiento.Articulos
 
         protected void DDropDownPas_SelectedIndexChanged(object sender, EventArgs e)
         {
+            isSuperAdmin = UsrLogged.IdRoles.Equals("0") ? true : false;
+
             ddEstante.Items[0].Attributes["disabled"] = "disabled";
-            var idBodega = Convert.ToInt32(ddBodega.SelectedValue);
-            FillgvPasillo(ddEstante.SelectedValue, idBodega);
-           
+
+            if (isSuperAdmin)
+            {
+                FillgvPasillo(ddEstante.SelectedValue, Convert.ToInt32(ddBodega.SelectedValue));
+            }
+            else
+            {
+                FillgvPasillo(ddEstante.SelectedValue, UsrLogged.IdBodega);
+            }
         }
 
         private void FillgvPasillo(string pasillo, int idBodega)

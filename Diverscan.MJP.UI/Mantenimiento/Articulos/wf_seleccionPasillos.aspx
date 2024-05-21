@@ -25,7 +25,7 @@
                style="width: 80%; height: 70%; position: absolute; visibility: visible; z-index: 3002; left: 254px; top: 150px;
                 margin-left:1%; margin-top:2%">
             <br />
-         <label>Bodega:</label>
+         <asp:Label ID="lblBodega" runat="server" Text="Bodega: " CssClass="TexboxNormal"></asp:Label>
          <asp:DropDownList runat="server" ID="ddBodega" CssClass="TexboxNormal" Width="250px" AutoPostBack="true" OnSelectedIndexChanged="DDropDownBod_SelectedIndexChanged"></asp:DropDownList>
        
                    <br />
