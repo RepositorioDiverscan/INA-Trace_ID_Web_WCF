@@ -30,7 +30,6 @@ namespace Diverscan.MJP.UI.Administracion.Inventario
         //Instanciar variables globales
         e_Usuario UsrLogged = new e_Usuario(); //Obtener las variables de sesión del usuario
 
-
         //Método de carga de la página
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -50,8 +49,18 @@ namespace Diverscan.MJP.UI.Administracion.Inventario
                 ScriptManager.GetCurrent(Page).AsyncPostBackTimeout = 36000;
                 var today = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day); //Obtener la fecha de hoy
                 _rdpFechaAplicado.SelectedDate = today;
-                //Invocar los métodos iniciales de carga
-                FillDDBodega();
+
+                if (UsrLogged.IdRoles.Equals("0"))
+                {
+                    FillDDBodega();
+                }
+                else
+                {
+                    loadInventarios(today, today, UsrLogged.IdBodega);
+                    ddBodega.Visible = false;
+                    Label17.Visible = false;
+                }
+
                 loadArticulos();
                 InvetarioEstaCerrado();
                 loadDdlEstado();
@@ -121,13 +130,13 @@ namespace Diverscan.MJP.UI.Administracion.Inventario
         private void InvetarioEstaCerrado()
         {
             if (string.IsNullOrEmpty(_ddlInventariosBasicos.SelectedValue)) { return; }
-                
+
             long idInventarioBasico = int.Parse(_ddlInventariosBasicos.SelectedValue);
 
-            if (idInventarioBasico < -1) { return;}
-                
-            if (_inventarioBasicoRecords.Count == 0){ return;}
-               
+            if (idInventarioBasico < -1) { return; }
+
+            if (_inventarioBasicoRecords.Count == 0) { return; }
+
             //Comprobar el estado del inventario para saber si está o no cerrado y habilitar el botón de Cerrar
             var estado = _inventarioBasicoRecords.FirstOrDefault(x => x.IdInventarioBasico == idInventarioBasico).Estado;
             estado = true ? _btnCerrar.Enabled = true : _btnCerrar.Enabled = false;
@@ -158,7 +167,7 @@ namespace Diverscan.MJP.UI.Administracion.Inventario
             loadArticulos();
             mostrarArticulosPorUbicacion();
             InvetarioEstaCerrado();
-           
+
         }
 
 
@@ -167,14 +176,25 @@ namespace Diverscan.MJP.UI.Administracion.Inventario
         {
             //Obtener la fecha y la bodega de los campos seleccionados
             var date = _rdpFechaAplicado.SelectedDate ?? DateTime.Now;
-            var idBodega = Convert.ToInt32(ddBodega.SelectedValue);
+
             //Invocar métodos para obtener información de los inventarios
             LimpiarResultados();
-            loadInventarios(date, date, idBodega);
+
+            if (UsrLogged.IdRoles.Equals("0"))
+            {
+                var idBodega = Convert.ToInt32(ddBodega.SelectedValue);
+                loadInventarios(date, date, idBodega);
+            }
+            else
+            {
+                loadInventarios(date, date, UsrLogged.IdBodega);
+            }
+
+
             loadArticulos();
             mostrarArticulosPorUbicacion();
             InvetarioEstaCerrado();
-         
+
         }
 
 
@@ -186,7 +206,7 @@ namespace Diverscan.MJP.UI.Administracion.Inventario
             loadArticulos();
             mostrarArticulosPorUbicacion();
             InvetarioEstaCerrado();
-           
+
         }
 
 
@@ -196,7 +216,7 @@ namespace Diverscan.MJP.UI.Administracion.Inventario
             //Invocar métodos para obtener información de los inventarios
             LimpiarResultados();
             mostrarArticulosPorUbicacion();
-            
+
         }
 
 
@@ -442,7 +462,7 @@ namespace Diverscan.MJP.UI.Administracion.Inventario
                     return;
                 }
 
-          
+
                 long idInventarioBasico = int.Parse(_ddlInventariosBasicos.SelectedValue);
                 if (idInventarioBasico < -1)
                 {
@@ -452,8 +472,18 @@ namespace Diverscan.MJP.UI.Administracion.Inventario
                 //Cerrar la Toma Física y cargar los datos
                 N_InventarioBasico.CerrarInventarioBasico(idInventarioBasico);
                 var date = _rdpFechaAplicado.SelectedDate ?? DateTime.Now;
-                var idBodega = Convert.ToInt32(ddBodega.SelectedValue);
-                loadInventarios(date, date, idBodega);
+
+                if (UsrLogged.IdRoles.Equals("0"))
+                {
+                    var idBodega = Convert.ToInt32(ddBodega.SelectedValue);
+                    loadInventarios(date, date, idBodega);
+                }
+                else
+                {
+                    loadInventarios(date, date, UsrLogged.IdBodega);
+                }
+
+
                 loadArticulos();
                 InvetarioEstaCerrado();
                 Mensaje("ok", "Inventario Cerrado exitosamente", "");
@@ -462,8 +492,6 @@ namespace Diverscan.MJP.UI.Administracion.Inventario
             {
                 Mensaje("error", "Ha ocurrido un error, descripción del error: " + ex.Message, "");
             }
-
-
         }
 
 
@@ -620,7 +648,7 @@ namespace Diverscan.MJP.UI.Administracion.Inventario
                 RGBodegaFisica_SistemaRecord.DataBind();
 
                 //Métodos para cargar los artículos por ubicaciones por el idInventario
-                
+
                 colocarCantidadTotales(_bodegaFisica_SistemaRecordData);
 
                 //Mostrar los campos de estado y contado
@@ -699,7 +727,7 @@ namespace Diverscan.MJP.UI.Administracion.Inventario
         }
 
 
-        
+
 
 
         //Método para limpiar los resultados y los campos de texto
