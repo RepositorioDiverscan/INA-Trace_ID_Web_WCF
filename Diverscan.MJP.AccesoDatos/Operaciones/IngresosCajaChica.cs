@@ -92,7 +92,7 @@ namespace Diverscan.MJP.AccesoDatos.Operaciones
             Database db = DatabaseFactory.CreateDatabase("MJPConnectionString");
             var dbCommand = db.GetStoredProcCommand("SP_GETDETAILICCh");
             db.AddInParameter(dbCommand, "@p_idMaestroIngresoCCh", DbType.Int32, id);
-            //db.AddInParameter(dbCommand, "@p_idBodega", DbType.Int32, idBodega);
+            db.AddInParameter(dbCommand, "@p_idBodega", DbType.Int32, idBodega);
 
             List<EDetalleOrdenC> ListDetalleIngCCh = new List<EDetalleOrdenC>();
             using (IDataReader reader = db.ExecuteReader(dbCommand))

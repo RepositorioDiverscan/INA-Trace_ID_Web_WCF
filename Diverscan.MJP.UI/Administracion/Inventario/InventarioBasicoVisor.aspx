@@ -27,27 +27,21 @@
 
                                                 <!--Campo del Familia-->
                                                 <asp:Label runat="server" ID="_lblFamilia" Text="Id Familia" Style="margin-left: 8px;"></asp:Label>
-                                                <asp:TextBox runat="server" ID="txtFamilia" Style="margin-top: 10px; margin-left: 55px"></asp:TextBox>
+                                                <asp:TextBox runat="server" ID="txtFamilia" Style="margin-top: 10px; margin-left: 42px" OnTextChanged="txtFamilia_TextChanged"></asp:TextBox>
 
                                                 <!-- Campo de Fecha de Aplicar -->
                                                 <br />
                                                 <br />
                                                 <asp:Label runat="server" ID="_lblFechaPorAplicar" Text="Fecha Por Aplicar" Style="margin-left: 5px;"></asp:Label>
                                                 <telerik:RadDatePicker runat="server" ID="_rdpFechaPorAplicar" Style="margin-left: 5px;">
-                                                    <DateInput runat="server" DateFormat="dd/MM/yyyy" />
+                                                    <DateInput runat="server" DateFormat="dd/MM/yyyy"/>
                                                 </telerik:RadDatePicker>
 
                                                 <!-- Campo de Tipo de Inventario -->
                                                 <br />
                                                 <br />
                                                 <asp:Label runat="server" ID="_lblTipoInventario" Text="Tipo de Inventario" Style="margin-left: 5px;"></asp:Label>
-                                                <asp:DropDownList ID="lstTipoInventario" runat="server" Width="150px">
-                                                    <asp:ListItem Text="MATERIALES" Value="1"></asp:ListItem>
-                                                    <asp:ListItem Text="EQUIPO" Value="2"></asp:ListItem>
-                                                    <asp:ListItem Text="MATERIAL DEVOLUTIVO" Value="3"></asp:ListItem>
-                                                    <asp:ListItem Text="MATERIAL PERECEDERO" Value="4"></asp:ListItem>
-                                                </asp:DropDownList>
-
+                                                <asp:DropDownList ID="lstTipoInventario" runat="server" AutoPostBack="true"  Width="150px"></asp:DropDownList>
                                                 <!-- Campo de Usuario -->
                                                 <br />
                                                 <br />

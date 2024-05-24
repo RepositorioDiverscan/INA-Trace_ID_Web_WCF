@@ -31,7 +31,7 @@ namespace Diverscan.MJP.UI.Administracion.Inventario
 
             //Agregar la fecha actual a los 3 calendarios de la página
             if (!IsPostBack)
-            {                 
+            {
                 _rdpFechaPorAplicar.SelectedDate = DateTime.Now;
                 _rdpFechaInicio.SelectedDate = DateTime.Now;
                 _rdpFechaFin.SelectedDate = DateTime.Now;
@@ -39,7 +39,7 @@ namespace Diverscan.MJP.UI.Administracion.Inventario
             }
         }
 
-        
+
         //Método para iniciar el panel
         protected override void OnInit(EventArgs e)
         {
@@ -82,7 +82,7 @@ namespace Diverscan.MJP.UI.Administracion.Inventario
             {
                 Mensaje("info", "Debe ingresar el numero de Familia", "");
                 return;
-            } 
+            }
             else if (lstTipoInventario.SelectedIndex == 0) //TipoInventario
             {
                 Mensaje("info", "Debe seleccionar un Tipo de inventario", "");
@@ -93,16 +93,21 @@ namespace Diverscan.MJP.UI.Administracion.Inventario
                 Mensaje("info", "Debe seleccionar un Usuario", "");
                 return;
             }
+            else if (txtFamilia.Text.StartsWith("5") && !(lstTipoInventario.SelectedValue.Equals("2")))
+            {
+                Mensaje("info", "No existe esta categoría para esta familia", "");
+                return;
+            }
             else
             {
                 //Comprobar que exista una fecha por aplicar, en caso contrario
                 DateTime fechaAplicar = _rdpFechaPorAplicar.SelectedDate ?? DateTime.Now;
-                
+
                 //Invocar la capa lógica para insertar el inventario
-                String resultado = N_InventarioBasico.InsertLogAjusteDeInventario(new InventarioBasicoRecord(txtFamilia.Text,Convert.ToInt16(lstTipoInventario.SelectedValue), Convert.ToInt32(lstUsarios.SelectedValue), fechaAplicar), idBodega);
+                String resultado = N_InventarioBasico.InsertLogAjusteDeInventario(new InventarioBasicoRecord(txtFamilia.Text, Convert.ToInt16(lstTipoInventario.SelectedValue), Convert.ToInt32(lstUsarios.SelectedValue), fechaAplicar), idBodega);
 
                 //Comprobar el valor del resultado 
-                if(resultado == "Insertado")
+                if (resultado == "Insertado")
                 {
                     Mensaje("ok", "Inventario agregado correctamente", "");
 
@@ -132,9 +137,17 @@ namespace Diverscan.MJP.UI.Administracion.Inventario
             }
             catch (Exception ex)
             {
-                Mensaje("error", "Ha ocurrido un error, descripción del error: " + ex.Message , "");
+                Mensaje("error", "Ha ocurrido un error, descripción del error: " + ex.Message, "");
                 return;
             }
+        }
+
+        protected void txtFamilia_TextChanged(object sender, EventArgs e)
+        {
+            lstTipoInventario.Items.Clear();
+
+            lstTipoInventario.Enabled = true;
+            cargalstTipoInventario();
         }
 
 
@@ -165,7 +178,7 @@ namespace Diverscan.MJP.UI.Administracion.Inventario
             {
                 //Obtener una vista de los inventarios
                 var data = ViewState["InventarioBasicoRecords"] as List<InventarioBasicoRecord>;
-                
+
                 //En caso de que la data sea nula se crea una lista vacia
                 if (data == null)
                 {
@@ -182,7 +195,7 @@ namespace Diverscan.MJP.UI.Administracion.Inventario
         }
 
 
-        public void cargarCombos() 
+        public void cargarCombos()
         {
             int idBodega = UsrLogged.IdBodega;
 
@@ -213,6 +226,26 @@ namespace Diverscan.MJP.UI.Administracion.Inventario
                 case "ok":
                     ScriptManager.RegisterClientScriptBlock(this, this.GetType(), " ", "ok('" + sMensaje + "');", true);
                     break;
+            }
+        }
+
+        private void cargalstTipoInventario()
+        {
+            lstTipoInventario.Items.Clear();
+
+            lstTipoInventario.Items.Insert(0, new ListItem("Selecciona una opción", ""));
+
+            if (txtFamilia.Text.StartsWith("5"))
+            {
+                lstTipoInventario.Items.Add(new ListItem("EQUIPO", "2"));
+                lstTipoInventario.SelectedValue = "2";
+                lstTipoInventario.Enabled = false;
+            }
+            else
+            {
+                lstTipoInventario.Items.Add(new ListItem("MATERIALES", "1"));
+                lstTipoInventario.Items.Add(new ListItem("MATERIAL DEVOLUTIVO", "3"));
+                lstTipoInventario.Items.Add(new ListItem("MATERIAL PERECEDERO", "4"));
             }
         }
     }
