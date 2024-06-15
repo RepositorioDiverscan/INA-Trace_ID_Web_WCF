@@ -49,5 +49,11 @@ namespace Diverscan.MJP.Negocio.AjusteInventario
             SolicitudAjusteInventario_DBA solicitudAjusteInventario_DBA = new SolicitudAjusteInventario_DBA();
             return solicitudAjusteInventario_DBA.GetIdSolicitudAjusteRefencia(idSolicitudAjusteRefenrencia);
         }
+
+        public static int GetLocationIdDevolutionState(bool state, int warehouse)
+        {
+            SolicitudAjusteInventario_DBA solicitudAjusteInventario_DBA = new SolicitudAjusteInventario_DBA();
+            return solicitudAjusteInventario_DBA.GetLocationIdDevolutionState(state, warehouse);
+        }
     }
 }

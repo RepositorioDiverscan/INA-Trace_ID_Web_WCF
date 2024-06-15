@@ -41,6 +41,7 @@ using Diverscan.MJP.Entidades.Pedidos;
 using Diverscan.MJP.Entidades.Recepcion;
 using Diverscan.MJP.Entidades.Devolutions.SolicitudDevolucion;
 using Diverscan.MJP.Entidades.Consultas;
+using Diverscan.MJP.AccesoDatos.Devolutions;
 
 namespace TRACEID.WCF
 {
@@ -319,7 +320,7 @@ namespace TRACEID.WCF
         BodyStyle = WebMessageBodyStyle.Wrapped,
         ResponseFormat = WebMessageFormat.Json,
         UriTemplate = "GetLocationId")]
-        string GetLocationId(string description);
+        string GetLocationId(string description, int idWarehouse);
 
         [OperationContract]
         [WebInvoke(Method = "POST",
@@ -697,5 +698,19 @@ namespace TRACEID.WCF
         ResponseFormat = WebMessageFormat.Json,
         UriTemplate = "GetArticuloXubicacion")]
         List<EGetArticulosXubicacion> GetArticuloXubi(string ubi);
+
+        [OperationContract]
+        [WebInvoke(Method = "POST",
+        BodyStyle = WebMessageBodyStyle.Wrapped,
+        ResponseFormat = WebMessageFormat.Json,
+        UriTemplate = "RecibirSolicitudDevolucion")]
+        string RecibirSolicitudDevolucion(EDetalleRecibirSolicitudDevolucion detalle, int usuario);
+
+        [OperationContract]
+        [WebInvoke(Method = "POST",
+        BodyStyle = WebMessageBodyStyle.Wrapped,
+        ResponseFormat = WebMessageFormat.Json,
+        UriTemplate = "GetLocationIdDevolutionState")]
+        int GetLocationIdDevolutionState(bool state, int warehouse);
     }
 }

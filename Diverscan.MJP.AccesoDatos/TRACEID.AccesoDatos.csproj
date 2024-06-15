@@ -52,7 +52,7 @@
     </Reference>
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.Data, Version=5.0.414.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.Practices.EnterpriseLibrary\Microsoft.Practices.EnterpriseLibrary.Data.dll</HintPath>
+      <HintPath>..\LibreriasExternas\Microsoft.Practices.EnterpriseLibrary.Data.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.Security.Cryptography, Version=5.0.414.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -126,7 +126,9 @@
     <Compile Include="Consultas\DConsultarMaestroArticulo.cs" />
     <Compile Include="Consultas\DGetArticuloXubicacion.cs" />
     <Compile Include="Consultas\DInventario.cs" />
+    <Compile Include="Devolutions\da_RecibirSolicitudDevolucion.cs" />
     <Compile Include="Devolutions\da_SolicitudDevolucion.cs" />
+    <Compile Include="Devolutions\EDetalleRecibirSolicitudDevolucion.cs" />
     <Compile Include="Operaciones\EDetalleReporteOC.cs" />
     <Compile Include="Operaciones\eIngresoCajaChica.cs" />
     <Compile Include="Operaciones\eReporteICCh.cs" />

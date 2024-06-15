@@ -73,6 +73,7 @@ using Diverscan.MJP.Negocio.Recepcion;
 using Diverscan.MJP.Entidades.Devolutions.SolicitudDevolucion;
 using Diverscan.MJP.Negocio.Consulta;
 using Diverscan.MJP.Entidades.Consultas;
+using Diverscan.MJP.AccesoDatos.Devolutions;
 
 namespace TRACEID.WCF
 {
@@ -590,11 +591,11 @@ namespace TRACEID.WCF
             return nDevolutions.InsertProductLocation(productLocation);
         }
 
-        public string GetLocationId(string description)
+        public string GetLocationId(string description, int idWarehouse)
         {
 
             n_Traslados _Traslados = new n_Traslados();
-            return _Traslados.ObtenerIdUbicacion(description);
+            return _Traslados.ObtenerIdUbicacion(description, idWarehouse);
         }
 
         public string InsertArticleRR(List<EArticulos> eArticulos)
@@ -974,6 +975,31 @@ namespace TRACEID.WCF
             catch (Exception)
             {
                 return null;
+            }
+        }
+
+        public string RecibirSolicitudDevolucion(EDetalleRecibirSolicitudDevolucion detalle, int usuario)
+        {
+            n_RecibirSolicitudDevolucion _recibirSolicitudDevolucion  = new n_RecibirSolicitudDevolucion();
+            return _recibirSolicitudDevolucion.ObtenerSolicitudesDevolucion(detalle, usuario);
+        }
+
+        public int GetLocationIdDevolutionState(bool state, int warehouse)
+        {
+            try
+            {
+                return N_SolicitudAjusteInventario.GetLocationIdDevolutionState(state, warehouse);
+            }
+            catch (Exception ex)
+            {
+                clErrores cl = new clErrores();
+                cl.escribirError(ex.Message, ex.StackTrace);
+                using (StreamWriter writer = new StreamWriter(@"C:\ArchivoError\Archivo.txt"))
+                {
+                    writer.WriteLine(string.Format("{0}@{1}@{2}", "InserSolicitudAjusteInventarioRecord", ex.Message, ex.StackTrace));
+                }
+
+                return -1;
             }
         }
     }

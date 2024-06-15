@@ -155,7 +155,7 @@ namespace Diverscan.MJP.AccesoDatos.Devolutions
             {
                 long idArticulo = long.Parse(reader["idArticulo"].ToString());
                 string Nombre = reader["Nombre"].ToString();
-                int Cantidad = Convert.ToInt32(reader["Cantidad"].ToString());
+                int Cantidad = Convert.ToInt32(reader["Cantidad"]);
                 string MARCA = reader["MARCA"].ToString();
                 string Placa = reader["Placa"].ToString();
                 long idDetalleSolicitudDevolucion = long.Parse(reader["idDetalleSolicitudDevolucion"].ToString());

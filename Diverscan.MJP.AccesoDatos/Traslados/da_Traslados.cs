@@ -50,13 +50,14 @@ namespace Diverscan.MJP.AccesoDatos.Traslados
             return result;
         }
 
-        public string ObtenerIdUbicacion(string Descripcion)
+        public string ObtenerIdUbicacion(string Descripcion, int idWarehouse)
         {    
             string result = "";
 
             Database db = DatabaseFactory.CreateDatabase("MJPConnectionString");
             var dbCommand = db.GetStoredProcCommand("SP_GETLOCATION");
             db.AddInParameter(dbCommand, "@p_description", DbType.String, Descripcion);
+            db.AddInParameter(dbCommand, "@p_idWarehouse", DbType.Int32, idWarehouse);
             using (IDataReader reader = db.ExecuteReader(dbCommand))
             {
                 while (reader.Read())

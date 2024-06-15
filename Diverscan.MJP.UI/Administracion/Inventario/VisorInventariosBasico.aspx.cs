@@ -743,13 +743,23 @@ namespace Diverscan.MJP.UI.Administracion.Inventario
         //Método para Realizar un Ajuste de Salida
         private void realizarAjusteSalida(List<BodegaSistema> listaBodegaSistemaSalida, ref string articulosSinIntegridad)
         {
-            int idBodega = int.Parse(ddBodega.SelectedValue);
+            int idBodega;
+
             long idInventarioBasico = int.Parse(_ddlInventariosBasicos.SelectedValue);
 
-            if (ddBodega.SelectedIndex <= 0 || string.IsNullOrEmpty(_ddlInventariosBasicos.SelectedValue) || idInventarioBasico < -1)
+            if (UsrLogged.IdRoles.Equals("0"))
             {
-                Mensaje("error", "Por favor compruebe los campos si están completos", "");
-                return;
+                idBodega = Convert.ToInt32(ddBodega.SelectedValue);
+
+                if (ddBodega.SelectedIndex <= 0 || string.IsNullOrEmpty(_ddlInventariosBasicos.SelectedValue) || idInventarioBasico < -1)
+                {
+                    Mensaje("error", "Por favor compruebe los campos si están completos", "");
+                    return;
+                }
+            }
+            else
+            {
+                idBodega = UsrLogged.IdBodega;
             }
 
             //Crear un arreglo de clase ArticulosDisponibles
@@ -808,15 +818,24 @@ namespace Diverscan.MJP.UI.Administracion.Inventario
         //Método para Realizar un Ajuste de Entrada
         private void realizarAjusteEntrada(List<BodegaSistema> listaBodegaSistemaSalida)
         {
-            int idBodega = int.Parse(ddBodega.SelectedValue);
+            int idBodega;
+
             long idInventarioBasico = int.Parse(_ddlInventariosBasicos.SelectedValue);
 
-            if (ddBodega.SelectedIndex <= 0 || string.IsNullOrEmpty(_ddlInventariosBasicos.SelectedValue) || idInventarioBasico < -1)
+            if (UsrLogged.IdRoles.Equals("0"))
             {
-                Mensaje("error", "Por favor compruebe los campos si están completos", "");
-                return;
-            }
+                idBodega = Convert.ToInt32(ddBodega.SelectedValue);
 
+                if (ddBodega.SelectedIndex <= 0 || string.IsNullOrEmpty(_ddlInventariosBasicos.SelectedValue) || idInventarioBasico < -1)
+                {
+                    Mensaje("error", "Por favor compruebe los campos si están completos", "");
+                    return;
+                }
+            }
+            else
+            {
+                idBodega = UsrLogged.IdBodega;
+            }
 
             //Crear un arreglo de ICantidadPorUbicacionArticuloRecord
             List<List<ICantidadPorUbicacionArticuloRecord>> ArticulosBodegaFiltradosList = new List<List<ICantidadPorUbicacionArticuloRecord>>();

@@ -33,16 +33,24 @@ namespace Diverscan.MJP.AccesoDatos.AjusteInventario
             var dbTse = DatabaseFactory.CreateDatabase("MJPConnectionString");
             var dbCommand = dbTse.GetStoredProcCommand("TieneCantidadDisponibleParaSalida_VP");
 
-            dbTse.AddInParameter(dbCommand, "@IdAjusteInventario", DbType.Int64, idAjusteInventario);
+            //dbTse.AddInParameter(dbCommand, "@IdAjusteInventario", DbType.Int64, idAjusteInventario);
             dbTse.AddInParameter(dbCommand, "@IdArticulo", DbType.Int64, articuloXSolicitudAjusteRecord.IdArticulo);
             dbTse.AddInParameter(dbCommand, "@Lote", DbType.String, articuloXSolicitudAjusteRecord.Lote);
-            dbTse.AddInParameter(dbCommand, "@FechaVencimiento", DbType.DateTime, articuloXSolicitudAjusteRecord.FechaVencimiento);
-            dbTse.AddInParameter(dbCommand, "@IdUbicacionOrigen", DbType.Int64, articuloXSolicitudAjusteRecord.IdUbicacionActual);        
-            dbTse.AddInParameter(dbCommand, "@Cantidad", DbType.Int32, articuloXSolicitudAjusteRecord.Cantidad);
-            dbTse.AddOutParameter(dbCommand, "@Resultado", DbType.String, 100);
+            dbTse.AddInParameter(dbCommand, "@FechaVencimiento", DbType.DateTime, articuloXSolicitudAjusteRecord.FechaVencimientoAndroid);
+            dbTse.AddInParameter(dbCommand, "@IdUbicacion", DbType.Int64, articuloXSolicitudAjusteRecord.IdUbicacionActual);        
+            dbTse.AddOutParameter(dbCommand, "@Cantidad", DbType.Int32, articuloXSolicitudAjusteRecord.Cantidad);
+            //dbTse.AddOutParameter(dbCommand, "@Resultado", DbType.String, 100);
             dbTse.ExecuteNonQuery(dbCommand);
-            int result = Convert.ToInt32(dbCommand.Parameters["@Resultado"].Value);
-            return result;
+
+            if (dbCommand.Parameters["@Cantidad"].Value == DBNull.Value)
+            {
+                return 0;
+            }
+            else
+            {
+                int result = Convert.ToInt32(dbCommand.Parameters["@Cantidad"].Value);
+                return result;
+            }
         }
 
         public int InsertarArticuloAjusteInventarioRecord(ArticuloXSolicitudAjusteRecord articuloXSolicitudAjusteRecord, long idSolicitudAjusteInventario)
@@ -59,6 +67,23 @@ namespace Diverscan.MJP.AccesoDatos.AjusteInventario
             dbTse.AddInParameter(dbCommand, "@Cantidad", DbType.Int32, articuloXSolicitudAjusteRecord.Cantidad);
 
             var result = dbTse.ExecuteNonQuery(dbCommand);
+            return result;
+        }
+
+        public int ActualizarCantidadArticuloSalidaAjusteInventarioRecord(ArticuloXSolicitudAjusteRecord articuloXSolicitudAjusteRecord, int IdUsuario)
+        {
+            var dbTse = DatabaseFactory.CreateDatabase("MJPConnectionString");
+            var dbCommand = dbTse.GetStoredProcCommand("SP_SalidaTrazabilidad");
+
+            dbTse.AddInParameter(dbCommand, "@IdArticulo", DbType.Int64, articuloXSolicitudAjusteRecord.IdArticulo);
+            dbTse.AddInParameter(dbCommand, "@Lote", DbType.String, articuloXSolicitudAjusteRecord.Lote);
+            dbTse.AddInParameter(dbCommand, "@FechaVencimiento", DbType.DateTime, articuloXSolicitudAjusteRecord.FechaVencimiento);
+            dbTse.AddInParameter(dbCommand, "@IdUbicacion", DbType.Int64, articuloXSolicitudAjusteRecord.IdUbicacionActual);
+            dbTse.AddInParameter(dbCommand, "@Cantidad", DbType.Int32, articuloXSolicitudAjusteRecord.Cantidad);
+            dbTse.AddInParameter(dbCommand, "@IdUsuario", DbType.Int32, IdUsuario);
+            dbTse.AddInParameter(dbCommand, "@IdMetodoAccion", DbType.Int32, 8);
+
+            int result = dbTse.ExecuteNonQuery(dbCommand);
             return result;
         }
 
@@ -117,6 +142,11 @@ namespace Diverscan.MJP.AccesoDatos.AjusteInventario
                 }
 
                 AplicarSolicitudAjusteAutomatico(id);
+
+                foreach (var articulo in articuloXSolicitudAjusteRecord)
+                {
+                    ActualizarCantidadArticuloSalidaAjusteInventarioRecord(articulo, solicitudAjusteInventarioRecord.IdUsuario);
+                }
 
                 return "Registro Exitoso";
             }
@@ -209,6 +239,25 @@ namespace Diverscan.MJP.AccesoDatos.AjusteInventario
                 }
             }            
             return IdSolicitudAjusteInventario;
+        }
+
+        public int GetLocationIdDevolutionState(bool state, int warehouse)
+        {
+            Database db = DatabaseFactory.CreateDatabase("MJPConnectionString");
+            var dbCommand = db.GetStoredProcCommand("SP_GETLOCATION_DevolutionState");
+            db.AddInParameter(dbCommand, "@p_state", DbType.Byte, state);
+            db.AddInParameter(dbCommand, "@p_warehouse", DbType.Int32, warehouse);
+            using (IDataReader reader = db.ExecuteReader(dbCommand))
+            {
+                if (reader.Read())
+                {
+                    return Convert.ToInt32(reader["RESULTADO"]);
+                }
+                else
+                {
+                    return -1;
+                }
+            }
         }
     }
 }

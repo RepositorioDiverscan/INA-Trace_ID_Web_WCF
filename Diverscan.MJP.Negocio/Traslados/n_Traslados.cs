@@ -17,10 +17,10 @@ namespace Diverscan.MJP.Negocio.Traslados
             return result;
         }
 
-        public string ObtenerIdUbicacion(string Descripcion)
+        public string ObtenerIdUbicacion(string Descripcion, int idWarehouse)
         {
             da_Traslados Ptraslados = new da_Traslados();
-            string result = Ptraslados.ObtenerIdUbicacion(Descripcion);
+            string result = Ptraslados.ObtenerIdUbicacion(Descripcion, idWarehouse);
             return result;
         }
 
