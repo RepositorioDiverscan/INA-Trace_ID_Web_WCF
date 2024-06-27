@@ -39,14 +39,14 @@ namespace Diverscan.MJP.UI.Operaciones.Traslados.SolicitudTraslados
 
 
                 case "CrearSolicitudTraslado":
-                    //Obtener los parametros que se envian
                     string NumeroTransaccion = Request.Form["NumeroTransaccion"];
-                    int IdBodegaDestino = Convert.ToInt32(Request.Form["IdBodegaDestino"]);
-                    int IdArticulo = Convert.ToInt32(Request.Form["IdArticulo"]);
-                    int CantidadSolicitada = Convert.ToInt32(Request.Form["CantidadSolicitada"]);
+                    int CantidadSolicitada;
 
-                    if (!(String.IsNullOrEmpty(NumeroTransaccion)))
+                    if (!string.IsNullOrWhiteSpace(NumeroTransaccion) && int.TryParse(Request.Form["CantidadSolicitada"], out CantidadSolicitada))
                     {
+                        int IdBodegaDestino = Convert.ToInt32(Request.Form["IdBodegaDestino"]);
+                        int IdArticulo = Convert.ToInt32(Request.Form["IdArticulo"]);
+
                         //Instanciar la clase de Solicitud de Traslado
                         ESolicitudTraslado solicitudTraslado = new ESolicitudTraslado(NumeroTransaccion, IdUsuario, IdBodega, IdBodegaDestino, 0, IdArticulo, CantidadSolicitada);
                         string respuesta = dBTrasladoBodegas.CrearSolicitudTrasladoBodega(solicitudTraslado);
@@ -70,8 +70,11 @@ namespace Diverscan.MJP.UI.Operaciones.Traslados.SolicitudTraslados
                             Response.Write("Ocurrió un error al realizar el Ingreso de Traslado entre Bodegas");
                         }
                     }
+                    else
+                    {
+                        Response.Write("Por favor complete los campos");
+                    }
 
-                    
                     break;
 
 

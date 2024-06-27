@@ -189,7 +189,8 @@
 
                     <div class="modal-body">
                         <div class="form-group col-8 mx-auto" >
-                            <input type="text" name="txt_cantidadTB" v-model="txt_NumeroTrans" id="txt_NumTrans" placeholder="Número de Transacción" class="form-control" style="margin-bottom: 20px"/>
+                            <label>Número de Transacción</label>
+                            <input type="text" name="txt_cantidadTB" v-model="txt_NumeroTrans" id="txt_NumTrans" class="form-control" style="margin-bottom: 20px" required/>
                             <label>Ingrese la cantidad a solicitar:</label>
                             <input type="tel" name="txt_cantidadTB" v-model="txt_cantidadTB" id="txt_cantidadTB"  maxlength="3" class="form-control"
                              @keypress="validaNumeros(event)"/>
