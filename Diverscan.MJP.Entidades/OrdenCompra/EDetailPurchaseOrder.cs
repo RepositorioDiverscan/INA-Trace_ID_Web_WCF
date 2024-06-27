@@ -51,8 +51,8 @@ namespace Diverscan.MJP.Entidades.OrdenCompra
 
         public EDetailPurchaseOrder(IDataReader reader)
         {
-            this._idMaestroOrdenCompra = reader["idMaestroIngreso"].ToString();
             this._idDetalleOrdenCompra = reader["idDetalleIngreso"].ToString();
+            this._idMaestroOrdenCompra = reader["idMaestroIngreso"].ToString();
             this._idArticulo = reader["idArticulo"].ToString();
             this._GTIN = reader["GTIN"].ToString();
             this._comentario = reader["Comentario"].ToString(); 

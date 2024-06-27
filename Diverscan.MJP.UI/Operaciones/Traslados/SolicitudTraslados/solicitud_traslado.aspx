@@ -48,6 +48,7 @@
                 <table class="table mt-2 text-center col-12" id="tablaSolicitudesBodega">
                     <thead class="text-white text-center" style="background-color: #356191;">
                         <tr>
+                            <th>Numero de Transacción</th>
                             <th>Nombre del Solicitante</th>
                             <th>Nombre del Gestionador</th>
                             <th>Bodega Origen</th>
@@ -59,6 +60,7 @@
                     </thead>
                     <tbody>
                         <tr v-for="encabezado in listaEncabezadosSolicitudes">
+                            <td>{{encabezado.NumeroTransaccion}}</td>
                             <td>{{encabezado.NombreSolicitante}}</td>
                             <td>{{encabezado.NombreProcesa}}</td>
                             <td>{{encabezado.NombreBodegaOrigen}}</td>
@@ -187,6 +189,7 @@
 
                     <div class="modal-body">
                         <div class="form-group col-8 mx-auto" >
+                            <input type="text" name="txt_cantidadTB" v-model="txt_NumeroTrans" id="txt_NumTrans" placeholder="Número de Transacción" class="form-control" style="margin-bottom: 20px"/>
                             <label>Ingrese la cantidad a solicitar:</label>
                             <input type="tel" name="txt_cantidadTB" v-model="txt_cantidadTB" id="txt_cantidadTB"  maxlength="3" class="form-control"
                              @keypress="validaNumeros(event)"/>

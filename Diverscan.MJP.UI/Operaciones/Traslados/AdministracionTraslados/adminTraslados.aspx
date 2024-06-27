@@ -15,6 +15,7 @@
                 <table class="table mt-5 text-center col-12" id="tablaEncabezadosSolicitud">
                     <thead class="text-white text-center" style="background-color: #356191;">
                         <tr>
+                            <th>Número de Transacción</th>
                             <th>Nombre Solicitante</th>
                             <th>Nombre del Gestionador</th>
                             <th>Bodega Origen</th>
@@ -25,7 +26,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="encabezado in listaEncabezadosSolicitudes">                            
+                        <tr v-for="encabezado in listaEncabezadosSolicitudes">
+                            <td>{{encabezado.NumeroTransaccion}}</td>
                             <td>{{encabezado.NombreSolicitante}}</td>
                             <td>{{encabezado.NombreProcesa}}</td>
                             <td>{{encabezado.NombreBodegaOrigen}}</td>

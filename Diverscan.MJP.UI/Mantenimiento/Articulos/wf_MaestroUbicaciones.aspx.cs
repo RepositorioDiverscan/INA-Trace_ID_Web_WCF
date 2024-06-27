@@ -55,6 +55,8 @@ namespace Diverscan.MJP.UI.Mantenimiento.Articulos
             }
             if (!IsPostBack)
             {
+                CargarDDLS();
+
                 //Se valida si el rol del usuario es SuperAdmin
                 if (!(UsrLogged.IdRoles.Equals("0")))
                 {
@@ -72,7 +74,6 @@ namespace Diverscan.MJP.UI.Mantenimiento.Articulos
                     isSuperAdmin = true;
                 }
 
-                CargarDDLS();
                 FillDDBodega();
                 enviaFront();
             }

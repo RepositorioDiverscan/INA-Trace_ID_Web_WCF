@@ -200,7 +200,7 @@
                                                             <telerik:GridBoundColumn SortExpression="UbicacionSSCC" HeaderText="Ubicacion de Certificación" HeaderButtonType="TextButton"
                                                                 DataField="UbicacionSSCC">
                                                             </telerik:GridBoundColumn>
-                                                            <telerik:GridBoundColumn SortExpression="UbicacionSSCC" HeaderText="Ubicacion de Certificación" HeaderButtonType="TextButton"
+                                                            <telerik:GridBoundColumn SortExpression="UbicacionSSCC" HeaderText="Ubicacion Actual" HeaderButtonType="TextButton"
                                                                 DataField="UbicacionSSCC">
                                                             </telerik:GridBoundColumn>
                                                             <telerik:GridBoundColumn SortExpression="NombreUsuario" HeaderText="Certificador" HeaderButtonType="TextButton"

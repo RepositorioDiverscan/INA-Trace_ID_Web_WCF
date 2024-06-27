@@ -47,15 +47,16 @@ namespace Diverscan.MJP.UI.Administracion.GestionPedido
                     break;
 
 
-                case "IngresarSolicitud":                    
+                case "IngresarSolicitud":
                     //Obtener los parametros que se envian
+                    string NumeroTransaccion = Request.Form["NumeroTransaccion"];
                     int IdBodegaDestino = Convert.ToInt32(Request.Form["IdBodegaDestino"]);
                     int IdArticulo = Convert.ToInt32(Request.Form["IdArticulo"]);
                     int CantidadSolicitada = Convert.ToInt32(Request.Form["CantidadSolicitada"]);
                     int IdPedidoOriginal = Convert.ToInt32(Request.Form["IdPedidoOriginal"]);
 
                     //Instanciar la clase de Solicitud de Traslado
-                    ESolicitudTraslado solicitudTraslado = new ESolicitudTraslado(IdUsuario, IdBodega, IdBodegaDestino, IdPedidoOriginal,
+                    ESolicitudTraslado solicitudTraslado = new ESolicitudTraslado(NumeroTransaccion, IdUsuario, IdBodega, IdBodegaDestino, IdPedidoOriginal,
                         IdArticulo, CantidadSolicitada);
 
                     string respuesta = dBAGestionPedido.InsertarSolicitudTrasladoBodega(solicitudTraslado);

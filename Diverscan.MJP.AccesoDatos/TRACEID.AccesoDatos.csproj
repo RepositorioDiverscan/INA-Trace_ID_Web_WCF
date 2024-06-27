@@ -129,8 +129,10 @@
     <Compile Include="Devolutions\da_RecibirSolicitudDevolucion.cs" />
     <Compile Include="Devolutions\da_SolicitudDevolucion.cs" />
     <Compile Include="Devolutions\EDetalleRecibirSolicitudDevolucion.cs" />
+    <Compile Include="Operaciones\DBIngresoTrasladoBodega.cs" />
     <Compile Include="Operaciones\EDetalleReporteOC.cs" />
     <Compile Include="Operaciones\eIngresoCajaChica.cs" />
+    <Compile Include="Operaciones\EIngresoTrasladoBodega.cs" />
     <Compile Include="Operaciones\eReporteICCh.cs" />
     <Compile Include="Operaciones\eReporteOC.cs" />
     <Compile Include="Operaciones\eReporteSOC.cs" />

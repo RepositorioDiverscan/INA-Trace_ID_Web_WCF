@@ -70,6 +70,7 @@ namespace Diverscan.MJP.AccesoDatos.Operacion.TrasladoBodegas
                 var dbCommand = db.GetStoredProcCommand("SP_CrearSolicitudTrasladoBodega");
 
                 //Enviar los parametros del SP
+                db.AddInParameter(dbCommand, "@numeroTransaccion", DbType.Int64, solicitudTraslado.NumeroTransaccion);
                 db.AddInParameter(dbCommand, "@idUsuarioSolicita", DbType.Int64, solicitudTraslado.IdUsuarioSolicita);
                 db.AddInParameter(dbCommand, "@idBodegaOrigen", DbType.Int64, solicitudTraslado.IdBodegaOrigen);
                 db.AddInParameter(dbCommand, "@idBodegaDestino", DbType.Int64, solicitudTraslado.IdBodegaDestino);

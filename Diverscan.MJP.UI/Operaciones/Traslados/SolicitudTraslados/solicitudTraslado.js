@@ -5,6 +5,7 @@
 
     data: {
         mensaje: '',
+        txt_NumeroTrans: '',
         txt_cantidadTB: '',
         solicitudTraslado: '',
         idSolicitudTraslado: '',
@@ -92,9 +93,11 @@
                 Opcion: 'CrearSolicitudTraslado',
                 IdBodegaDestino: self.articuloSolicitar.IdBodega,
                 IdArticulo: self.articuloSolicitar.IdArticulo,
+                NumeroTransaccion: self.txt_NumeroTrans,
                 CantidadSolicitada: self.txt_cantidadTB,
             }, function (data) {
                 $('#ModalCantidadSolicitar').modal('hide');
+                self.txt_NumeroTrans = ''
                 self.txt_cantidadTB =  ''
                 self.mostrarMensaje(data);
                 self.obtenerEncabezadosSolicitudes()
@@ -114,6 +117,7 @@
             }, function (data) {
                 $('#ModalCantidadActualizar').modal('hide');
                 $('#ModalArticulosBodegaEspecifica').modal('hide');
+                self.txt_NumeroTrans = ''
                 self.txt_cantidadAct = ''
                 self.mostrarMensaje(data);
                 self.obtenerEncabezadosSolicitudes()

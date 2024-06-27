@@ -1,8 +1,10 @@
 ﻿using Diverscan.MJP.AccesoDatos.GestionPedido.SolicitudTraslado;
 using Diverscan.MJP.AccesoDatos.Operacion.TrasladoBodegas;
+using Diverscan.MJP.AccesoDatos.Operaciones;
 using Diverscan.MJP.Entidades;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 
 namespace Diverscan.MJP.UI.Operaciones.Traslados.SolicitudTraslados
 {
@@ -12,6 +14,7 @@ namespace Diverscan.MJP.UI.Operaciones.Traslados.SolicitudTraslados
         {
             //Instanciar la BD
             DBTrasladoBodegas dBTrasladoBodegas = new DBTrasladoBodegas();
+            DBIngresoTrasladoBodega dBIngresoTrasladoBodegas = new DBIngresoTrasladoBodega();
 
             //Obtener la informacion del Usuario
             e_Usuario _eUsuario = (e_Usuario)Session["USUARIO"];
@@ -37,13 +40,38 @@ namespace Diverscan.MJP.UI.Operaciones.Traslados.SolicitudTraslados
 
                 case "CrearSolicitudTraslado":
                     //Obtener los parametros que se envian
+                    string NumeroTransaccion = Request.Form["NumeroTransaccion"];
                     int IdBodegaDestino = Convert.ToInt32(Request.Form["IdBodegaDestino"]);
                     int IdArticulo = Convert.ToInt32(Request.Form["IdArticulo"]);
                     int CantidadSolicitada = Convert.ToInt32(Request.Form["CantidadSolicitada"]);
-                    //Instanciar la clase de Solicitud de Traslado
-                    ESolicitudTraslado solicitudTraslado = new ESolicitudTraslado(IdUsuario, IdBodega, IdBodegaDestino, 0, IdArticulo, CantidadSolicitada);
-                    string respuesta = dBTrasladoBodegas.CrearSolicitudTrasladoBodega(solicitudTraslado);
-                    Response.Write(respuesta);
+
+                    if (!(String.IsNullOrEmpty(NumeroTransaccion)))
+                    {
+                        //Instanciar la clase de Solicitud de Traslado
+                        ESolicitudTraslado solicitudTraslado = new ESolicitudTraslado(NumeroTransaccion, IdUsuario, IdBodega, IdBodegaDestino, 0, IdArticulo, CantidadSolicitada);
+                        string respuesta = dBTrasladoBodegas.CrearSolicitudTrasladoBodega(solicitudTraslado);
+
+                        //Instanciar la clase de Ingreso de Traslado
+                        EIngresoTrasladoBodega ingresoTraslado = new EIngresoTrasladoBodega();
+                        ingresoTraslado.NumeroTransaccion = NumeroTransaccion;
+                        ingresoTraslado.IdBodega = IdBodega;
+                        ingresoTraslado.IdBodegaTraslado = IdBodegaDestino;
+                        ingresoTraslado.Comentario = "Ingreso por traslado entre Bodegas. Numero Transacción: " + NumeroTransaccion;
+                        ingresoTraslado.IdUsuario = IdUsuario;
+                        ingresoTraslado.IdArticulo = IdArticulo;
+                        ingresoTraslado.CantidadSolicitada = CantidadSolicitada;
+
+                        if (dBIngresoTrasladoBodegas.CrearIngresoTrasladoBodegas(ingresoTraslado).Equals("Ok"))
+                        {
+                            Response.Write(respuesta);
+                        }
+                        else
+                        {
+                            Response.Write("Ocurrió un error al realizar el Ingreso de Traslado entre Bodegas");
+                        }
+                    }
+
+                    
                     break;
 
 

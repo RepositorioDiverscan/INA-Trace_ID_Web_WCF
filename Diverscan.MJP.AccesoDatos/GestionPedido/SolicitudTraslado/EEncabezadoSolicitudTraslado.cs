@@ -7,6 +7,7 @@ namespace Diverscan.MJP.AccesoDatos.GestionPedido.SolicitudTraslado
     {
         //Atributos
         private int _idSolicitudTrasladoBodega;
+        private string _numeroTransaccion;
         private int _idUsuarioSolicita;
         private string _nombreSolicitante;
         private int _idUsuarioProcesa;
@@ -23,6 +24,7 @@ namespace Diverscan.MJP.AccesoDatos.GestionPedido.SolicitudTraslado
         public EEncabezadoSolicitudTraslado(IDataReader reader)
         {
             _idSolicitudTrasladoBodega = Convert.ToInt32(reader["Solicitud"]);
+            NumeroTransaccion = (string)reader["NumeroTransaccion"];
             _idUsuarioSolicita = Convert.ToInt32(reader["IDUsuarioSolicita"]);
             _nombreSolicitante = (string) reader["NombreSolicita"];
             _idUsuarioProcesa = Convert.ToInt32(reader["IDUsuarioProcesa"]);
@@ -38,6 +40,7 @@ namespace Diverscan.MJP.AccesoDatos.GestionPedido.SolicitudTraslado
 
         //Metodos Get y Set
         public int IdSolicitudTrasladoBodega { get => _idSolicitudTrasladoBodega; set => _idSolicitudTrasladoBodega = value; }
+        public string NumeroTransaccion { get => _numeroTransaccion; set => _numeroTransaccion = value; }
         public int IdUsuarioSolicita { get => _idUsuarioSolicita; set => _idUsuarioSolicita = value; }
         public string NombreSolicitante { get => _nombreSolicitante; set => _nombreSolicitante = value; }
         public int IdUsuarioProcesa { get => _idUsuarioProcesa; set => _idUsuarioProcesa = value; }
