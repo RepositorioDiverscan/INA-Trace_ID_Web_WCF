@@ -7,182 +7,200 @@
 // </generado automáticamente>
 //------------------------------------------------------------------------------
 
-namespace Diverscan.MJP.UI
+namespace Diverscan.MJP.UI.Operaciones.Ingresos
 {
 
 
-    public partial class SiteMaster
+    public partial class wf_IngresoTrasladoBodegas
     {
 
         /// <summary>
-        /// Control Head1.
+        /// Control Panel4.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlHead Head1;
+        protected global::System.Web.UI.WebControls.Panel Panel4;
 
         /// <summary>
-        /// Control HeadContent.
+        /// Control RadAjaxManager1.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ContentPlaceHolder HeadContent;
+        protected global::Telerik.Web.UI.RadAjaxManager RadAjaxManager1;
 
         /// <summary>
-        /// Control CuerpoHtml.
+        /// Control RadWindowManager1.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl CuerpoHtml;
+        protected global::Telerik.Web.UI.RadWindowManager RadWindowManager1;
 
         /// <summary>
-        /// Control Form1.
+        /// Control WinUsuarios.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlForm Form1;
+        protected global::Telerik.Web.UI.RadWindow WinUsuarios;
 
         /// <summary>
-        /// Control scrMaster.
+        /// Control RadTabStrip1.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.ScriptManager scrMaster;
+        protected global::Telerik.Web.UI.RadTabStrip RadTabStrip1;
 
         /// <summary>
-        /// Control RadSkinManager1.
+        /// Control RadMultiPage1.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::Telerik.Web.UI.RadSkinManager RadSkinManager1;
+        protected global::Telerik.Web.UI.RadMultiPage RadMultiPage1;
 
         /// <summary>
-        /// Control cabezera.
+        /// Control RadPageView1.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl cabezera;
+        protected global::Telerik.Web.UI.RadPageView RadPageView1;
 
         /// <summary>
-        /// Control lbNombre.
+        /// Control Panel1.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lbNombre;
+        protected global::System.Web.UI.WebControls.Panel Panel1;
 
         /// <summary>
-        /// Control lbApellidos.
+        /// Control Vista_OrdenesCompra.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lbApellidos;
+        protected global::System.Web.UI.WebControls.Panel Vista_OrdenesCompra;
 
         /// <summary>
-        /// Control ddlmenu.
+        /// Control DummyButton.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlmenu;
+        protected global::System.Web.UI.WebControls.ImageButton DummyButton;
 
         /// <summary>
-        /// Control lbPrograma.
+        /// Control Label14.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lbPrograma;
+        protected global::System.Web.UI.WebControls.Label Label14;
 
         /// <summary>
-        /// Control HeadLoginView.
+        /// Control txtFechaInicioBusqueda.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LoginView HeadLoginView;
+        protected global::Telerik.Web.UI.RadDatePicker txtFechaInicioBusqueda;
 
         /// <summary>
-        /// Control imgLodoMJP.
+        /// Control Label22.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Image imgLodoMJP;
+        protected global::System.Web.UI.WebControls.Label Label22;
 
         /// <summary>
-        /// Control MenuNavigate.
+        /// Control txtFechaFinBusqueda.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl MenuNavigate;
+        protected global::Telerik.Web.UI.RadDatePicker txtFechaFinBusqueda;
 
         /// <summary>
-        /// Control siteMap.
+        /// Control Label2.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.SiteMapPath siteMap;
+        protected global::System.Web.UI.WebControls.Label Label2;
 
         /// <summary>
-        /// Control RadPanelBar1.
+        /// Control txtNumeroTransaccion.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::Telerik.Web.UI.RadPanelBar RadPanelBar1;
+        protected global::System.Web.UI.WebControls.TextBox txtNumeroTransaccion;
 
         /// <summary>
-        /// Control RadMenu.
+        /// Control btnBuscar.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::Telerik.Web.UI.RadMenu RadMenu;
+        protected global::System.Web.UI.WebControls.Button btnBuscar;
 
         /// <summary>
-        /// Control MenuIE.
+        /// Control Vista_DetalleIngresoTrasladoBodega.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::Telerik.Web.UI.RadMenu MenuIE;
+        protected global::System.Web.UI.WebControls.Panel Vista_DetalleIngresoTrasladoBodega;
 
         /// <summary>
-        /// Control MainContent.
+        /// Control RadGridOPEINGTrasladoBodega.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ContentPlaceHolder MainContent;
+        protected global::Telerik.Web.UI.RadGrid RadGridOPEINGTrasladoBodega;
+
+        /// <summary>
+        /// Control Panel2.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel Panel2;
+
+        /// <summary>
+        /// Control RadGridDetalleIngreso.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::Telerik.Web.UI.RadGrid RadGridDetalleIngreso;
     }
 }

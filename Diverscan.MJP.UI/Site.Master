@@ -399,6 +399,10 @@
                                             <telerik:RadPanelItem runat="server" NavigateUrl="~/Operaciones/Ingresos/wf_CajaChica.aspx"
                                                 Text="Vale Caja Chica" Visible="true">
                                             </telerik:RadPanelItem>
+
+                                            <telerik:RadPanelItem runat="server" NavigateUrl="~/Operaciones/Ingresos/wf_IngresoTrasladoBodegas.aspx"
+                                                Text="Traslados Bodegas" Visible="true">
+                                            </telerik:RadPanelItem>
                                         </Items>
 
                                     </telerik:RadPanelItem>

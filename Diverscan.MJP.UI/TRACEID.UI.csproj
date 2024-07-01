@@ -297,6 +297,7 @@
     <Content Include="Mantenimiento\Articulos\Scripts.js" />
     <Content Include="Operaciones\Ingresos\123.aspx" />
     <Content Include="Operaciones\Ingresos\wf_CajaChica.aspx" />
+    <Content Include="Operaciones\Ingresos\wf_IngresoTrasladoBodegas.aspx" />
     <Content Include="Operaciones\Ingresos\wf_SinOrdenCompra.aspx" />
     <Content Include="Operaciones\Pedidos\DepuracionPedidoCursos\DepurarPedidoCurso.js" />
     <Content Include="Operaciones\Pedidos\DepuracionPedidoCursos\DepurarPedidoCursoAjax.aspx" />
@@ -2303,6 +2304,13 @@
     <Compile Include="Operaciones\Ingresos\wf_CajaChica.aspx.designer.cs">
       <DependentUpon>wf_CajaChica.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Operaciones\Ingresos\wf_IngresoTrasladoBodegas.aspx.cs">
+      <DependentUpon>wf_IngresoTrasladoBodegas.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Operaciones\Ingresos\wf_IngresoTrasladoBodegas.aspx.designer.cs">
+      <DependentUpon>wf_IngresoTrasladoBodegas.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Operaciones\Ingresos\wf_SinOrdenCompra.aspx.cs">
       <DependentUpon>wf_SinOrdenCompra.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -3378,7 +3386,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties UseJQuerySupport="False" UseAjaxifiedTemplates="False" />
+      <UserProperties UseAjaxifiedTemplates="False" UseJQuerySupport="False" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

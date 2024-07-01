@@ -22,6 +22,13 @@ namespace Diverscan.MJP.AccesoDatos.Operaciones
 
         }
 
+        public List<EIngresoTrasladoBodega> ObtenerIngresoTrasladoBodega(DateTime? fechaInicio, DateTime? fechaFin, string ordenCompra, int idBodega)
+        {
+            DBIngresoTrasladoBodega ingresoTrasladoBodega = new DBIngresoTrasladoBodega();
+            return ingresoTrasladoBodega.ObtenerIngresoTrasladoBodega(fechaInicio, fechaFin, ordenCompra, idBodega);
+
+        }
+
         public List<eIngresoCajaChica> ObtenerCCBodega(DateTime? fechaInicio, DateTime? fechaFin, string ordenCompra, int idBodega)
         {
             IngresosCajaChica ingresoCC = new IngresosCajaChica();
@@ -41,6 +48,13 @@ namespace Diverscan.MJP.AccesoDatos.Operaciones
             SinOrdenCompra SinOrdenesCompra = new SinOrdenCompra();
 
             return SinOrdenesCompra.ObtenerDetalleSinOrdenCompras(id, idBodega);
+        }
+
+        public List<EDetalleOrdenC> ObtenerDetalleIngresoTraslado(int id, int idBodega)
+        {
+            DBIngresoTrasladoBodega ingresoTrasladoBodega = new DBIngresoTrasladoBodega();
+
+            return ingresoTrasladoBodega.ObtenerDetalleIngresoTraslado(id, idBodega);
         }
 
         public List<EDetalleOrdenC> ObtenerDetalleCC(int id, int idBodega)
