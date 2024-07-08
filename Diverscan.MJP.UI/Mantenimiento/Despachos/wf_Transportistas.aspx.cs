@@ -89,9 +89,23 @@ namespace Diverscan.MJP.UI.Mantenimiento.Despachos
 
             if (!IsPostBack)
             {
+                if (!UsrLogged.IdRoles.Equals("0"))
+                {
+                    Label17.Visible = false;
+                    ddBodega.Visible = false;
+
+                    Label24.Visible = false;
+                    ddlBodegasVehiculo.Visible = false;
+
+                    _idWarehouse = UsrLogged.IdBodega;
+                    CargarTransportistas("", true);
+                    CargarVehiculos("", true);
+                }
+                else
+                {
+                    FillDDBodega();
+                }
                 CargarDDLS();
-                FillDDBodega();
-                CargarVehiculos("", true);
             }
         }
 
@@ -175,8 +189,10 @@ namespace Diverscan.MJP.UI.Mantenimiento.Despachos
                 if (Msj[1] != "") Mensaje(Msj[0], Msj[1], "");
                 Msj = n_SmartMaintenance.CargarDDL(ddlidcolor, e_TablasBaseDatos.TblColores(), UsrLogged.IdUsuario, false);
                 if (Msj[1] != "") Mensaje(Msj[0], Msj[1], "");
-              //  Msj = n_SmartMaintenance.CargarDDL(ddlidTransportista, e_TablasBaseDatos.TblTransportista(), UsrLogged.IdUsuario, true);
-                if (Msj[1] != "") Mensaje(Msj[0], Msj[1], "");
+
+                //Msj = n_SmartMaintenance.CargarDDL(ddlidTransportista, e_TablasBaseDatos.TblTransportista(), UsrLogged.IdUsuario, true);
+                //if (Msj[1] != "") Mensaje(Msj[0], Msj[1], "");
+
                 Msj = n_SmartMaintenance.CargarDDL(ddlIdTipoVehiculo, e_TablasBaseDatos.TblTiposVehiculo(), UsrLogged.IdUsuario, false);
                 if (Msj[1] != "") Mensaje(Msj[0], Msj[1], "");
                 Msj = n_SmartMaintenance.CargarDDL(ddlIdMarcaVehiculo, e_TablasBaseDatos.TblMarcasVehiculos(), UsrLogged.IdUsuario, false);
@@ -219,6 +235,8 @@ namespace Diverscan.MJP.UI.Mantenimiento.Despachos
                     _idWarehouse = Convert.ToInt32(ddBodega.SelectedValue);
                     FileExceptionWriter fileExceptionWriter = new FileExceptionWriter();
                     NSectorWareHouse nSectorWare = new NSectorWareHouse(fileExceptionWriter);
+
+                    CargarTransportistas("", true);
                 }
             }
             catch (Exception ex)
@@ -346,18 +364,16 @@ namespace Diverscan.MJP.UI.Mantenimiento.Despachos
                 alertName.Visible = false;
                 alertPhone.Visible = false;
                 alertMail.Visible = false;
-                if (ddlIdCompania.SelectedIndex <= 0)
-                {
-                    Mensaje("error", "Debe Seleccionar la Compañía", "");
-                    return;
-                }
 
-                if (ddBodega.SelectedIndex <= 0)
+                if (UsrLogged.IdRoles.Equals("0"))
                 {
-                    Mensaje("error", "Debe Seleccionar una bodega", "");
-                    return;
+                    if (ddBodega.SelectedIndex <= 0)
+                    {
+                        Mensaje("error", "Debe Seleccionar una bodega", "");
+                        return;
+                    }
                 }
-                long idBodega = long.Parse(ddBodega.SelectedValue);
+                
                 String nombre = txtNombre.Text;
                 String telefono = txtTelefono.Text;
                 String correo = txtCorreo.Text;
@@ -377,7 +393,7 @@ namespace Diverscan.MJP.UI.Mantenimiento.Despachos
 
 
                 String mensaje = _dTransportista.IngresarTransportista(
-                    new ETransportista(idBodega,nombre,telefono,correo,comentario,true));
+                    new ETransportista(_idWarehouse,nombre,telefono,correo,comentario,true));
                 Mensaje("info", mensaje, "");
             }
             catch (Exception ex) 
@@ -400,19 +416,17 @@ namespace Diverscan.MJP.UI.Mantenimiento.Despachos
                 alertName.Visible = false;
                 alertPhone.Visible = false;
                 alertMail.Visible = false;
-                if (ddlIdCompania.SelectedIndex <= 0)
+
+                if (UsrLogged.IdRoles.Equals("0"))
                 {
-                    Mensaje("error", "Debe Seleccionar la Compañía", "");
-                    return;
+                    if (ddBodega.SelectedIndex <= 0)
+                    {
+                        Mensaje("error", "Debe Seleccionar una bodega", "");
+                        return;
+                    }
                 }
 
-                if (ddBodega.SelectedIndex <= 0)
-                {
-                    Mensaje("error", "Debe Seleccionar una bodega", "");
-                    return;
-                }
                 long idTransportista = long.Parse(txtidTransportista.Text);
-                long idBodega = long.Parse(ddBodega.SelectedValue);
                 String nombre = txtNombre.Text;
                 String telefono = txtTelefono.Text;
                 String correo = txtCorreo.Text;
@@ -432,7 +446,7 @@ namespace Diverscan.MJP.UI.Mantenimiento.Despachos
 
 
                 String mensaje = _dTransportista.ActualizarTransportista(
-                    new ETransportista(idTransportista,idBodega, nombre, telefono, correo, comentario, activo));
+                    new ETransportista(idTransportista,_idWarehouse, nombre, telefono, correo, comentario, activo));
                 Mensaje("info", mensaje, "");
             }
             catch (Exception ex)
@@ -449,7 +463,11 @@ namespace Diverscan.MJP.UI.Mantenimiento.Despachos
             CargarDDLS();
             LimpiarTransportistas();
             txtSearchTransportistas.Text = "";
-            CargarTransportistas("", true);
+
+            if (!UsrLogged.IdRoles.Equals("0"))
+            {
+                CargarTransportistas("", true);
+            }
         }
 
         protected void Btnlimpiar2_Click(object sender, EventArgs e)
@@ -457,7 +475,11 @@ namespace Diverscan.MJP.UI.Mantenimiento.Despachos
             CargarDDLS();
             LimpiarVehiculos();
             txtSearchVehiculos.Text = "";
-            CargarVehiculos("", true);
+
+            if (!UsrLogged.IdRoles.Equals("0"))
+            {
+                CargarVehiculos("", true);
+            }
         }
 
         #endregion //EventosFrontEnd
@@ -483,11 +505,20 @@ namespace Diverscan.MJP.UI.Mantenimiento.Despachos
                 SQL = "EXEC SP_BuscarTransportistas '" + idCompania + "', '" + buscar + "', '" + _idWarehouse + "'";
                 DSDatos = n_ConsultaDummy.GetDataSet(SQL, UsrLogged.IdUsuario);
 
+                if (!UsrLogged.IdRoles.Equals("0"))
+                {
+                    List<ETransportista> transportistas = _dTransportista.BuscarTransportistaXBodega(_idWarehouse);
+                    ddlidTransportista.DataSource = transportistas;
+                    ddlidTransportista.DataTextField = "Nombre";
+                    ddlidTransportista.DataValueField = "IdTransportista";
+                    ddlidTransportista.DataBind();
+                    ddlidTransportista.Items.Insert(0, new ListItem("--Seleccione--", "0"));
+                }
+
                 RadGridTransportistas.DataSource = DSDatos;
                 if (pestana)
                 {
                     RadGridTransportistas.DataBind();
-                    Mensaje("ok", "Se ha encontrado un registros." , "");
                 }
             }
             catch (Exception ex)
@@ -499,7 +530,6 @@ namespace Diverscan.MJP.UI.Mantenimiento.Despachos
         private void LimpiarTransportistas()
         {
             txtidTransportista.Text = "";
-            ddlIdCompania.SelectedValue = "--Seleccionar--";
             txtNombre.Text = "";
             txtTelefono.Text = "";
             txtCorreo.Text = "";
@@ -527,7 +557,10 @@ namespace Diverscan.MJP.UI.Mantenimiento.Despachos
         {
             try
             {
-                CargarTransportistas(txtSearchTransportistas.Text.ToString().Trim(), false);
+                if (!UsrLogged.IdRoles.Equals("0"))
+                {
+                    CargarTransportistas(txtSearchTransportistas.Text.ToString().Trim(), false);
+                }
                 //CargarTransportistas("", false);
             }
             catch (Exception ex)
@@ -575,7 +608,11 @@ namespace Diverscan.MJP.UI.Mantenimiento.Despachos
             {
                 if (ddlBodegasVehiculo.SelectedIndex > 0)
                 {
-                    _idWarehouse = Convert.ToInt32(ddlBodegasVehiculo.SelectedValue);
+                    if (UsrLogged.IdRoles.Equals("0"))
+                    {
+                        _idWarehouse = Convert.ToInt32(ddlBodegasVehiculo.SelectedValue);
+                    }
+
                     FileExceptionWriter fileExceptionWriter = new FileExceptionWriter();
                     List<ETransportista> transportistas = _dTransportista.BuscarTransportistaXBodega(_idWarehouse);
                     ddlidTransportista.DataSource = transportistas;
@@ -583,9 +620,11 @@ namespace Diverscan.MJP.UI.Mantenimiento.Despachos
                     ddlidTransportista.DataValueField = "IdTransportista";
                     ddlidTransportista.DataBind();
                     ddlidTransportista.Items.Insert(0, new ListItem("--Seleccione--", "0"));
-                   // ddlidTransportista.Items[0].Attributes.Add("disabled", "disabled");
-                    
-                   //NSectorWareHouse nSectorWare = new NSectorWareHouse(fileExceptionWriter);
+
+                    CargarVehiculos("", true);
+                    // ddlidTransportista.Items[0].Attributes.Add("disabled", "disabled");
+
+                    //NSectorWareHouse nSectorWare = new NSectorWareHouse(fileExceptionWriter);
 
                 }
             }
@@ -605,7 +644,6 @@ namespace Diverscan.MJP.UI.Mantenimiento.Despachos
 
                 RadGridVehiculos.DataSource = _vehiculosList;
                 RadGridVehiculos.DataBind();
-                Mensaje("ok", "Se ha encontrado un registros.", "");
 
             }
             catch (Exception ex)
@@ -627,19 +665,19 @@ namespace Diverscan.MJP.UI.Mantenimiento.Despachos
                     return;
                 }
 
-                if (ddlIdTipoVehiculo.SelectedIndex <= 0)
+                if (ddlIdTipoVehiculo.SelectedIndex < 0)
                 {
                     Mensaje("error", "Debe Seleccionar un tipo de vehiculo", "");
                     return;
                 }
 
-                if (ddlIdMarcaVehiculo.SelectedIndex <= 0)
+                if (ddlIdMarcaVehiculo.SelectedIndex < 0)
                 {
                     Mensaje("error", "Debe Seleccionar una marca vehiculo", "");
                     return;
                 }
 
-                if (ddlidcolor.SelectedIndex <= 0)
+                if (ddlidcolor.SelectedIndex < 0)
                 {
                     Mensaje("error", "Debe Seleccionar el color del vehiculo", "");
                     return;
@@ -654,9 +692,8 @@ namespace Diverscan.MJP.UI.Mantenimiento.Despachos
                 decimal volumen = Convert.ToDecimal(txtCapacidadVolumen.Text);
                 int peso = Convert.ToInt32(txtCapacidadPeso.Text);
                 string comentario = txtComentario.Text;
-                int idBodega = ((e_Usuario)Session["USUARIO"]).IdBodega;
                 int idUsuarioRegistro = Convert.ToInt32(((e_Usuario)Session["USUARIO"]).IdUsuario);
-                SEVehiculo vehiculo = new SEVehiculo(idTransportista, idTipo, idMarca, idColor, numeroPlaca, modelo, volumen, peso, comentario, idBodega, true, idUsuarioRegistro);
+                SEVehiculo vehiculo = new SEVehiculo(idTransportista, idTipo, idMarca, idColor, numeroPlaca, modelo, volumen, peso, comentario, _idWarehouse, true, idUsuarioRegistro);
                 // string[] Msj = n_SmartMaintenance.AgregarDatos(Panel, e_TablasBaseDatos.TblVehiculos(), ToleranciaAgregar, UsrLogged.IdUsuario);
                 // if (Msj[1] != "") Mensaje(Msj[0], Msj[1], "");
                 DVehiculo dVehiculo = new DVehiculo();
@@ -718,9 +755,8 @@ namespace Diverscan.MJP.UI.Mantenimiento.Despachos
                 decimal volumen = Convert.ToDecimal(txtCapacidadVolumen.Text);
                 int peso = Convert.ToInt32(txtCapacidadPeso.Text);
                 string comentario = txtComentario.Text;
-                int idBodega = ((e_Usuario)Session["USUARIO"]).IdBodega;
                 int idUsuarioRegistro = Convert.ToInt32(((e_Usuario)Session["USUARIO"]).IdUsuario);
-                SEVehiculo vehiculo = new SEVehiculo(idTransportista, idTipo, idMarca, idColor, numeroPlaca, modelo, volumen, peso, comentario, idBodega, true, idUsuarioRegistro);
+                SEVehiculo vehiculo = new SEVehiculo(idTransportista, idTipo, idMarca, idColor, numeroPlaca, modelo, volumen, peso, comentario, _idWarehouse, true, idUsuarioRegistro);
                 vehiculo.IdVehiculo = idVehiculo;
                 DVehiculo dVehiculo = new DVehiculo();
                 string result = dVehiculo.UpdateVehiculo(vehiculo);

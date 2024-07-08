@@ -127,9 +127,21 @@ namespace Diverscan.MJP.UI.Operaciones.Certificacion
             }
             if (!IsPostBack)
             {
-
                 SetDatetime();
-                FillDDBodega();
+
+                if (!UsrLogged.IdRoles.Equals("0"))
+                {
+                    Label17.Visible = false;
+                    ddBodega.Visible = false;
+
+                    _idWarehouse = UsrLogged.IdBodega;
+                    cargarSectores();
+                }
+                else
+                {
+                    FillDDBodega();
+                }
+                
                 TraducirFiltrosTelerik.traducirFiltros(RadGridDetalleSalida.FilterMenu);
 
                 //ValidateButtonCertificar();
@@ -179,20 +191,22 @@ namespace Diverscan.MJP.UI.Operaciones.Certificacion
                 fechaInicioBusqueda = RDPFechaInicio.SelectedDate.Value;
                 fechaFinBusqueda = RDPFechaFinal.SelectedDate.Value;
                 string idInternoOrder = txtSearch.Text.Trim();
-                int idWarehouse = 0;
 
-                if (ddBodega.SelectedIndex > 0)
+                if (UsrLogged.IdRoles.Equals("0"))
                 {
-                    idWarehouse = Convert.ToInt32(ddBodega.SelectedValue.ToString());
+                    if (ddBodega.SelectedIndex > 0)
+                    {
+                        _idWarehouse = Convert.ToInt32(ddBodega.SelectedValue.ToString());
+                    }
                 }
-
-                if (string.IsNullOrEmpty(idInternoOrder) && ddBodega.SelectedIndex == 0)
+                
+                if (string.IsNullOrEmpty(idInternoOrder) && _idWarehouse == default(int))
                 {
                     Mensaje("error", "Debe ingresar los campos de busquedad requeridos!!!", "");
                     return;
                 }
                 else
-                    _listMaestros = nCerficacion.GetOrdersToCertificated(idWarehouse, fechaInicioBusqueda, fechaFinBusqueda, idInternoOrder);
+                    _listMaestros = nCerficacion.GetOrdersToCertificated(_idWarehouse, fechaInicioBusqueda, fechaFinBusqueda, idInternoOrder);
 
                 RGAprobarSalida.DataSource = _listMaestros;
                 RGAprobarSalida.DataBind();
@@ -235,26 +249,29 @@ namespace Diverscan.MJP.UI.Operaciones.Certificacion
             var prueba = RGAprobarSalida;
             if (e.CommandName == "btnVerDetalle")
             {
-                int idMaestroSolicitud = -1, idBodega = -1;
+                int idMaestroSolicitud = -1;//, idBodega = -1;  --Se usa la variable global en vez de esta, no se entiende el porque -1
                 try
                 {
-                    if (ddBodega.SelectedIndex > 0)
+                    if (UsrLogged.IdRoles.Equals("0"))
                     {
-                        idBodega = Convert.ToInt32(ddBodega.SelectedValue);
-                    }
-                    else
-                    {
-                        Mensaje("error", "¡Debe seleccionar una bodega!", "");
-                        return;
+                        if (ddBodega.SelectedIndex > 0)
+                        {
+                            _idWarehouse = Convert.ToInt32(ddBodega.SelectedValue);
+                        }
+                        else
+                        {
+                            Mensaje("error", "¡Debe seleccionar una bodega!", "");
+                            return;
+                        }
                     }
 
                     GridDataItem item = (GridDataItem)e.Item;
                     idMaestroSolicitud = Convert.ToInt32(item["IdMaestroSolicitud"].Text);
 
-                    if (idBodega > 0 && idMaestroSolicitud > 0)
+                    if (_idWarehouse > 0 && idMaestroSolicitud > 0)
                     {
                         _idOla = idMaestroSolicitud;
-                        GetGetDetalleSalidaArticulosSector(idBodega, idMaestroSolicitud);
+                        GetGetDetalleSalidaArticulosSector(_idWarehouse, idMaestroSolicitud);
                     }
                 }
                 catch (Exception ex)
@@ -268,18 +285,14 @@ namespace Diverscan.MJP.UI.Operaciones.Certificacion
 
         protected void ddBodega_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (ddBodega.SelectedIndex > 0)
+            if (UsrLogged.IdRoles.Equals("0"))
             {
-                _idWarehouse = Convert.ToInt32(ddBodega.SelectedValue);
-                FileExceptionWriter fileExceptionWriter = new FileExceptionWriter();
-                NSectorWareHouse nSectorWare = new NSectorWareHouse(fileExceptionWriter);
+                if (ddBodega.SelectedIndex > 0)
+                {
+                    _idWarehouse = Convert.ToInt32(ddBodega.SelectedValue);
 
-                _sectorsWarehouse = nSectorWare.GetSectorsWarehouse(_idWarehouse);
-                ddSector.DataSource = _sectorsWarehouse;
-                ddSector.DataTextField = "Name";
-                ddSector.DataValueField = "IdSectorWarehouse";
-                ddSector.DataBind();
-                ddSector.Items.Insert(0, new ListItem("--Todos--", "" + _sectorsWarehouse.Count));
+                    cargarSectores();
+                }   
             }
         }
 
@@ -523,14 +536,13 @@ namespace Diverscan.MJP.UI.Operaciones.Certificacion
         protected void ddAlistador_SelectedIndexChanged(object sender, EventArgs e)
         {
             List<E_CertificacionDetalle> articulosPorSector = new List<E_CertificacionDetalle>();
-            if (ddSector.SelectedItem.Text == "--Todos--")
+            if (ddAlistador.SelectedItem.Text == "--Todos--")
             {
                 articulosPorSector = _listaDetalleCertificacion;              
             }
             else
             {
-                 articulosPorSector = _listaDetalleCertificacion.FindAll(x => x.NombreSector == ddSector.SelectedItem.Text);
-              
+                 articulosPorSector = _listaDetalleCertificacion.FindAll(x => x.NombreUsuario == ddAlistador.SelectedItem.Text);
             }
 
             var nombreAlistador = ddAlistador.SelectedItem.Text;
@@ -545,6 +557,19 @@ namespace Diverscan.MJP.UI.Operaciones.Certificacion
                 RadGridDetalleSalida.DataSource = articulosPorSectorAlistador;
                 RadGridDetalleSalida.DataBind();
             }
+        }
+
+        public void cargarSectores() 
+        {
+            FileExceptionWriter fileExceptionWriter = new FileExceptionWriter();
+            NSectorWareHouse nSectorWare = new NSectorWareHouse(fileExceptionWriter);
+
+            _sectorsWarehouse = nSectorWare.GetSectorsWarehouse(_idWarehouse);
+            ddSector.DataSource = _sectorsWarehouse;
+            ddSector.DataTextField = "Name";
+            ddSector.DataValueField = "IdSectorWarehouse";
+            ddSector.DataBind();
+            ddSector.Items.Insert(0, new ListItem("--Todos--", "" + _sectorsWarehouse.Count));
         }
     }
 }

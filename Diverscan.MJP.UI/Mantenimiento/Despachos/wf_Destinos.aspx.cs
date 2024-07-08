@@ -26,7 +26,16 @@ namespace Diverscan.MJP.UI.Mantenimiento.Despachos
             }   
             if (!IsPostBack)
             {
-                CargarDDLS();
+                if (!UsrLogged.IdRoles.Equals("0"))
+                {
+                    RadPageView1.Enabled = false;
+                    RadPageView2.Enabled = false;
+                    RadPageView3.Enabled = false;
+                }
+                else
+                {
+                    CargarDDLS();
+                }
             }
         }
 
@@ -127,10 +136,10 @@ namespace Diverscan.MJP.UI.Mantenimiento.Despachos
                 string[] Msj = n_SmartMaintenance.CargarDDL(ddlIdCompania, e_TablasBaseDatos.TblCompania(), UsrLogged.IdUsuario, true);
                 if (Msj[1] != "") Mensaje(Msj[0], Msj[1], "");
 
-                Msj = n_SmartMaintenance.CargarDDL(ddlidTipoDestino, e_TablasBaseDatos.TblTipoDestino(), UsrLogged.IdUsuario, true);
+                Msj = n_SmartMaintenance.CargarDDL(ddlidDestino, e_TablasBaseDatos.TblDestino(), UsrLogged.IdUsuario, true);
                 if (Msj[1] != "") Mensaje(Msj[0], Msj[1], "");
 
-                Msj = n_SmartMaintenance.CargarDDL(ddlidDestino, e_TablasBaseDatos.TblDestino(), UsrLogged.IdUsuario, true);
+                Msj = n_SmartMaintenance.CargarDDL(ddlidTipoDestino, e_TablasBaseDatos.TblTipoDestino(), UsrLogged.IdUsuario, true);
                 if (Msj[1] != "") Mensaje(Msj[0], Msj[1], "");
 
                 Msj = n_SmartMaintenance.CargarDDL(ddlidDia, e_TablasBaseDatos.TblDiaSemana(), UsrLogged.IdUsuario, false);

@@ -162,9 +162,20 @@ namespace Diverscan.MJP.UI.Operaciones.Certificacion
             }
             if (!IsPostBack)
             {
-
                 SetDatetime();
-                FillDDBodega();
+
+                if (!UsrLogged.IdRoles.Equals("0"))
+                {
+                    Label17.Visible = false;
+                    ddBodega.Visible = false;
+
+                    _idWarehouse = UsrLogged.IdBodega;
+                }
+                else
+                {
+                    FillDDBodega();
+                }
+
                 //fillddPrioridad();
             }
         }
@@ -221,7 +232,7 @@ namespace Diverscan.MJP.UI.Operaciones.Certificacion
             ddBodega.DataBind();
             ddBodega.Items.Insert(0, new ListItem("--Seleccione--", "0"));
             ddBodega.Items[0].Attributes.Add("disabled", "disabled");
-        }   
+        }
         public void Mensaje(string sTipo, string sMensaje, string sLLenado)
         {
             switch (sTipo)
@@ -246,7 +257,7 @@ namespace Diverscan.MJP.UI.Operaciones.Certificacion
             {
                 _idWarehouse = Convert.ToInt32(ddBodega.SelectedValue);
                 FileExceptionWriter fileExceptionWriter = new FileExceptionWriter();
-             //   NSectorWareHouse nSectorWare = new NSectorWareHouse(fileExceptionWriter);              
+                //   NSectorWareHouse nSectorWare = new NSectorWareHouse(fileExceptionWriter);              
             }
         }
         protected void btnBuscar_Click(object sender, EventArgs e)
@@ -262,11 +273,13 @@ namespace Diverscan.MJP.UI.Operaciones.Certificacion
                 fechaInicioBusqueda = RDPFechaInicio.SelectedDate.Value;
                 fechaFinBusqueda = RDPFechaFinal.SelectedDate.Value;
                 string idInternoOrder = txtSearch.Text.Trim();
-                int idWarehouse = 0;
 
-                if (ddBodega.SelectedIndex > 0)
+                if (UsrLogged.IdRoles.Equals("0"))
                 {
-                    idWarehouse = Convert.ToInt32(ddBodega.SelectedValue.ToString());
+                    if (ddBodega.SelectedIndex > 0)
+                    {
+                        _idWarehouse = Convert.ToInt32(ddBodega.SelectedValue.ToString());
+                    }
                 }
 
                 if (string.IsNullOrEmpty(idInternoOrder) && ddBodega.SelectedIndex == 0)
@@ -275,7 +288,7 @@ namespace Diverscan.MJP.UI.Operaciones.Certificacion
                     return;
                 }
                 else
-                    _listMaestros = nOPESALMaestroSolicitud.GetOrdersToEnlist(idWarehouse, fechaInicioBusqueda, fechaFinBusqueda, idInternoOrder);
+                    _listMaestros = nOPESALMaestroSolicitud.GetOrdersToEnlist(_idWarehouse, fechaInicioBusqueda, fechaFinBusqueda, idInternoOrder);
 
                 RGMaestroSolicitud.DataSource = _listMaestros;
                 RGMaestroSolicitud.DataBind();
@@ -295,7 +308,7 @@ namespace Diverscan.MJP.UI.Operaciones.Certificacion
             {
                 Mensaje("error", "Ops! Ha ocurrido un Error, Codigo:TID-UI-OPE-ING-000002" + ex.Message, "");
             }
-        }       
+        }
         protected void RGMaestroSolicitud_ItemCommand(object sender, Telerik.Web.UI.GridCommandEventArgs e)
         {
             var prueba = RGMaestroSolicitud;
@@ -307,7 +320,7 @@ namespace Diverscan.MJP.UI.Operaciones.Certificacion
 
 
                     _idOla = long.Parse(item["IdInterno"].Text);
-                  
+
                     _listaSSCCCertificados = _nSSCC.ObtenerSSCCXIdSolicitud(_idOla);
                     RGSSCCOla.DataSource = _listaSSCCCertificados;
                     RGSSCCOla.DataBind();
@@ -339,82 +352,82 @@ namespace Diverscan.MJP.UI.Operaciones.Certificacion
                         break;
                     }
             }
-        }                      
-       /* private void GenerarReportePorOla()
-        {
-            if (_idOla < 0)
-            {
-                Mensaje("error", "Debe seleccionar una Ola", "");
-                return;
-            }
-
-            if (_idSSCC < 0)
-            {
-                Mensaje("error", "Debe seleccionar un SSCC", "");
-                return;
-            }
-
-            if (_listaDetalleSSCC.Count == 0)
-            {
-                Mensaje("error", "El SSCC seleccionado no contine articulos", "");
-                return;
-            }
-
-
-            ReportDocument report = new CrystalReportes.SSCCCertificados.CRSSCCCertificados();
-
-            List<e_OPESALMaestroSolicitud> maestroSolicitudLista =
-                new List<e_OPESALMaestroSolicitud>();
-            e_OPESALMaestroSolicitud maestroSolicitud = _listMaestros.
-                Find(x => x.IdMaestroSolicitud == _idOla);
-            maestroSolicitudLista.Add(maestroSolicitud);
-
-            List<ESSCC> eSSCCCertificadoLista = new List<ESSCC>();
-            ESSCC sSCCCertificado = _listaSSCCCertificados.
-                Find(x => x.IdSSCC == _idSSCC);
-            eSSCCCertificadoLista.Add(sSCCCertificado);
-
-
-            var fileName = "Certificacion_" + sSCCCertificado.ConsecutivoSSCC + "_"  + ".pdf";
-            var path = HttpRuntime.AppDomainAppPath + @"CrystalReportes" + @"\SSCCCertificados\" + fileName;            
-
-            //var tablename1 = report.Database.Tables[0];            
-            //var tablename2 = report.Database.Tables[1];
-            //var tablename3 = report.Database.Tables[2];
-
-            report.Database.Tables[0].SetDataSource(_listaDetalleSSCC);
-            report.Database.Tables[1].SetDataSource(maestroSolicitudLista);
-            report.Database.Tables[2].SetDataSource(eSSCCCertificadoLista);
-
-            ExportOptions CrExportOptions;
-            DiskFileDestinationOptions CrDiskFileDestinationOptions = new DiskFileDestinationOptions();
-            PdfRtfWordFormatOptions CrFormatTypeOptions = new PdfRtfWordFormatOptions();
-            CrDiskFileDestinationOptions.DiskFileName = path;
-            CrExportOptions = report.ExportOptions;
-            {
-                CrExportOptions.ExportDestinationType = ExportDestinationType.DiskFile;
-                CrExportOptions.ExportFormatType = ExportFormatType.PortableDocFormat;
-                CrExportOptions.DestinationOptions = CrDiskFileDestinationOptions;
-                CrExportOptions.FormatOptions = CrFormatTypeOptions;
-            }
-            report.Export();
-            report.Close();
-            report.Dispose();
-            GC.Collect();
-
-            Response.AddHeader("Content-Type", "application/octet-stream");
-            Response.AddHeader("Content-Transfer-Encoding", "Binary");
-            Response.AddHeader("Content-disposition", "attachment; filename=\"" + fileName + "\"");
-            //Response.AddHeader("Content-disposition", "attachment; filename=\"Certificacion.pdf\"");
-            Response.WriteFile(path);
-            Response.End();
-
         }
-        protected void btnGenerarPdf_Click(object sender, EventArgs e)
-        {
-            GenerarReportePorOla();
-        }
-        */
+        /* private void GenerarReportePorOla()
+         {
+             if (_idOla < 0)
+             {
+                 Mensaje("error", "Debe seleccionar una Ola", "");
+                 return;
+             }
+
+             if (_idSSCC < 0)
+             {
+                 Mensaje("error", "Debe seleccionar un SSCC", "");
+                 return;
+             }
+
+             if (_listaDetalleSSCC.Count == 0)
+             {
+                 Mensaje("error", "El SSCC seleccionado no contine articulos", "");
+                 return;
+             }
+
+
+             ReportDocument report = new CrystalReportes.SSCCCertificados.CRSSCCCertificados();
+
+             List<e_OPESALMaestroSolicitud> maestroSolicitudLista =
+                 new List<e_OPESALMaestroSolicitud>();
+             e_OPESALMaestroSolicitud maestroSolicitud = _listMaestros.
+                 Find(x => x.IdMaestroSolicitud == _idOla);
+             maestroSolicitudLista.Add(maestroSolicitud);
+
+             List<ESSCC> eSSCCCertificadoLista = new List<ESSCC>();
+             ESSCC sSCCCertificado = _listaSSCCCertificados.
+                 Find(x => x.IdSSCC == _idSSCC);
+             eSSCCCertificadoLista.Add(sSCCCertificado);
+
+
+             var fileName = "Certificacion_" + sSCCCertificado.ConsecutivoSSCC + "_"  + ".pdf";
+             var path = HttpRuntime.AppDomainAppPath + @"CrystalReportes" + @"\SSCCCertificados\" + fileName;            
+
+             //var tablename1 = report.Database.Tables[0];            
+             //var tablename2 = report.Database.Tables[1];
+             //var tablename3 = report.Database.Tables[2];
+
+             report.Database.Tables[0].SetDataSource(_listaDetalleSSCC);
+             report.Database.Tables[1].SetDataSource(maestroSolicitudLista);
+             report.Database.Tables[2].SetDataSource(eSSCCCertificadoLista);
+
+             ExportOptions CrExportOptions;
+             DiskFileDestinationOptions CrDiskFileDestinationOptions = new DiskFileDestinationOptions();
+             PdfRtfWordFormatOptions CrFormatTypeOptions = new PdfRtfWordFormatOptions();
+             CrDiskFileDestinationOptions.DiskFileName = path;
+             CrExportOptions = report.ExportOptions;
+             {
+                 CrExportOptions.ExportDestinationType = ExportDestinationType.DiskFile;
+                 CrExportOptions.ExportFormatType = ExportFormatType.PortableDocFormat;
+                 CrExportOptions.DestinationOptions = CrDiskFileDestinationOptions;
+                 CrExportOptions.FormatOptions = CrFormatTypeOptions;
+             }
+             report.Export();
+             report.Close();
+             report.Dispose();
+             GC.Collect();
+
+             Response.AddHeader("Content-Type", "application/octet-stream");
+             Response.AddHeader("Content-Transfer-Encoding", "Binary");
+             Response.AddHeader("Content-disposition", "attachment; filename=\"" + fileName + "\"");
+             //Response.AddHeader("Content-disposition", "attachment; filename=\"Certificacion.pdf\"");
+             Response.WriteFile(path);
+             Response.End();
+
+         }
+         protected void btnGenerarPdf_Click(object sender, EventArgs e)
+         {
+             GenerarReportePorOla();
+         }
+         */
         #endregion
     }
 }

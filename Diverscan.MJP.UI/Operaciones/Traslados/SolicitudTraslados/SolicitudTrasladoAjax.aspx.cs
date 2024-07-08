@@ -15,6 +15,7 @@ namespace Diverscan.MJP.UI.Operaciones.Traslados.SolicitudTraslados
             //Instanciar la BD
             DBTrasladoBodegas dBTrasladoBodegas = new DBTrasladoBodegas();
             DBIngresoTrasladoBodega dBIngresoTrasladoBodegas = new DBIngresoTrasladoBodega();
+            EIngresoTrasladoBodega ingresoTraslado = new EIngresoTrasladoBodega();
 
             //Obtener la informacion del Usuario
             e_Usuario _eUsuario = (e_Usuario)Session["USUARIO"];
@@ -39,7 +40,7 @@ namespace Diverscan.MJP.UI.Operaciones.Traslados.SolicitudTraslados
 
 
                 case "CrearSolicitudTraslado":
-                    string NumeroTransaccion = Request.Form["NumeroTransaccion"];
+                    string NumeroTransaccion = Request.Form["NumeroTransaccion"], IdInterno = Request.Form["IdInterno"];
                     int CantidadSolicitada;
 
                     if (!string.IsNullOrWhiteSpace(NumeroTransaccion) && int.TryParse(Request.Form["CantidadSolicitada"], out CantidadSolicitada))
@@ -52,13 +53,13 @@ namespace Diverscan.MJP.UI.Operaciones.Traslados.SolicitudTraslados
                         string respuesta = dBTrasladoBodegas.CrearSolicitudTrasladoBodega(solicitudTraslado);
 
                         //Instanciar la clase de Ingreso de Traslado
-                        EIngresoTrasladoBodega ingresoTraslado = new EIngresoTrasladoBodega();
                         ingresoTraslado.NumeroTransaccion = NumeroTransaccion;
                         ingresoTraslado.IdBodega = IdBodega;
                         ingresoTraslado.IdBodegaTraslado = IdBodegaDestino;
                         ingresoTraslado.Comentario = "Ingreso por traslado entre Bodegas. Numero Transacción: " + NumeroTransaccion;
                         ingresoTraslado.IdUsuario = IdUsuario;
                         ingresoTraslado.IdArticulo = IdArticulo;
+                        ingresoTraslado.IdInterno = IdInterno;
                         ingresoTraslado.CantidadSolicitada = CantidadSolicitada;
 
                         if (dBIngresoTrasladoBodegas.CrearIngresoTrasladoBodegas(ingresoTraslado).Equals("Ok"))
@@ -79,13 +80,15 @@ namespace Diverscan.MJP.UI.Operaciones.Traslados.SolicitudTraslados
 
 
                 case "ActualizarSolicitudTraslado":
-                    //Obtener los parametros que se envian
-                    int idSolicitudAct = Convert.ToInt32(Request.Form["IdSolicitudTraslado"]);
-                    int IdArticuloAct = Convert.ToInt32(Request.Form["IdArticulo"]);
-                    int CantidadSolicitadaAct = Convert.ToInt32(Request.Form["CantidadSolicitada"]);
+                    ingresoTraslado.IdSolicitudTraslado = Convert.ToInt32(Request.Form["IdSolicitudTraslado"]);
+                    ingresoTraslado.IdArticulo = Convert.ToInt32(Request.Form["IdArticulo"]);
+                    ingresoTraslado.NombreArticulo = Request.Form["NombreArticulo"];
+                    ingresoTraslado.IdInterno = Request.Form["IdInterno"];
+                    ingresoTraslado.IdUsuario = IdUsuario;
+                    ingresoTraslado.CantidadSolicitada = Convert.ToInt32(Request.Form["CantidadSolicitada"]);
 
-                    string respuestaAct = dBTrasladoBodegas.ActualizarSolicitudTrasladoBodega(idSolicitudAct, IdArticuloAct, CantidadSolicitadaAct);
-                    Response.Write(respuestaAct);
+                    Response.Write(dBTrasladoBodegas.ActualizarSolicitudTrasladoBodega(ingresoTraslado));
+
                     break;
 
 

@@ -6,6 +6,7 @@ namespace Diverscan.MJP.AccesoDatos.Operaciones
     public class EIngresoTrasladoBodega
     {
         public int IdMaestroIngresoTraslado { get; set; }
+        public int IdSolicitudTraslado { get; set; }
         public int IdBodega { get; set; }
         public int IdBodegaTraslado { get; set; }
         public string IdCompania { get; set; }
@@ -21,6 +22,8 @@ namespace Diverscan.MJP.AccesoDatos.Operaciones
         public double PorcentajeRecepcion { get; set; }
 
         public int IdArticulo { get; set; }
+        public string NombreArticulo { get; set; }
         public int CantidadSolicitada { get; set; }
+        public string IdInterno { get; set; }
     }
 }

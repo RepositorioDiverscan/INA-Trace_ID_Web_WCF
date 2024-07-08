@@ -133,7 +133,7 @@ namespace Diverscan.MJP.AccesoDatos.Operaciones
             db.AddInParameter(dbCommand, "@IdBodegaTraslado", DbType.Int32, eIngresoTraslado.IdBodegaTraslado);
             db.AddInParameter(dbCommand, "@comentario", DbType.String, eIngresoTraslado.Comentario);
             db.AddInParameter(dbCommand, "@idUsuario", DbType.Int32, eIngresoTraslado.IdUsuario);
-            db.AddInParameter(dbCommand, "@idArticulo", DbType.Int32, eIngresoTraslado.IdArticulo);
+            db.AddInParameter(dbCommand, "@idInterno", DbType.String, eIngresoTraslado.IdInterno);
             db.AddInParameter(dbCommand, "@cantidadSolicitada", DbType.Int32, eIngresoTraslado.CantidadSolicitada);
 
             using (IDataReader reader = db.ExecuteReader(dbCommand))

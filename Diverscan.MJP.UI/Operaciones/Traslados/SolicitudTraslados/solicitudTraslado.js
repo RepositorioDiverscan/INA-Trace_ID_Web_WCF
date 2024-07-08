@@ -93,6 +93,7 @@
                 Opcion: 'CrearSolicitudTraslado',
                 IdBodegaDestino: self.articuloSolicitar.IdBodega,
                 IdArticulo: self.articuloSolicitar.IdArticulo,
+                IdInterno: self.articuloSolicitar.IdInterno,
                 NumeroTransaccion: self.txt_NumeroTrans,
                 CantidadSolicitada: self.txt_cantidadTB,
             }, function (data) {
@@ -113,6 +114,8 @@
                 Opcion: 'ActualizarSolicitudTraslado',
                 IdSolicitudTraslado: self.idSolicitudTraslado,
                 IdArticulo: self.articuloActualizar.IdArticulo,
+                NombreArticulo: self.articuloActualizar.Articulo,
+                IdInterno: self.articuloActualizar.IdInterno,
                 CantidadSolicitada: self.txt_cantidadAct,
             }, function (data) {
                 $('#ModalCantidadActualizar').modal('hide');

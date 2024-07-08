@@ -25,7 +25,7 @@ namespace Diverscan.MJP.UI.Operaciones.Salidas
         DataSet DS = new DataSet();
         static DataSet DSDatosExport = new DataSet(); //Para Grid Detalle
         static string idMaestroSolicitud = "";  //Obtener el IdPara cargar el detalle
-        private string valor_bodega;       
+        private string valor_bodega;
         private List<ESectorWarehouse> _sectorsWarehouse
         {
             get
@@ -165,13 +165,27 @@ namespace Diverscan.MJP.UI.Operaciones.Salidas
             if (!IsPostBack)
             {
                 SetDatetime();
-                FillDDBodega();               
+
+                if (!UsrLogged.IdRoles.Equals("0"))
+                {
+                    Label17.Visible = false;
+                    ddBodega.Visible = false;
+
+                    _idBodega = UsrLogged.IdBodega;
+                    cargarSectores();
+                }
+                else
+                {
+                    FillDDBodega();
+                }
+
             }
+
             TraducirFiltrosTelerik.traducirFiltros(RGAprobarSalida.FilterMenu);
             TraducirFiltrosTelerik.traducirFiltros(RadGridDetalleSalida.FilterMenu);
             TraducirFiltrosTelerik.traducirFiltros(RadGridTasks.FilterMenu);
 
-        }       
+        }
 
         void UpdatePanel1_Unload(object sender, EventArgs e)
         {
@@ -196,14 +210,14 @@ namespace Diverscan.MJP.UI.Operaciones.Salidas
         protected void RadGrid_NeedDataSource(object sender, Telerik.Web.UI.GridNeedDataSourceEventArgs e)
         {
             try
-            {               
+            {
                 RGAprobarSalida.DataSource = _listOrders;
             }
             catch (Exception ex)
             {
                 Mensaje("error", "Ops! Ha ocurrido un Error, Codigo:TID-UI-OPE-ING-000002" + ex.Message, "");
             }
-        }    
+        }
         public void Mensaje(string sTipo, string sMensaje, string sLLenado)
         {
             switch (sTipo)
@@ -254,24 +268,26 @@ namespace Diverscan.MJP.UI.Operaciones.Salidas
                 fechaInicioBusqueda = RDPFechaInicio.SelectedDate.Value;
                 fechaFinBusqueda = RDPFechaFinal.SelectedDate.Value;
                 string idInternoOrder = txtSearch.Text.Trim();
-                int idWarehouse = 0;
 
-             /*   var xx = ddBodega.SelectedValue;
-                var yy = ddBodega.SelectedItem;  */
+                /*   var xx = ddBodega.SelectedValue;
+                   var yy = ddBodega.SelectedItem;  */
 
-                if (ddBodega.SelectedIndex > 0)
+                if (UsrLogged.IdRoles.Equals("0"))
                 {
-                    idWarehouse = Convert.ToInt32(ddBodega.SelectedValue.ToString());
+                    if (ddBodega.SelectedIndex > 0)
+                    {
+                        _idBodega = Convert.ToInt32(ddBodega.SelectedValue.ToString());
+                    }
                 }
 
-                if (string.IsNullOrEmpty(idInternoOrder) && ddBodega.SelectedIndex == 0)
+                if (string.IsNullOrEmpty(idInternoOrder) && _idBodega == default(int))
                 {
                     Mensaje("error", "Debe ingresar los campos de busquedad requeridos!!!", "");
                     return;
                 }
                 else
-                    _listOrders = nOPESALMaestroSolicitud.GetOrdersToEnlist(idWarehouse, fechaInicioBusqueda, fechaFinBusqueda, idInternoOrder);
-                
+                    _listOrders = nOPESALMaestroSolicitud.GetOrdersToEnlist(_idBodega, fechaInicioBusqueda, fechaFinBusqueda, idInternoOrder);
+
                 RGAprobarSalida.DataSource = _listOrders;
                 RGAprobarSalida.DataBind();
             }
@@ -340,27 +356,27 @@ namespace Diverscan.MJP.UI.Operaciones.Salidas
                 GridDataItem item = (GridDataItem)e.Item;
                 idMaestroSolicitud = item["IdLineaDetalleSolicitud"].Text.Replace("&nbsp;", "");
             }
-        }       
+        }
         protected void RGAprobarSalida_ItemCommand(object source, GridCommandEventArgs e)
         {
-           
+
             if (e.CommandName == "btnVerDetalle")
-            {                
+            {
                 try
                 {
-                    if (ddBodega.SelectedIndex < 0)
-                    {                   
+                    if (UsrLogged.IdRoles.Equals("0") && ddBodega.SelectedIndex < 0)
+                    {
                         Mensaje("error", "¡Debe seleccionar una bodega!", "");
                         return;
                     }
 
-                    e.Item.Selected= true;
+                    e.Item.Selected = true;
                     GridDataItem item = (GridDataItem)e.Item;
                     _idMaestroSolicitud = Convert.ToInt32(item["IdMaestroSolicitud"].Text);
                     _chkAsignado.Visible = true;
                     _chkAsignado.Checked = false;
-                    
-                  
+
+
                     if (_idBodega > 0 && _idMaestroSolicitud > 0)
                     {
                         GetGetDetalleSalidaArticulosSector(_idBodega, _idMaestroSolicitud);
@@ -388,36 +404,31 @@ namespace Diverscan.MJP.UI.Operaciones.Salidas
             ddBodega.DataBind();
             ddBodega.Items.Insert(0, new ListItem("--Seleccione--", "0"));
             ddBodega.Items[0].Attributes.Add("disabled", "disabled");
-        }    
+        }
         protected void ddBodega_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (ddBodega.SelectedIndex > 0)
             {
                 _idBodega = Convert.ToInt32(ddBodega.SelectedValue);
-                FileExceptionWriter fileExceptionWriter = new FileExceptionWriter();
-                NSectorWareHouse nSectorWare = new NSectorWareHouse(fileExceptionWriter);
 
-                _sectorsWarehouse = nSectorWare.GetSectorsWarehouse(_idBodega);
-                ddSector.DataSource = _sectorsWarehouse;
-                ddSector.DataTextField = "Name";
-                ddSector.DataValueField = "IdSectorWarehouse";
-                ddSector.DataBind();
-                ddSector.Items.Insert(0, new ListItem("--Seleccione--", "0"));
-                ddSector.Items.Insert(1, new ListItem("--Todos--", ""+_sectorsWarehouse.Count));
-
+                cargarSectores();
             }
         }
         protected void ddSector_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (ddSector.SelectedIndex > 0)
             {
-                _idBodega = Convert.ToInt32(ddBodega.SelectedValue);
+                if (UsrLogged.IdRoles.Equals("0"))
+                {
+                    _idBodega = Convert.ToInt32(ddBodega.SelectedValue);
+                }
+
                 n_Usuario nUsuario = new n_Usuario();
                 usersList = nUsuario.GetUserByRol(_idBodega, 5); //idRol alistador = 5     
                 int idSector = Convert.ToInt32(ddSector.SelectedValue);
                 FiltrarSectores(ddSector.SelectedItem.Text);
-                if(ddSector.SelectedIndex > 1)
-                     usersList = usersList.FindAll(x => x.IdSector == idSector);
+                if (ddSector.SelectedIndex > 1)
+                    usersList = usersList.FindAll(x => x.IdSector == idSector);
 
                 ddlIdUsuario.DataSource = usersList;
                 ddlIdUsuario.DataTextField = "Nombre";
@@ -425,12 +436,12 @@ namespace Diverscan.MJP.UI.Operaciones.Salidas
                 ddlIdUsuario.DataBind();
                 ddlIdUsuario.Items.Insert(0, new ListItem("--Seleccione--", "0"));
             }
-        } 
+        }
         private void FiltrarSectores(string NombreDelSector)
         {
-           
+
             if (NombreDelSector == "--Todos--")
-            {               
+            {
                 RadGridDetalleSalida.DataSource = _listaDetalleOrden;
                 RadGridDetalleSalida.DataBind();
             }
@@ -439,26 +450,26 @@ namespace Diverscan.MJP.UI.Operaciones.Salidas
                 List<EDetalleSalidaArticuloSector> PruebaList = _listaDetalleOrden.FindAll(x => x.NombreSector == NombreDelSector);
                 RadGridDetalleSalida.DataSource = PruebaList;
                 RadGridDetalleSalida.DataBind();
-            }          
+            }
         }
         protected void btnAddTask_Click(object sender, EventArgs e)
         {
             try
             {
-              
+
                 int idusuario;
                 int idPrioridad;
                 List<long> listaIdLineaDetalleSolicitud = new List<long>();
 
 
-                    idPrioridad = 1;
-                    idusuario = Convert.ToInt32(ddlIdUsuario.SelectedValue);
-                    for (int i = 0; i < RadGridDetalleSalida.Items.Count; i++)
+                idPrioridad = 1;
+                idusuario = Convert.ToInt32(ddlIdUsuario.SelectedValue);
+                for (int i = 0; i < RadGridDetalleSalida.Items.Count; i++)
+                {
+                    var item = RadGridDetalleSalida.Items[i];
+                    var checkbox = item["CheckUsuario"].Controls[0] as CheckBox;
+                    if (checkbox.Checked)
                     {
-                        var item = RadGridDetalleSalida.Items[i];
-                        var checkbox = item["CheckUsuario"].Controls[0] as CheckBox;
-                        if (checkbox.Checked)
-                        {
 
                         long idlineaDetallesolicitud = Convert.ToInt64(item["IdLineaDetalleSolicitud"].Text);
                         listaIdLineaDetalleSolicitud.Add(idlineaDetallesolicitud);
@@ -467,12 +478,12 @@ namespace Diverscan.MJP.UI.Operaciones.Salidas
                         //InsertarTareaAlistador(idlineaDetallesolicitud, idusuario, idPrioridad);
 
                         int index = _listaDetalleOrden.FindIndex(p => p.IdLineaDetalleSolicitud == idlineaDetallesolicitud);
-                            if (index >= 0)
-                            {
-                                _listaDetalleOrden[index].DetalleAlistado = "Pendiente";
-                            }
+                        if (index >= 0)
+                        {
+                            _listaDetalleOrden[index].DetalleAlistado = "Pendiente";
                         }
                     }
+                }
 
                 if (listaIdLineaDetalleSolicitud.Count > 0)
                 {
@@ -490,7 +501,7 @@ namespace Diverscan.MJP.UI.Operaciones.Salidas
                 var cl = new clErrores();
                 cl.escribirError(ex.Message, ex.StackTrace);
                 ex.ToString();
-            }  
+            }
         }
         protected void btnRemoveTask_Click(object sender, EventArgs e)
         {
@@ -500,19 +511,19 @@ namespace Diverscan.MJP.UI.Operaciones.Salidas
                 int idTareaUsuario;
 
                 int cantidadItems = RadGridTasks.Items.Count;
-                    for (int i = 0; i < cantidadItems; i++)
+                for (int i = 0; i < cantidadItems; i++)
+                {
+                    var item = RadGridTasks.Items[i];
+                    var checkbox = item["CheckTask"].Controls[0] as CheckBox;
+                    if (checkbox != null && checkbox.Checked)
                     {
-                        var item = RadGridTasks.Items[i];
-                        var checkbox = item["CheckTask"].Controls[0] as CheckBox;
-                        if (checkbox != null && checkbox.Checked)
-                        {
-                            idTareaUsuario = Convert.ToInt32(item["IdTareaUsuario"].Text);
-                            idlineaDetalle = Convert.ToInt32(item["IdLineaDetalle"].Text);
-                            ActualizarTareaAlistador(idlineaDetalle, idTareaUsuario);
-                            _listaTareasAlistador.RemoveAll(x => x.IdTareaUsuario == idTareaUsuario);
+                        idTareaUsuario = Convert.ToInt32(item["IdTareaUsuario"].Text);
+                        idlineaDetalle = Convert.ToInt32(item["IdLineaDetalle"].Text);
+                        ActualizarTareaAlistador(idlineaDetalle, idTareaUsuario);
+                        _listaTareasAlistador.RemoveAll(x => x.IdTareaUsuario == idTareaUsuario);
 
                         // listaDetalleOrden.Find(x=>x.IdLineaDetalleSolicitud== idlineaDetalle);
-                       int index = _listaDetalleOrden.FindIndex(p => p.IdLineaDetalleSolicitud == idlineaDetalle);
+                        int index = _listaDetalleOrden.FindIndex(p => p.IdLineaDetalleSolicitud == idlineaDetalle);
                         if (index >= 0)
                         {
                             _listaDetalleOrden[index].DetalleAlistado = "Sin asignar";
@@ -522,7 +533,7 @@ namespace Diverscan.MJP.UI.Operaciones.Salidas
 
                     }
 
-                    }
+                }
 
                 GetTareasPendientesPorUsuario(Convert.ToInt32(ddlIdUsuario.SelectedValue));
                 GetGetDetalleSalidaArticulosSector(_idBodega, _idMaestroSolicitud);
@@ -533,7 +544,7 @@ namespace Diverscan.MJP.UI.Operaciones.Salidas
                 cl.escribirError(ex.Message, ex.StackTrace);
                 ex.ToString();
             }
-           
+
         }
 
         private void GetGetDetalleSalidaArticulosSector(int idBodega, int idMaestroSalida)
@@ -544,7 +555,7 @@ namespace Diverscan.MJP.UI.Operaciones.Salidas
                 OPESALMaestroSolicitud oPESALMaestroSolicitud = new OPESALMaestroSolicitud(fileExceptionWriter);
 
                 _listaDetalleOrden = oPESALMaestroSolicitud.GetDetalleSalidaArticulosSector(idBodega, idMaestroSalida);
-                
+
                 RadGridDetalleSalida.DataSource = _listaDetalleOrden;
                 RadGridDetalleSalida.DataBind();
             }
@@ -557,12 +568,13 @@ namespace Diverscan.MJP.UI.Operaciones.Salidas
 
         }
 
-        private void InsertarTareaAlistador(int idLineaDeatalla,int idUsuario,int idPrioridad){
+        private void InsertarTareaAlistador(int idLineaDeatalla, int idUsuario, int idPrioridad)
+        {
             try
-            {               
+            {
                 FileExceptionWriter fileExceptionWriter = new FileExceptionWriter();
                 OPESALMaestroSolicitud oPESALMaestroSolicitud = new OPESALMaestroSolicitud(fileExceptionWriter);
-                if (idLineaDeatalla > 0 && idUsuario > 0 && idPrioridad>0)
+                if (idLineaDeatalla > 0 && idUsuario > 0 && idPrioridad > 0)
                 {
                     string Resultado = oPESALMaestroSolicitud.InsertarTareaAlistador(idLineaDeatalla, idUsuario, idPrioridad);
                 }
@@ -592,7 +604,7 @@ namespace Diverscan.MJP.UI.Operaciones.Salidas
                 ex.ToString();
             }
         }
-   
+
         private void GetTareasPendientesPorUsuario(int idUsuario)
         {
             try
@@ -600,7 +612,7 @@ namespace Diverscan.MJP.UI.Operaciones.Salidas
                 FileExceptionWriter fileExceptionWriter = new FileExceptionWriter();
                 OPESALMaestroSolicitud oPESALMaestroSolicitud = new OPESALMaestroSolicitud(fileExceptionWriter);
 
-                _listaTareasAlistador = oPESALMaestroSolicitud.GetTareasPendientesPorUsuario(idUsuario);                
+                _listaTareasAlistador = oPESALMaestroSolicitud.GetTareasPendientesPorUsuario(idUsuario);
                 RadGridTasks.DataSource = _listaTareasAlistador;
                 RadGridTasks.DataBind();
             }
@@ -615,7 +627,7 @@ namespace Diverscan.MJP.UI.Operaciones.Salidas
         protected void ddlIdUsuario_SelectedIndexChanged(object sender, EventArgs e)
         {
             GetTareasPendientesPorUsuario(Convert.ToInt32(ddlIdUsuario.SelectedValue));
-        }     
+        }
 
         protected void RadGridTasks_NeedDataSource(object sender, GridNeedDataSourceEventArgs e)
         {
@@ -642,21 +654,34 @@ namespace Diverscan.MJP.UI.Operaciones.Salidas
             List<EDetalleSalidaArticuloSector> listaFiltrada = new List<EDetalleSalidaArticuloSector>();
             try
             {
-                if (_chkAsignado.Checked)             
-                listaFiltrada = _listaDetalleOrden.FindAll(x => x.DetalleAlistado.Contains("Sin asignar"));
-             else
-                listaFiltrada = _listaDetalleOrden;
+                if (_chkAsignado.Checked)
+                    listaFiltrada = _listaDetalleOrden.FindAll(x => x.DetalleAlistado.Contains("Sin asignar"));
+                else
+                    listaFiltrada = _listaDetalleOrden;
 
-            RadGridDetalleSalida.DataSource = listaFiltrada;
-            RadGridDetalleSalida.DataBind();
+                RadGridDetalleSalida.DataSource = listaFiltrada;
+                RadGridDetalleSalida.DataBind();
             }
             catch (Exception ex)
             {
                 var cl = new clErrores();
-             //   cl.escribirError(ex.Message, ex.StackTrace);
+                //   cl.escribirError(ex.Message, ex.StackTrace);
                 ex.ToString();
             }
         }
 
+        public void cargarSectores()
+        {
+            FileExceptionWriter fileExceptionWriter = new FileExceptionWriter();
+            NSectorWareHouse nSectorWare = new NSectorWareHouse(fileExceptionWriter);
+
+            _sectorsWarehouse = nSectorWare.GetSectorsWarehouse(_idBodega);
+            ddSector.DataSource = _sectorsWarehouse;
+            ddSector.DataTextField = "Name";
+            ddSector.DataValueField = "IdSectorWarehouse";
+            ddSector.DataBind();
+            ddSector.Items.Insert(0, new ListItem("--Seleccione--", "0"));
+            ddSector.Items.Insert(1, new ListItem("--Todos--", "" + _sectorsWarehouse.Count));
+        }
     }
 }

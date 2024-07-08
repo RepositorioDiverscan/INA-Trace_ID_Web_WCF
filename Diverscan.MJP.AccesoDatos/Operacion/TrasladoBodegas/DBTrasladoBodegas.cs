@@ -5,6 +5,7 @@ using Microsoft.Practices.EnterpriseLibrary.Data;
 using Diverscan.MJP.AccesoDatos.GestionPedido.SolicitudTraslado;
 using System.Data;
 using System.Data.SqlClient;
+using Diverscan.MJP.AccesoDatos.Operaciones;
 
 namespace Diverscan.MJP.AccesoDatos.Operacion.TrasladoBodegas
 {
@@ -94,7 +95,7 @@ namespace Diverscan.MJP.AccesoDatos.Operacion.TrasladoBodegas
 
 
         //Método para ingresar un nuevo artículo a una solicitud de traslado de Bodega
-        public string ActualizarSolicitudTrasladoBodega(int idSolicitud, int idArticulo, int Cantidad)
+        public string ActualizarSolicitudTrasladoBodega(EIngresoTrasladoBodega input)
         {
             try
             {
@@ -103,9 +104,13 @@ namespace Diverscan.MJP.AccesoDatos.Operacion.TrasladoBodegas
                 var dbCommand = db.GetStoredProcCommand("SP_ActualizarSolicitudTrasladoBodega");
 
                 //Enviar los parametros del SP
-                db.AddInParameter(dbCommand, "@idSolicitudTraslado", DbType.Int64, idSolicitud);
-                db.AddInParameter(dbCommand, "@idArticulo", DbType.Int64, idArticulo);
-                db.AddInParameter(dbCommand, "@cantidadSolicitada", DbType.Int64, Cantidad);
+                db.AddInParameter(dbCommand, "@idSolicitudTraslado", DbType.Int64, input.IdSolicitudTraslado);
+                db.AddInParameter(dbCommand, "@idArticulo", DbType.Int64, input.IdArticulo);
+                db.AddInParameter(dbCommand, "@NombreArticulo", DbType.String, input.NombreArticulo);
+                db.AddInParameter(dbCommand, "@IdInterno", DbType.String, input.IdInterno);
+                db.AddInParameter(dbCommand, "@IdUsuario", DbType.Int64, input.IdUsuario);
+                db.AddInParameter(dbCommand, "@cantidadSolicitada", DbType.Int64, input.CantidadSolicitada);
+
                 db.AddOutParameter(dbCommand, "@resultado", DbType.String, 200);
 
                 //Ejecutar el SP
