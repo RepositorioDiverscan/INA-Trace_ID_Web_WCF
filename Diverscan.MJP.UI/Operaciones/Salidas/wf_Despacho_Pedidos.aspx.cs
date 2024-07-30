@@ -26,7 +26,7 @@ using Diverscan.MJP.AccesoDatos.Operacion.DespachoPedidos.Entidades;
 using CrystalDecisions.CrystalReports.Engine;
 using Diverscan.MJP.UI.CrystalReportes.Certificacion;
 using CrystalDecisions.Shared;
-using Diverscan.MJP.AccesoDatos.Transportista;
+//using Diverscan.MJP.AccesoDatos.Transportista;
 
 namespace Diverscan.MJP.UI.Operaciones.Salidas
 {
@@ -49,7 +49,7 @@ namespace Diverscan.MJP.UI.Operaciones.Salidas
         private string valor_bodega;
         private List<e_OPESALMaestroSolicitud> _listOrders = new List<e_OPESALMaestroSolicitud>();
         private List<ESectorWarehouse> _sectorsWarehouse = new List<ESectorWarehouse>();         
-        private NTransportista _nTransportista;
+        //private NTransportista _nTransportista;
         private FileExceptionWriter _fileException = new FileExceptionWriter();
 
         private long _idWarehouse
@@ -205,14 +205,14 @@ namespace Diverscan.MJP.UI.Operaciones.Salidas
 
         private void FIlLDDLTransportista()
         {
-            _nTransportista = new NTransportista(_fileException);
-            List<ETransportista> transportistas = _nTransportista.BuscarTransportistaXBodega(_idWarehouse);
-            ddlTransportista.DataSource = transportistas;
-            ddlTransportista.DataTextField = "Nombre";
-            ddlTransportista.DataValueField = "IdTransportista";
-            ddlTransportista.DataBind();
-            ddlTransportista.Items.Insert(0, new ListItem("--Seleccione--", "0"));
-            ddlTransportista.Items[0].Attributes.Add("disabled", "disabled");
+            //_nTransportista = new NTransportista(_fileException);
+            //List<ETransportista> transportistas = _nTransportista.BuscarTransportistaXBodega(_idWarehouse);
+            //ddlTransportista.DataSource = transportistas;
+            //ddlTransportista.DataTextField = "Nombre";
+            //ddlTransportista.DataValueField = "IdTransportista";
+            //ddlTransportista.DataBind();
+            //ddlTransportista.Items.Insert(0, new ListItem("--Seleccione--", "0"));
+            //ddlTransportista.Items[0].Attributes.Add("disabled", "disabled");
         }
 
         protected void RadGrid_NeedDataSource(object sender, Telerik.Web.UI.GridNeedDataSourceEventArgs e)

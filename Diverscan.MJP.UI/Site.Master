@@ -349,7 +349,7 @@
                                                 NavigateUrl="~/Mantenimiento/Despachos/wf_Destinos.aspx">
                                             </telerik:RadPanelItem>
 
-                                            <telerik:RadPanelItem runat="server" ImageUrl="~/Images/MenuItem/departmentstore.png" Text="Transportistas" Visible="false"
+                                            <telerik:RadPanelItem runat="server" ImageUrl="~/Images/MenuItem/departmentstore.png" Text="Encargados" Visible="false"
                                                 NavigateUrl="~/Mantenimiento/Despachos/wf_Transportistas.aspx">
                                             </telerik:RadPanelItem>
                                         </Items>

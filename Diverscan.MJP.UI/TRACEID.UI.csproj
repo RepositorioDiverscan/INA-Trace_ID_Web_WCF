@@ -1583,8 +1583,6 @@
     <Content Include="Operaciones\Certificacion\wfSSCCCertificados.aspx" />
     <Content Include="Operaciones\Certificacion\wf_Certificacion.aspx" />
     <Content Include="Operaciones\Embarques\wf_Programacion.aspx" />
-    <Content Include="Operaciones\Emo\wf_Emos.aspx" />
-    <Content Include="Operaciones\Emo\wf_CrearEmo.aspx" />
     <Content Include="Operaciones\Eventos\wf_DemoEventos.aspx" />
     <Content Include="Operaciones\Ingresos\Provedores\wf_MantenimientoProvedor.aspx" />
     <Content Include="Administracion\Motor de Desiciones\Contextos.aspx" />
@@ -2723,20 +2721,6 @@
     <Compile Include="Operaciones\Embarques\wf_Programacion.aspx.designer.cs">
       <DependentUpon>wf_Programacion.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Operaciones\Emo\wf_Emos.aspx.cs">
-      <DependentUpon>wf_Emos.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Operaciones\Emo\wf_Emos.aspx.designer.cs">
-      <DependentUpon>wf_Emos.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Operaciones\Emo\wf_CrearEmo.aspx.cs">
-      <DependentUpon>wf_CrearEmo.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Operaciones\Emo\wf_CrearEmo.aspx.designer.cs">
-      <DependentUpon>wf_CrearEmo.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Operaciones\Eventos\wf_DemoEventos.aspx.cs">
       <DependentUpon>wf_DemoEventos.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -3386,7 +3370,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties UseAjaxifiedTemplates="False" UseJQuerySupport="False" />
+      <UserProperties UseJQuerySupport="False" UseAjaxifiedTemplates="False" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -42,6 +42,8 @@ using Diverscan.MJP.Entidades.Recepcion;
 using Diverscan.MJP.Entidades.Devolutions.SolicitudDevolucion;
 using Diverscan.MJP.Entidades.Consultas;
 using Diverscan.MJP.AccesoDatos.Devolutions;
+using Diverscan.MJP.AccesoDatos.Encargado;
+using Diverscan.MJP.AccesoDatos.Despacho;
 
 namespace TRACEID.WCF
 {
@@ -83,7 +85,7 @@ namespace TRACEID.WCF
             BodyStyle = WebMessageBodyStyle.Wrapped,
             ResponseFormat = WebMessageFormat.Json,
             UriTemplate = "GetDetailPurchaseOrder")]
-        ResultGetDetailPurchaseOrder GetDetailPurchaseOrder( string IdMOC, string TipoIngreso);
+        ResultGetDetailPurchaseOrder GetDetailPurchaseOrder(string IdMOC, string TipoIngreso);
 
         [OperationContract]
         [WebInvoke(Method = "POST",
@@ -114,7 +116,7 @@ namespace TRACEID.WCF
 
         //[OperationContract]
         //long OtenerIdUbicacion(string etiqueta);
-              
+
 
         [OperationContract]
         [WebInvoke(Method = "POST",
@@ -269,7 +271,7 @@ namespace TRACEID.WCF
         //UriTemplate = "GetPurchaseOrderDetails/{PurchaseOrderId}/{servicePass}")]
         //List<e_OrdenCompra> GetPurchaseOrderDetails(string PurchaseOrderId, string servicePass);
 
-       
+
 
         //#region ConsultaTrasladosPIC
         //[OperationContract]
@@ -291,14 +293,14 @@ namespace TRACEID.WCF
         //UriTemplate = "StatusActualPedido/{idMaestroArticulo}")]
         //List<EstadoAlisto> StatusActualPedido(string idMaestroArticulo);
 
-       
+
 
         [OperationContract]
         [WebInvoke(Method = "POST",
           BodyStyle = WebMessageBodyStyle.Wrapped,
           ResponseFormat = WebMessageFormat.Json,
           UriTemplate = "GetDevolutionsOrders")]
-         ResultGetDevolutionHeader GetDevolutionsOrders(string userEmail);
+        ResultGetDevolutionHeader GetDevolutionsOrders(string userEmail);
 
         [OperationContract]
         [WebInvoke(Method = "POST",
@@ -312,9 +314,9 @@ namespace TRACEID.WCF
          BodyStyle = WebMessageBodyStyle.Wrapped,
          ResponseFormat = WebMessageFormat.Json,
          UriTemplate = "InsertProductLocation")]
-         string InsertProductLocation(EDevolutionProduct productLocation);
+        string InsertProductLocation(EDevolutionProduct productLocation);
 
-  
+
         [OperationContract]
         [WebInvoke(Method = "POST",
         BodyStyle = WebMessageBodyStyle.Wrapped,
@@ -328,7 +330,7 @@ namespace TRACEID.WCF
                 ResponseFormat = WebMessageFormat.Json,
                 UriTemplate = "InsertArticleRR")]
         string InsertArticleRR(List<EArticulos> eArticulos);
- 
+
         [OperationContract]
         [WebInvoke(Method = "POST",
         BodyStyle = WebMessageBodyStyle.Wrapped,
@@ -376,7 +378,7 @@ namespace TRACEID.WCF
          BodyStyle = WebMessageBodyStyle.Wrapped,
          ResponseFormat = WebMessageFormat.Json,
          UriTemplate = "InTransferProduct")]
-        string InTransferProduct(int IdArticulo, string Lote, string FechaVencimiento, int IdUbicacionOrigen,int IdUbicacionDestino, int Cantidad, int IdUsuario, int IdMetodoAccionEntrada);
+        string InTransferProduct(int IdArticulo, string Lote, string FechaVencimiento, int IdUbicacionOrigen, int IdUbicacionDestino, int Cantidad, int IdUsuario, int IdMetodoAccionEntrada);
 
         [OperationContract]
         [WebInvoke(Method = "POST",
@@ -419,7 +421,7 @@ namespace TRACEID.WCF
         ResponseFormat = WebMessageFormat.Json,
         UriTemplate = "GetEncabezadoSalidas")]
         List<EEncabezadoSalida> GetEncabezadoSalidas(int idUsuario);
-   
+
         [OperationContract]
         [WebInvoke(Method = "POST",
         BodyStyle = WebMessageBodyStyle.Wrapped,
@@ -432,7 +434,7 @@ namespace TRACEID.WCF
         BodyStyle = WebMessageBodyStyle.Wrapped,
         ResponseFormat = WebMessageFormat.Json,
         UriTemplate = "GetDetalleSalidaOrdenUsuario")]
-        List<EDetalleSalidaOrdenUsuario> GetDetalleSalidaOrdenUsuario(int idUsuario,int idMaestroSalida);
+        List<EDetalleSalidaOrdenUsuario> GetDetalleSalidaOrdenUsuario(int idUsuario, int idMaestroSalida);
 
         [OperationContract]
         [WebInvoke(Method = "POST",
@@ -446,9 +448,9 @@ namespace TRACEID.WCF
         BodyStyle = WebMessageBodyStyle.Wrapped,
         ResponseFormat = WebMessageFormat.Json,
         UriTemplate = "IngresarArticuloSSCC")]
-        string IngresarArticuloSSCC(long idConsecutivoSSCC, long idMaestroSolicitud, long idArticulo, 
+        string IngresarArticuloSSCC(long idConsecutivoSSCC, long idMaestroSolicitud, long idArticulo,
             string lote, string FechaVencimiento, int cantidad, long idUbicacion, long idLineaDetalleSolicitud,
-            int idUsuario,int idMetodoAccionSalida);
+            int idUsuario, int idMetodoAccionSalida);
 
         [OperationContract]
         [WebInvoke(Method = "POST",
@@ -456,7 +458,7 @@ namespace TRACEID.WCF
         ResponseFormat = WebMessageFormat.Json,
         UriTemplate = "RevertirArticuloSSCC")]
         string RevertirArticuloSSCC(long idConsecutivoSSCC, long idMaestroSolicitud, long idArticulo,
-            string lote, string FechaVencimiento,int cantidad, long idUbicacionDestino, 
+            string lote, string FechaVencimiento, int cantidad, long idUbicacionDestino,
             long idLineaDetalleSolicitud, int idUsuario, int idMetodoAccionSalida);
 
         [OperationContract]
@@ -543,14 +545,6 @@ namespace TRACEID.WCF
         ResponseFormat = WebMessageFormat.Json,
         UriTemplate = "DescargarVehiculoXPlaca")]
         string DescargarVehiculoXPlaca(string placa);
-
-        [OperationContract]
-        [WebInvoke(Method = "POST",
-        BodyStyle = WebMessageBodyStyle.Wrapped,
-        ResponseFormat = WebMessageFormat.Json,
-        UriTemplate = "CargarVehiculoXPlaca")]
-        String CargarVehiculoXPlaca(string placa, long idSSCC, long idUbicacion,
-            bool capacidadExcedida, bool sobreCargar);
 
         [OperationContract]
         [WebInvoke(Method = "POST",
@@ -712,5 +706,19 @@ namespace TRACEID.WCF
         ResponseFormat = WebMessageFormat.Json,
         UriTemplate = "GetLocationIdDevolutionState")]
         int GetLocationIdDevolutionState(bool state, int warehouse);
+
+        [OperationContract]
+        [WebInvoke(Method = "POST",
+        BodyStyle = WebMessageBodyStyle.Wrapped,
+        ResponseFormat = WebMessageFormat.Json,
+        UriTemplate = "ObtenerEncargado")]
+        EEncargado ObtenerEncargado(int idBodega, string buscar);
+
+        [OperationContract]
+        [WebInvoke(Method = "POST",
+        BodyStyle = WebMessageBodyStyle.Wrapped,
+        ResponseFormat = WebMessageFormat.Json,
+        UriTemplate = "AsignarPedidoEncargado")]
+        string AsignarPedidoEncargado(EAsignarDespacho input);
     }
 }

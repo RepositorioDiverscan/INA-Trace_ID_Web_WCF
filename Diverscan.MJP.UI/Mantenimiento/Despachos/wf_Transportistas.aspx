@@ -44,7 +44,7 @@
                             <ContentTemplate >
                                <telerik:RadTabStrip  AutoPostBack="false" RenderMode="Lightweight" runat="server" ID="RadTabStrip1"  MultiPageID="RadMultiPage1" SelectedIndex="0" >
                                 <Tabs>
-                                    <telerik:RadTab Text="Transportistas" Width="200px"></telerik:RadTab>
+                                    <telerik:RadTab Text="Encargados" Width="200px"></telerik:RadTab>
                                     <telerik:RadTab Text="Vehiculos" Width="200px"></telerik:RadTab>
                                 </Tabs>
                                 </telerik:RadTabStrip>
@@ -53,7 +53,7 @@
                                     <telerik:RadPageView runat="server" ID="RadPageView1"  >
                                         <asp:Panel ID="Panel1" runat="server" Class="TabContainer"  >                                        
                                             <asp:Panel runat="server"  CssClass="TituloPanelVista" ID="Vista_Transportistas">
-                                                <h1 class="TituloPanelTitulo">Datos del transportista</h1>
+                                                <h1 class="TituloPanelTitulo">Datos del encargado</h1>
                                                    <asp:ImageButton ID="DummyButton" runat="server" ImageUrl="~/Images/Ico/imageres_123.ico" Height="0px" onClientClick="return false;" />
                                             </asp:Panel>
 
@@ -91,7 +91,7 @@
                                                     <table width="100%" style="border-radius: 10px; border: 1px solid grey; width: 100%; border-collapse: initial;" id="Table1">                      
                                                         <tr>
                                                              <td>
-                                                                <asp:Label ID="Label3" runat="server" Text="Id Transportista"></asp:Label> 
+                                                                <asp:Label ID="Label3" runat="server" Text="Id Encargado"></asp:Label> 
                                                             </td>
                                                             <td >     
                                                                 <asp:TextBox CssClass="TextBoxBusqueda" ID="txtidTransportista" runat="server" Width="85px" AutoCompleteType="Disabled" Enabled="false" ></asp:TextBox>   
@@ -166,14 +166,14 @@
                                                             </tr>
                                                     </table>
                                                     <asp:Panel runat="server"  CssClass="TituloPanelVistaDetalle" ID="Vista_Transportistas0">
-                                                <h1 class="TituloPanelTitulo">Listado Transportistas</h1> 
+                                                <h1 class="TituloPanelTitulo">Listado Encargados</h1> 
                                             </asp:Panel>
                                             <telerik:RadGrid ID="RadGridTransportistas" AllowPaging="True" Width="100%" OnClientClick="DisplayLoadingImage1()"  OnNeedDataSource ="RadGridTransportistas_NeedDataSource"
                                                         runat="server" AutoGenerateColumns="False" AllowSorting="True" PageSize="50" AllowMultiRowSelection="true" OnItemCommand="RadGridTransportistas_ItemCommand" PagerStyle-AlwaysVisible="true">
                                                          <MasterTableView>
                                                             <Columns>
-                                                                <telerik:GridBoundColumn UniqueName="idTransportista"
-                                                                    SortExpression="idTransportista" HeaderText="Id Transportista" DataField="idTransportista">
+                                                                <telerik:GridBoundColumn UniqueName="idEncargado"
+                                                                    SortExpression="idEncargado" HeaderText="Id Encargado" DataField="IdEncargado">
                                                                 </telerik:GridBoundColumn>
 
                                                                 <telerik:GridBoundColumn UniqueName="IdCompania"

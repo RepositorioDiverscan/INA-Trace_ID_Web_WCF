@@ -1,10 +1,6 @@
 ﻿using Diverscan.Visitas.Utilidades;
 using System.Linq;
-using System.Text;
 using System;
-using System.Data;
-using Diverscan.MJP.Negocio;
-using Diverscan.MJP.Negocio.UsoGeneral;
 using Diverscan.MJP.Entidades;
 using Diverscan.MJP.Utilidades;
 using Diverscan.MJP.Negocio.Administracion;
@@ -26,23 +22,18 @@ using Diverscan.MJP.Entidades.OrdenCompra;
 using Diverscan.MJP.Entidades.PICKING;
 using Diverscan.MJP.Negocio.OrdenCompra;
 using Diverscan.MJP.Negocio.PICKING;
-using Diverscan.MJP.Entidades.SSCC;
-using Diverscan.MJP.Negocio.SSCC;
 using Diverscan.MJP.Entidades.Alistos;
 using Diverscan.MJP.Negocio.Alistos;
 using Diverscan.MJP.Negocio.Devolutions;
 using Diverscan.MJP.Entidades.Devolutions.DevolucionHeader;
 using Diverscan.MJP.Entidades.Devolutions.DevolutionsDetail;
 using Diverscan.MJP.Entidades.Devolutions.DevolutionProductLocation;
-
 using Diverscan.MJP.Negocio.Traslados;
 using Diverscan.MJP.AccesoDatos.DetalleOrdenCompra;
 using Diverscan.MJP.Negocio.MaestroArticulo;
-
 using Diverscan.MJP.Entidades.GTIN14VariableLogistic;
 using Diverscan.MJP.Negocio.GTIN14VariableLogistic;
 using Diverscan.MJP.AccesoDatos.Traslados;
-using Diverscan.MJP.Entidades.MaestroArticulo;
 using Diverscan.MJP.AccesoDatos.MaestroArticulo;
 using Diverscan.MJP.AccesoDatos.ModuloConsultas;
 using Diverscan.MJP.AccesoDatos.Alistos;
@@ -51,7 +42,6 @@ using Diverscan.MJP.Negocio.OPESALMaestroSolicitud;
 using Diverscan.MJP.AccesoDatos.Bodega;
 using Diverscan.MJP.AccesoDatos.Existencias;
 using Diverscan.MJP.Entidades.Articulo;
-using System.Runtime.Serialization;
 using Diverscan.MJP.AccesoDatos.RolUsuarioHH;
 using Diverscan.MJP.AccesoDatos.Articulos.InfoArticulo;
 using Diverscan.MJP.AccesoDatos.Certificación;
@@ -74,6 +64,7 @@ using Diverscan.MJP.Entidades.Devolutions.SolicitudDevolucion;
 using Diverscan.MJP.Negocio.Consulta;
 using Diverscan.MJP.Entidades.Consultas;
 using Diverscan.MJP.AccesoDatos.Devolutions;
+using Diverscan.MJP.AccesoDatos.Encargado;
 
 namespace TRACEID.WCF
 {
@@ -835,13 +826,6 @@ namespace TRACEID.WCF
             return nVehiculo.DescargarVehiculoXPlaca(placa);
         }
 
-        public String CargarVehiculoXPlaca(string placa, long idSSCC, long idUbicacion,
-                                                bool capacidadExcedida, bool sobreCargar)
-        {
-            NDespacho nDespacho = new NDespacho(_fileExceptionWriter);
-            return nDespacho.CargarVehiculoXPlaca(placa, idSSCC, idUbicacion, capacidadExcedida, sobreCargar);
-        }
-
         public ResultGetSSCCS CantidadSSCCActivosUsuario(long idUsuario)
         {
             NSSCC nSSCC = new NSSCC(_fileExceptionWriter);
@@ -1001,6 +985,18 @@ namespace TRACEID.WCF
 
                 return -1;
             }
+        }
+
+        public EEncargado ObtenerEncargado(int idBodega, string buscar)
+        {
+            NEncargado _obtenerEncargado = new NEncargado(_fileExceptionWriter);
+            return _obtenerEncargado.ObtenerEncargadoXBodega(idBodega, buscar);
+        }
+
+        public string AsignarPedidoEncargado(EAsignarDespacho input)
+        {
+            NDespacho nDespacho = new NDespacho(_fileExceptionWriter);
+            return nDespacho.AsignarPedidoEncargado(input);
         }
     }
 }

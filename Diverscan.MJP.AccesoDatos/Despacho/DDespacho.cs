@@ -55,25 +55,21 @@ namespace Diverscan.MJP.AccesoDatos.Despacho
             }
             return olasDespacho;
         }
-        public String CargarVehiculoXPlaca(string placa, long idSSCC,long idUbicacion,
-                                                bool capacidadExcedida,bool sobreCargar)
+        public string AsignarPedidoEncargado(EAsignarDespacho input, string PIN)
         {
             var dbTse = DatabaseFactory.CreateDatabase("MJPConnectionString");
-            var dbCommand = dbTse.GetStoredProcCommand("SPCargarSSCCVehiculo");
-            dbTse.AddInParameter(dbCommand, "@placa", DbType.String, placa);
-            dbTse.AddInParameter(dbCommand, "@idSSCC", DbType.Int64, idSSCC);
-            dbTse.AddInParameter(dbCommand, "@idubicacion", DbType.Int64, idUbicacion);
-            dbTse.AddInParameter(dbCommand, "@capacidadExcedida", DbType.Boolean, capacidadExcedida);
-            dbTse.AddInParameter(dbCommand, "@sobreCargar", DbType.Boolean, sobreCargar);
+            var dbCommand = dbTse.GetStoredProcCommand("uspAsignaPedidoEncargado");
+            dbTse.AddInParameter(dbCommand, "@NumeroTransaccion", DbType.String, input.NumeroTransaccion);
+            dbTse.AddInParameter(dbCommand, "@PIN", DbType.String, PIN);
+            dbTse.AddInParameter(dbCommand, "@idUsuario", DbType.Int64, input.IdUsuario);
+            dbTse.AddInParameter(dbCommand, "@correoEnvioPIN", DbType.String, input.CorreoEnvioPIN);
+
             dbTse.AddOutParameter(dbCommand, "@Resultado", DbType.String, 200);
-            String result = "";
 
             using (var reader = dbTse.ExecuteReader(dbCommand))
             {
-                result = dbTse.GetParameterValue(dbCommand, "@Resultado").ToString();
+                return dbTse.GetParameterValue(dbCommand, "@Resultado").ToString();
             }
-
-            return result;
         }
     }
 }

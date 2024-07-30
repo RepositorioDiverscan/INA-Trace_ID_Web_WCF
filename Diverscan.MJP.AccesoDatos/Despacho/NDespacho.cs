@@ -1,8 +1,9 @@
 ﻿using Diverscan.MJP.Utilidades;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Configuration;
+using System.IO;
+using System.Net;
+using System.Net.Mail;
 
 namespace Diverscan.MJP.AccesoDatos.Despacho
 {
@@ -16,17 +17,62 @@ namespace Diverscan.MJP.AccesoDatos.Despacho
             _fileExceptionWriter = fileExceptionWriter;
             dDespacho = new DDespacho();
         }
-        public String CargarVehiculoXPlaca(string placa, long idSSCC,long idUbicacion, 
-                                            bool capacidadExcedida, bool sobreCargar)
+        public string AsignarPedidoEncargado(EAsignarDespacho input)
         {
+            string PIN = GenerateRandomPIN();
+
             try
             {
-                return dDespacho.CargarVehiculoXPlaca(placa, idSSCC, idUbicacion, capacidadExcedida, sobreCargar);
+                string res = dDespacho.AsignarPedidoEncargado(input, PIN);
+
+                if (res.Equals("SSCC Asignado para Despachar con éxito."))
+                {
+                    SendEmailWithPin(PIN, input.CorreoEnvioPIN);
+                }
+
+                return res;
             }
             catch (Exception ex)
             {
                 _fileExceptionWriter.WriteException(ex, PathFileConfig.VEHICLEFILEPATHEXCEPTION);
                 return ex.Message;
+            }
+        }
+
+        public string GenerateRandomPIN()
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            var random = new Random();
+            var pin = new char[4];
+
+            for (int i = 0; i < 4; i++)
+            {
+                pin[i] = chars[random.Next(chars.Length)];
+            }
+
+            return new string(pin);
+        }
+
+        public void SendEmailWithPin(string PIN, string toEmail)
+        {
+            using (MailMessage mail = new MailMessage())
+            {
+                mail.From = new MailAddress(ConfigurationManager.AppSettings["fromEmail"].ToString(), ConfigurationManager.AppSettings["tittle"].ToString());
+                mail.To.Add(toEmail);
+                mail.Subject = ConfigurationManager.AppSettings["subject"].ToString();
+                mail.Body = string.Format(File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "/Resources/EmailTempates/PinEmailTemplate.html"), PIN);
+                mail.IsBodyHtml = true;
+
+                using (SmtpClient smtp = new SmtpClient())
+                {
+                    smtp.Host = ConfigurationManager.AppSettings["smtpHost"].ToString();
+                    smtp.Port = Convert.ToInt32(ConfigurationManager.AppSettings["smtpPort"]);
+                    smtp.EnableSsl = Convert.ToBoolean(ConfigurationManager.AppSettings["smtpEnableSsl"]);
+                    smtp.UseDefaultCredentials = Convert.ToBoolean(ConfigurationManager.AppSettings["smtpUseDefaultCredentials"]);
+                    smtp.Credentials = new NetworkCredential(ConfigurationManager.AppSettings["smtpCredentialsUser"].ToString(), ConfigurationManager.AppSettings["smtpCredentialsPass"].ToString());
+
+                    smtp.Send(mail);
+                }
             }
         }
     }

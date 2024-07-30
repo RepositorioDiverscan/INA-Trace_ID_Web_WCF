@@ -1,32 +1,21 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
-using System.ServiceModel;
-using System.Web.Script.Serialization;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Xml;
 using Diverscan.MJP.Entidades;
-using Diverscan.MJP.Negocio.Administracion;
 using Diverscan.MJP.Negocio.UsoGeneral;
-using Diverscan.MJP.UI.ServiceMH;
 using Diverscan.MJP.Utilidades;
-using Diverscan.Visitas.Utilidades;
-using Newtonsoft.Json;
 using Telerik.Web.UI;
-using Telerik.Web.UI.PersistenceFramework;
-using System.Linq;
 using System.Data;
-using System.Data.SqlClient;
 using System.Reflection;
 using Diverscan.MJP.Utilidades.general;
 using Diverscan.MJP.Negocio.LogicaWMS;
 using Diverscan.MJP.AccesoDatos.ModuloConsultas;
 using Diverscan.MJP.AccesoDatos.Bodega;
 using Diverscan.MJP.Negocio.SectorWarehouse;
-using Diverscan.MJP.AccesoDatos.Transportista;
 using Diverscan.MJP.AccesoDatos.Vehiculo;
+using Diverscan.MJP.AccesoDatos.Encargado;
 
 namespace Diverscan.MJP.UI.Mantenimiento.Despachos
 {
@@ -39,7 +28,7 @@ namespace Diverscan.MJP.UI.Mantenimiento.Despachos
         public static string TblTab21Mantenimiento = e_TablasBaseDatos.TblDestino();
         public int ToleranciaAgregar = 110;
         RadGridProperties radGridProperties = new RadGridProperties();
-        DTransportista _dTransportista = new DTransportista();
+        DEncargado _dEncargado = new DEncargado();
         DVehiculo _dVehiculo = new DVehiculo();
         private int _idWarehouse
         {
@@ -392,8 +381,8 @@ namespace Diverscan.MJP.UI.Mantenimiento.Despachos
                 }
 
 
-                String mensaje = _dTransportista.IngresarTransportista(
-                    new ETransportista(_idWarehouse,nombre,telefono,correo,comentario,true));
+                String mensaje = _dEncargado.IngresarEncargado(
+                    new EEncargado(_idWarehouse,nombre,telefono,correo,comentario,true));
                 Mensaje("info", mensaje, "");
             }
             catch (Exception ex) 
@@ -445,8 +434,8 @@ namespace Diverscan.MJP.UI.Mantenimiento.Despachos
                 }
 
 
-                String mensaje = _dTransportista.ActualizarTransportista(
-                    new ETransportista(idTransportista,_idWarehouse, nombre, telefono, correo, comentario, activo));
+                String mensaje = _dEncargado.ActualizarEncargado(
+                    new EEncargado(idTransportista,_idWarehouse, nombre, telefono, correo, comentario, activo));
                 Mensaje("info", mensaje, "");
             }
             catch (Exception ex)
@@ -502,15 +491,15 @@ namespace Diverscan.MJP.UI.Mantenimiento.Despachos
                 string SQL = "";
                 string idCompania = wms.getIdCompania(UsrLogged.IdUsuario);
 
-                SQL = "EXEC SP_BuscarTransportistas '" + idCompania + "', '" + buscar + "', '" + _idWarehouse + "'";
+                SQL = "EXEC SP_BuscarEncargados '" + idCompania + "', '" + buscar + "', '" + _idWarehouse + "'";
                 DSDatos = n_ConsultaDummy.GetDataSet(SQL, UsrLogged.IdUsuario);
 
                 if (!UsrLogged.IdRoles.Equals("0"))
                 {
-                    List<ETransportista> transportistas = _dTransportista.BuscarTransportistaXBodega(_idWarehouse);
-                    ddlidTransportista.DataSource = transportistas;
+                    List<EEncargado> encargados = _dEncargado.ObtenerEncargadosXBodega(_idWarehouse);
+                    ddlidTransportista.DataSource = encargados;
                     ddlidTransportista.DataTextField = "Nombre";
-                    ddlidTransportista.DataValueField = "IdTransportista";
+                    ddlidTransportista.DataValueField = "idEncargado";
                     ddlidTransportista.DataBind();
                     ddlidTransportista.Items.Insert(0, new ListItem("--Seleccione--", "0"));
                 }
@@ -576,7 +565,7 @@ namespace Diverscan.MJP.UI.Mantenimiento.Despachos
                 if (e.CommandName == "RowClick")
                 {
                     GridDataItem item = (GridDataItem)e.Item;
-                    txtidTransportista.Text = item["idTransportista"].Text.Replace("&nbsp;", "");
+                    txtidTransportista.Text = item["idEncargado"].Text.Replace("&nbsp;", "");
                     ddlIdCompania.SelectedValue = "AMCO";
                     string bodega = item["idBodega"].Text.Replace("&nbsp;", "");
                     ddBodega.SelectedValue = item["idBodega"].Text.Replace("&nbsp;", "");
@@ -614,8 +603,8 @@ namespace Diverscan.MJP.UI.Mantenimiento.Despachos
                     }
 
                     FileExceptionWriter fileExceptionWriter = new FileExceptionWriter();
-                    List<ETransportista> transportistas = _dTransportista.BuscarTransportistaXBodega(_idWarehouse);
-                    ddlidTransportista.DataSource = transportistas;
+                    List<EEncargado> encargados = _dEncargado.ObtenerEncargadosXBodega(_idWarehouse);
+                    ddlidTransportista.DataSource = encargados;
                     ddlidTransportista.DataTextField = "Nombre";
                     ddlidTransportista.DataValueField = "IdTransportista";
                     ddlidTransportista.DataBind();

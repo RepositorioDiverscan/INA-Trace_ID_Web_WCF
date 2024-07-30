@@ -79,6 +79,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\EmailTempates\PinEmailTemplate.html" />
+    <Content Include="Resources\Images\Logos\TID_Logo.png" />
     <Content Include="Service1.svc" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

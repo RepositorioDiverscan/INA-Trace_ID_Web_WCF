@@ -126,9 +126,13 @@
     <Compile Include="Consultas\DConsultarMaestroArticulo.cs" />
     <Compile Include="Consultas\DGetArticuloXubicacion.cs" />
     <Compile Include="Consultas\DInventario.cs" />
+    <Compile Include="Despacho\EAsignarDespacho.cs" />
     <Compile Include="Devolutions\da_RecibirSolicitudDevolucion.cs" />
     <Compile Include="Devolutions\da_SolicitudDevolucion.cs" />
     <Compile Include="Devolutions\EDetalleRecibirSolicitudDevolucion.cs" />
+    <Compile Include="Encargado\DEncargado.cs" />
+    <Compile Include="Encargado\EEncargado.cs" />
+    <Compile Include="Encargado\NEncargado.cs" />
     <Compile Include="Operaciones\DBIngresoTrasladoBodega.cs" />
     <Compile Include="Operaciones\EDetalleReporteOC.cs" />
     <Compile Include="Operaciones\eIngresoCajaChica.cs" />
@@ -410,9 +414,6 @@
     <Compile Include="TRAIngresoSalidaArticulos\TRAResumenDBA.cs" />
     <Compile Include="TransitoBodega\DArticuloTransitoBodega.cs" />
     <Compile Include="TransitoBodega\EArticuloTransitoBodega.cs" />
-    <Compile Include="Transportista\DTransportista.cs" />
-    <Compile Include="Transportista\ETransportista.cs" />
-    <Compile Include="Transportista\NTransportista.cs" />
     <Compile Include="Traslados\da_Traslados.cs" />
     <Compile Include="Traslados\ETraslado.cs" />
     <Compile Include="Traslados\ManejoExcepciones\GuardarMensajeError.cs" />
