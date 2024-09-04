@@ -532,19 +532,19 @@ namespace TRACEID.WCF
         UriTemplate = "ObtenerIdSolicitudAjusteRefencia")]
         int ObtenerIdSolicitudAjusteRefencia(int idSolicitudAjusteRefencia);
 
-        [OperationContract]
-        [WebInvoke(Method = "POST",
-        BodyStyle = WebMessageBodyStyle.Wrapped,
-        ResponseFormat = WebMessageFormat.Json,
-        UriTemplate = "ObtenerVehiculoXPlaca")]
-        ResultGetVehiculo ObtenerVehiculoXPlaca(string placa);
+        //[OperationContract]
+        //[WebInvoke(Method = "POST",
+        //BodyStyle = WebMessageBodyStyle.Wrapped,
+        //ResponseFormat = WebMessageFormat.Json,
+        //UriTemplate = "ObtenerVehiculoXPlaca")]
+        //ResultGetVehiculo ObtenerVehiculoXPlaca(string placa);
 
-        [OperationContract]
-        [WebInvoke(Method = "POST",
-        BodyStyle = WebMessageBodyStyle.Wrapped,
-        ResponseFormat = WebMessageFormat.Json,
-        UriTemplate = "DescargarVehiculoXPlaca")]
-        string DescargarVehiculoXPlaca(string placa);
+        //[OperationContract]
+        //[WebInvoke(Method = "POST",
+        //BodyStyle = WebMessageBodyStyle.Wrapped,
+        //ResponseFormat = WebMessageFormat.Json,
+        //UriTemplate = "DescargarVehiculoXPlaca")]
+        //string DescargarVehiculoXPlaca(string placa);
 
         [OperationContract]
         [WebInvoke(Method = "POST",
