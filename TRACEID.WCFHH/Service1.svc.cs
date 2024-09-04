@@ -814,17 +814,17 @@ namespace TRACEID.WCF
             }
         }
 
-        public ResultGetVehiculo ObtenerVehiculoXPlaca(string placa)
-        {
-            NVehiculo nVehiculo = new NVehiculo(_fileExceptionWriter);
-            return nVehiculo.GetVehiculoXPlaca(placa);
-        }
+        //public ResultGetVehiculo ObtenerVehiculoXPlaca(string placa)
+        //{
+        //    NVehiculo nVehiculo = new NVehiculo(_fileExceptionWriter);
+        //    return nVehiculo.GetVehiculoXPlaca(placa);
+        //}
 
-        public String DescargarVehiculoXPlaca(string placa)
-        {
-            NVehiculo nVehiculo = new NVehiculo(_fileExceptionWriter);
-            return nVehiculo.DescargarVehiculoXPlaca(placa);
-        }
+        //public String DescargarVehiculoXPlaca(string placa)
+        //{
+        //    NVehiculo nVehiculo = new NVehiculo(_fileExceptionWriter);
+        //    return nVehiculo.DescargarVehiculoXPlaca(placa);
+        //}
 
         public ResultGetSSCCS CantidadSSCCActivosUsuario(long idUsuario)
         {
