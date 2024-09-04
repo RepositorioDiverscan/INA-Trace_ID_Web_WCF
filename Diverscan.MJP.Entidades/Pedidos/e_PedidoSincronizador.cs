@@ -8,7 +8,6 @@ namespace Diverscan.MJP.Entidades.Pedidos
     [Serializable]
     public class e_PedidoSincronizador
     {
-        private int _IdDespachoPedido;
         private int _IdPedidoOriginal;
         private string _Destino;
         private DateTime _FechaCreacion;
@@ -18,10 +17,9 @@ namespace Diverscan.MJP.Entidades.Pedidos
         private int _IdTransportista;
         private string _NombreTransportista;
 
-        public e_PedidoSincronizador(int idDespachoPedido, int idPedidoOriginal, string destino, DateTime fechaCreacion, DateTime fechaEntrega, bool tipo,
+        public e_PedidoSincronizador(int idPedidoOriginal, string destino, DateTime fechaCreacion, DateTime fechaEntrega, bool tipo,
             string nombreProfesor, int idTransportista, string nombreTransportista)
         {
-            _IdDespachoPedido = idDespachoPedido;
             _IdPedidoOriginal = idPedidoOriginal;
             _Destino = destino;
             _FechaCreacion = fechaCreacion;
@@ -32,7 +30,6 @@ namespace Diverscan.MJP.Entidades.Pedidos
             _NombreTransportista = nombreTransportista;
         }
 
-        public int IdDespachoPedido { get => _IdDespachoPedido; set => _IdDespachoPedido = value; }
         public int IdPedidoOriginal { get => _IdPedidoOriginal; set => _IdPedidoOriginal = value; }
         public string Destino { get => _Destino; set => _Destino = value; }
         public DateTime FechaCreacion { get => _FechaCreacion; set => _FechaCreacion = value; }

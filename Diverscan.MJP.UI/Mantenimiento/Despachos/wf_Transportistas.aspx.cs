@@ -381,9 +381,9 @@ namespace Diverscan.MJP.UI.Mantenimiento.Despachos
                 }
 
 
-                //String mensaje = _dEncargado.IngresarEncargado(
-                //    new EEncargado(_idWarehouse,nombre,telefono,correo,comentario,true));
-                //Mensaje("info", mensaje, "");
+                String mensaje = _dEncargado.IngresarEncargado(
+                    new EEncargado(_idWarehouse,nombre,telefono,correo,comentario,true));
+                Mensaje("info", mensaje, "");
             }
             catch (Exception ex) 
             {
@@ -434,9 +434,9 @@ namespace Diverscan.MJP.UI.Mantenimiento.Despachos
                 }
 
 
-                //String mensaje = _dEncargado.ActualizarEncargado(
-                //    new EEncargado(idTransportista,_idWarehouse, nombre, telefono, correo, comentario, activo));
-                //Mensaje("info", mensaje, "");
+                String mensaje = _dEncargado.ActualizarEncargado(
+                    new EEncargado(idTransportista,_idWarehouse, nombre, telefono, correo, comentario, activo));
+                Mensaje("info", mensaje, "");
             }
             catch (Exception ex)
             {

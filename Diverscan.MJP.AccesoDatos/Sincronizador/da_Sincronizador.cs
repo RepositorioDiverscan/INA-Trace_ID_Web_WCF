@@ -136,8 +136,7 @@ namespace Diverscan.MJP.AccesoDatos.Sincronizador
             try
             {
 
-                int idDespachoPedido = Convert.ToInt32(reader["IdDespachoPedido"].ToString());
-                int idPedidoOriginal = Convert.ToInt32(reader["IdPedidoOriginal"].ToString());
+                int idPedidoOriginal = Convert.ToInt32(reader["IdDespachoPedido"].ToString());
                 string destino = reader["Destino"].ToString();
                 DateTime fechaCreacion = DateTime.Parse(reader["FechaCreacion"].ToString());
                 DateTime fechaEntrega = DateTime.Parse(reader["FechaEntrega"].ToString());
@@ -146,7 +145,7 @@ namespace Diverscan.MJP.AccesoDatos.Sincronizador
                 int idTransportista = Convert.ToInt32(reader["IdEncargado"].ToString());
                 string nombreTransportista = reader["NombreEncargado"].ToString();
 
-                var e_pedido = new e_PedidoSincronizador(idDespachoPedido, idPedidoOriginal, destino, fechaCreacion, fechaEntrega, tipo, nombreProfesor,
+                var e_pedido = new e_PedidoSincronizador(idPedidoOriginal, destino, fechaCreacion, fechaEntrega, tipo, nombreProfesor,
                     idTransportista, nombreTransportista);
 
                 return e_pedido;
