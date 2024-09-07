@@ -627,137 +627,137 @@ namespace Diverscan.MJP.UI.Mantenimiento.Despachos
 
         private void CargarVehiculos(string buscar, bool pestana)
         {
-            try
-            {                              
-                _vehiculosList = _dVehiculo.GetVehiculoXBodega(_idWarehouse, buscar);
+            //try
+            //{                              
+            //    _vehiculosList = _dVehiculo.GetVehiculoXBodega(_idWarehouse, buscar);
 
-                RadGridVehiculos.DataSource = _vehiculosList;
-                RadGridVehiculos.DataBind();
+            //    RadGridVehiculos.DataSource = _vehiculosList;
+            //    RadGridVehiculos.DataBind();
 
-            }
-            catch (Exception ex)
-            {
-                Mensaje("error", "Ops! Ha ocurrido un Error." + ex.Message, "");
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    Mensaje("error", "Ops! Ha ocurrido un Error." + ex.Message, "");
+            //}
         }
 
         protected void btnAgregar2_Click(object sender, EventArgs e)
         {
-            Control Ctr = (Control)sender;
-            var Panel = Ctr.Parent.Parent.Parent;
+            //Control Ctr = (Control)sender;
+            //var Panel = Ctr.Parent.Parent.Parent;
 
-            try
-            {
-                if (ddlidTransportista.SelectedIndex <= 0)
-                {
-                    Mensaje("error", "Debe Seleccionar un transportista", "");
-                    return;
-                }
+            //try
+            //{
+            //    if (ddlidTransportista.SelectedIndex <= 0)
+            //    {
+            //        Mensaje("error", "Debe Seleccionar un transportista", "");
+            //        return;
+            //    }
 
-                if (ddlIdTipoVehiculo.SelectedIndex < 0)
-                {
-                    Mensaje("error", "Debe Seleccionar un tipo de vehiculo", "");
-                    return;
-                }
+            //    if (ddlIdTipoVehiculo.SelectedIndex < 0)
+            //    {
+            //        Mensaje("error", "Debe Seleccionar un tipo de vehiculo", "");
+            //        return;
+            //    }
 
-                if (ddlIdMarcaVehiculo.SelectedIndex < 0)
-                {
-                    Mensaje("error", "Debe Seleccionar una marca vehiculo", "");
-                    return;
-                }
+            //    if (ddlIdMarcaVehiculo.SelectedIndex < 0)
+            //    {
+            //        Mensaje("error", "Debe Seleccionar una marca vehiculo", "");
+            //        return;
+            //    }
 
-                if (ddlidcolor.SelectedIndex < 0)
-                {
-                    Mensaje("error", "Debe Seleccionar el color del vehiculo", "");
-                    return;
-                }
+            //    if (ddlidcolor.SelectedIndex < 0)
+            //    {
+            //        Mensaje("error", "Debe Seleccionar el color del vehiculo", "");
+            //        return;
+            //    }
 
-                int idTransportista = Convert.ToInt32(ddlidTransportista.SelectedValue);
-                int idTipo = Convert.ToInt32(ddlIdTipoVehiculo.SelectedValue);
-                int idMarca = Convert.ToInt32(ddlIdMarcaVehiculo.SelectedValue);
-                int idColor = Convert.ToInt32(ddlidcolor.SelectedValue);
-                string numeroPlaca = txtPlaca.Text;
-                string modelo = txtModelo.Text;
-                decimal volumen = Convert.ToDecimal(txtCapacidadVolumen.Text);
-                int peso = Convert.ToInt32(txtCapacidadPeso.Text);
-                string comentario = txtComentario.Text;
-                int idUsuarioRegistro = Convert.ToInt32(((e_Usuario)Session["USUARIO"]).IdUsuario);
-                SEVehiculo vehiculo = new SEVehiculo(idTransportista, idTipo, idMarca, idColor, numeroPlaca, modelo, volumen, peso, comentario, _idWarehouse, true, idUsuarioRegistro);
-                // string[] Msj = n_SmartMaintenance.AgregarDatos(Panel, e_TablasBaseDatos.TblVehiculos(), ToleranciaAgregar, UsrLogged.IdUsuario);
-                // if (Msj[1] != "") Mensaje(Msj[0], Msj[1], "");
-                DVehiculo dVehiculo = new DVehiculo();
-                string result = dVehiculo.InsertVehiculo(vehiculo);
-                Mensaje("info", result, "");
-                CargarDDLS();
-                LimpiarVehiculos();
-                CargarVehiculos("", true);
-            }
-            catch (Exception)
-            {
-                Mensaje("error", "Ha ocurrido un problema, por favor intente lo más tarde o reporte lo a TI", "");
-            }
+            //    int idTransportista = Convert.ToInt32(ddlidTransportista.SelectedValue);
+            //    int idTipo = Convert.ToInt32(ddlIdTipoVehiculo.SelectedValue);
+            //    int idMarca = Convert.ToInt32(ddlIdMarcaVehiculo.SelectedValue);
+            //    int idColor = Convert.ToInt32(ddlidcolor.SelectedValue);
+            //    string numeroPlaca = txtPlaca.Text;
+            //    string modelo = txtModelo.Text;
+            //    decimal volumen = Convert.ToDecimal(txtCapacidadVolumen.Text);
+            //    int peso = Convert.ToInt32(txtCapacidadPeso.Text);
+            //    string comentario = txtComentario.Text;
+            //    int idUsuarioRegistro = Convert.ToInt32(((e_Usuario)Session["USUARIO"]).IdUsuario);
+            //    SEVehiculo vehiculo = new SEVehiculo(idTransportista, idTipo, idMarca, idColor, numeroPlaca, modelo, volumen, peso, comentario, _idWarehouse, true, idUsuarioRegistro);
+            //    // string[] Msj = n_SmartMaintenance.AgregarDatos(Panel, e_TablasBaseDatos.TblVehiculos(), ToleranciaAgregar, UsrLogged.IdUsuario);
+            //    // if (Msj[1] != "") Mensaje(Msj[0], Msj[1], "");
+            //    DVehiculo dVehiculo = new DVehiculo();
+            //    string result = dVehiculo.InsertVehiculo(vehiculo);
+            //    Mensaje("info", result, "");
+            //    CargarDDLS();
+            //    LimpiarVehiculos();
+            //    CargarVehiculos("", true);
+            //}
+            //catch (Exception)
+            //{
+            //    Mensaje("error", "Ha ocurrido un problema, por favor intente lo más tarde o reporte lo a TI", "");
+            //}
         }
 
         protected void btnEditar2_Click(object sender, EventArgs e)
         {
-            Control Ctr = (Control)sender;
-            var Panel = Ctr.Parent.Parent.Parent;
-            try
-            {
-                if (ddlBodegasVehiculo.SelectedIndex <= 0)
-                {
-                    Mensaje("error", "Debe Seleccionar una Bodega", "");
-                    return;
-                }
+            //Control Ctr = (Control)sender;
+            //var Panel = Ctr.Parent.Parent.Parent;
+            //try
+            //{
+            //    if (ddlBodegasVehiculo.SelectedIndex <= 0)
+            //    {
+            //        Mensaje("error", "Debe Seleccionar una Bodega", "");
+            //        return;
+            //    }
 
-                if (ddlidTransportista.SelectedIndex <= 0)
-                {
-                    Mensaje("error", "Debe Seleccionar un transportista", "");
-                    return;
-                }
+            //    if (ddlidTransportista.SelectedIndex <= 0)
+            //    {
+            //        Mensaje("error", "Debe Seleccionar un transportista", "");
+            //        return;
+            //    }
 
-                if (ddlIdTipoVehiculo.SelectedIndex <= 0)
-                {
-                    Mensaje("error", "Debe Seleccionar un tipo de vehiculo", "");
-                    return;
-                }
+            //    if (ddlIdTipoVehiculo.SelectedIndex <= 0)
+            //    {
+            //        Mensaje("error", "Debe Seleccionar un tipo de vehiculo", "");
+            //        return;
+            //    }
 
-                if (ddlIdMarcaVehiculo.SelectedIndex <= 0)
-                {
-                    Mensaje("error", "Debe Seleccionar una marca vehiculo", "");
-                    return;
-                }
+            //    if (ddlIdMarcaVehiculo.SelectedIndex <= 0)
+            //    {
+            //        Mensaje("error", "Debe Seleccionar una marca vehiculo", "");
+            //        return;
+            //    }
 
-                if (ddlidcolor.SelectedIndex <= 0)
-                {
-                    Mensaje("error", "Debe Seleccionar el color del vehiculo", "");
-                    return;
-                }
+            //    if (ddlidcolor.SelectedIndex <= 0)
+            //    {
+            //        Mensaje("error", "Debe Seleccionar el color del vehiculo", "");
+            //        return;
+            //    }
 
-                long idVehiculo = long.Parse(txtidVehiculo.Text);
-                int idTransportista = Convert.ToInt32(ddlidTransportista.SelectedValue);
-                int idTipo = Convert.ToInt32(ddlIdTipoVehiculo.SelectedValue);
-                int idMarca = Convert.ToInt32(ddlIdMarcaVehiculo.SelectedValue);
-                int idColor = Convert.ToInt32(ddlidcolor.SelectedValue);
-                string numeroPlaca = txtPlaca.Text;
-                string modelo = txtModelo.Text;
-                decimal volumen = Convert.ToDecimal(txtCapacidadVolumen.Text);
-                int peso = Convert.ToInt32(txtCapacidadPeso.Text);
-                string comentario = txtComentario.Text;
-                int idUsuarioRegistro = Convert.ToInt32(((e_Usuario)Session["USUARIO"]).IdUsuario);
-                SEVehiculo vehiculo = new SEVehiculo(idTransportista, idTipo, idMarca, idColor, numeroPlaca, modelo, volumen, peso, comentario, _idWarehouse, true, idUsuarioRegistro);
-                vehiculo.IdVehiculo = idVehiculo;
-                DVehiculo dVehiculo = new DVehiculo();
-                string result = dVehiculo.UpdateVehiculo(vehiculo);
-                Mensaje("info", result, "");
-                CargarDDLS();
-                LimpiarVehiculos();
-                CargarVehiculos("", true);
-            }
-            catch (Exception)
-            {
-                Mensaje("error", "Ha ocurrido un problema, por favor intente lo más tarde o reporte lo a TI", "");
-            }
+            //    long idVehiculo = long.Parse(txtidVehiculo.Text);
+            //    int idTransportista = Convert.ToInt32(ddlidTransportista.SelectedValue);
+            //    int idTipo = Convert.ToInt32(ddlIdTipoVehiculo.SelectedValue);
+            //    int idMarca = Convert.ToInt32(ddlIdMarcaVehiculo.SelectedValue);
+            //    int idColor = Convert.ToInt32(ddlidcolor.SelectedValue);
+            //    string numeroPlaca = txtPlaca.Text;
+            //    string modelo = txtModelo.Text;
+            //    decimal volumen = Convert.ToDecimal(txtCapacidadVolumen.Text);
+            //    int peso = Convert.ToInt32(txtCapacidadPeso.Text);
+            //    string comentario = txtComentario.Text;
+            //    int idUsuarioRegistro = Convert.ToInt32(((e_Usuario)Session["USUARIO"]).IdUsuario);
+            //    SEVehiculo vehiculo = new SEVehiculo(idTransportista, idTipo, idMarca, idColor, numeroPlaca, modelo, volumen, peso, comentario, _idWarehouse, true, idUsuarioRegistro);
+            //    vehiculo.IdVehiculo = idVehiculo;
+            //    DVehiculo dVehiculo = new DVehiculo();
+            //    string result = dVehiculo.UpdateVehiculo(vehiculo);
+            //    Mensaje("info", result, "");
+            //    CargarDDLS();
+            //    LimpiarVehiculos();
+            //    CargarVehiculos("", true);
+            //}
+            //catch (Exception)
+            //{
+            //    Mensaje("error", "Ha ocurrido un problema, por favor intente lo más tarde o reporte lo a TI", "");
+            //}
         }
 
         private void LimpiarVehiculos()

@@ -1,0 +1,51 @@
+﻿body
+{
+    font-family: Arial;
+    font-size: 16pt;
+    color: black;
+}
+.MenuCss {
+    width: 100%;
+    height: 40px;
+    top: 0;
+    position: fixed;
+    z-index: 1000;
+}
+
+.Nav_menu
+{
+    padding-left: 2%;
+}
+
+.main_menu
+{
+    color: black;
+    text-align: center;
+    line-height: 30px;
+    margin-right: 5px;
+    font-size: 16px;
+    background-color: red;
+    border-radius: 5.0px;
+}
+.level_menu
+{
+    width: 110px;
+    background-color: #000;
+    color: #fff;
+    text-align: left;
+    height: 30px;
+    line-height: 30px;
+    margin-top: 5px;
+}
+
+.SitemapStyle
+{
+    color: whitesmoke;
+    text-align: center;
+}
+.selected
+{
+    background-color: #852B91;
+    color: #fff;
+}
+

@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<siteMap xmlns="http://schemas.microsoft.com/AspNet/SiteMap-File-1.0" >
+  <siteMapNode url="~/Default.aspx" title="Menú Principal"  description="Menú Principal">
+    <!--Prueba de servicion-->
+    <siteMapNode url="~/ConsultaCompraRed.aspx" tite="Consulta de Servicio" description="Consulta Servicio"/>
+    <!--Salidas sin justificacion-->
+    <siteMapNode url="~/ControlSalidasSin.aspx" title="Manejo de salidas" description="Manejo de salidas"/>
+    <!--Centro de reportes-->
+    <siteMapNode url="~/Reportes/wf_ReporteCentro.aspx" title="Centro Reporte" description="Centro Reporte"/>
+    <!--Administracion-->
+    
+    <siteMapNode url="~/Administracion/wf_MenuAdministracion.aspx" title="Menú Administracion"  description="Menú Administracion">
+      <siteMapNode url="~/Administracion/wf_Usuarios.aspx" title="Usuarios"  description="Usuarios" />
+      <siteMapNode url="~/Administracion/Programa/wf_Programa.aspx" title="Programas"  description="Programas" />
+      <siteMapNode url="~/Administracion/Centros Penales/wf_CentrolesPenales.aspx" title="Destinos"  description="Destinos" />
+      <siteMapNode url="~/MaestroArticulos/wf_Empaque.aspx" title="Empaque"  description="Empaque"/>
+    </siteMapNode>
+    
+   <!--Ingresos-->
+    <siteMapNode url="~/Ingresos/wf_MenuIngresos.aspx" title="Menú Ingresos" description="Menú Ingresos">
+       <!--Orden de Compra-->
+       <siteMapNode url="~/Ingresos/OrdenCompra/wf_ListadoOrdenes.aspx" title="Listado Orden"  description="Listado Orden">
+         <siteMapNode url="~/Ingresos/OrdenCompra/wf_OrdenCompra.aspx" title="Orden Compra"  description="Orden Compra" >
+           <siteMapNode url="~/Ingresos/OrdenCompra/wf_DetalleCompra.aspx" title="Detalle Compra"  description="Detalle Compra" />
+         </siteMapNode>
+       </siteMapNode>
+
+       <siteMapNode url="~/Ingresos/wf_Custodia.aspx" title="Custodia" description="Custodia"></siteMapNode>
+        <siteMapNode url="~/Ingresos/wf_ConsultaDevoluciones.aspx" title="Menú Devoluciones" description="Menú devoluciones">
+          <siteMapNode url="~/Ingresos/wf_Devoluciones.aspx" title="Registro Devolución" description="Registro devolución"></siteMapNode>
+        </siteMapNode>
+
+    
+    </siteMapNode>
+    
+    <!--Salidas-->
+    <siteMapNode url="~/Salidas/wf_MenuSalidas.aspx" title="Menú Salidas" description="Menú Salidas">
+      
+      <siteMapNode url="~/Salidas/Requisicion/wf_ConsultaRequisicion.aspx" title="Consulta Requisicion" description="Consulta Requisicion">
+        <siteMapNode url="~/Salidas/Requisicion/wf_Requisicion.aspx" title="Recepcion Requisicion" description="Recepcion Requisicion">
+          <siteMapNode url="~/Salidas/Requisicion/wf_DetalleRequisicion.aspx" title="Detalle Requisición" description="Detalle Requisición"></siteMapNode>
+        </siteMapNode>
+      </siteMapNode>
+
+      <siteMapNode url="~/Salidas/Alistos/wf_ConsultaAlistos.aspx" title="Consulta Alistos" description="Consulta Alistos">
+        <siteMapNode url="~/Salidas/Alistos/wf_Alistos.aspx" title="Orden Alistos" description="Orden Alistos"></siteMapNode>
+      </siteMapNode>
+      
+      <siteMapNode url="~/Salidas/Despacho/wf_ConsultaDespacho.aspx" title="Consulta Despachos" description="Consulta Despachos">
+      <siteMapNode url="~/Salidas/Despacho/wf_Despacho.aspx" title="Despacho" description="Despacho"></siteMapNode>
+      </siteMapNode>
+      
+    </siteMapNode>
+    
+    <!--Configuracion-->
+    <siteMapNode url="~/Configuracion/wf_MenuConfiguracion.aspx" title="Menú Configuración" description="Menú Configuración">
+      <!--MaestroArticulos-->
+      <siteMapNode url="~/Reportes/wf_ReporteArticulos.aspx" title="Reporte Articulo"  description="Reporte Articulo"/>
+      <siteMapNode url="~/MaestroArticulos/wf_BandejaMaestroArticulo.aspx" title="Bandeja Maestro" description="Bandeja Maestro">
+        <siteMapNode url="~/MaestroArticulos/wf_MaestroArticulo.aspx" title="Maestro Articulos"  description="Maestro Articulos" />
+        <siteMapNode url="~/MaestroArticulos/wf_EditarArtibutos.aspx" title="Editar Articulos"  description="Editar Articulos" />
+        <siteMapNode url="~/MaestroArticulos/wf_ImportaExcel.aspx" title="Importar_Excel"  description="Importar Excel"/>
+      </siteMapNode>
+      <!--ActualizacionCantidad-->
+      <siteMapNode url="~/Administracion/Actualizacion_Cantidad/wf_ConsultaUbicacion.aspx" title="Consulta Solicitudes" description="Consulta Solicitudes">
+        <siteMapNode url="~/Administracion/Actualizacion_Cantidad/wf_DetalleActualizacion.aspx" title="Mantenimiento Solicitud"  description="Mantenimiento Solicitud"/>
+      </siteMapNode>
+       <!--Inventarios-->
+       <siteMapNode url="~/Configuracion/Inventario/wf_Inventario.aspx" title="Inventario"  description="Inventario"/>
+      <!-- Traslado Programas-->
+      <siteMapNode url="~/Configuracion/TrasladoProgramas/wf_TrasladoProgramas.aspx" title="Traslado Programas"  description="Traslado Programas"/>
+       <!--Requisiciones-->
+      
+       <!--Fecha Vencimiento lote-->
+      <siteMapNode url="~/Administracion/Programa/wf_FamiliarYRequerimientos.aspx" title="Fecha Vencimiento y lote" description="Fecha Vencimiento y lote"/>
+       <!--Fecha Vencimiento lote-->
+      
+      
+      <siteMapNode url="~/Configuracion/ValidacionReq/wf_ListadoRequerimientos.aspx" title="Listado Requerimientos"  description="Listado Requerimientos">
+         <siteMapNode url="~/Configuracion/ValidacionReq/wf_ValidaRequerimientos.aspx" title="Requerimientos"  description="Requerimientos"/>
+      </siteMapNode>
+      
+      <!--MaestroUbicacion-->
+      <siteMapNode url="~/Configuracion/MaestroUbicaciones/wf_MenuUbicaciones.aspx" title="Menú Ubicaciones" description="Menú Ubicaciones">
+         <siteMapNode url="~/Configuracion/MaestroUbicaciones/wf_MantenimientoGeneral.aspx" title="Mantenimiento General" description="Mantenimiento General"></siteMapNode>
+         <siteMapNode url="~/Configuracion/MaestroUbicaciones/wf_Localizacion.aspx" title="Localizaciones" description="Localizaciones"></siteMapNode>
+         <siteMapNode url="~/Configuracion/MaestroUbicaciones/wf_Reubicacion.aspx" title="Reubicaciones" description="Reubicaciones"></siteMapNode>
+      </siteMapNode>
+    </siteMapNode>
+
+    <!--Embarque-->
+    <siteMapNode url="~/Embarque/wf_ListadoEmbarque.aspx" title="Listado Embarque" description="Listado Embarque">
+      <siteMapNode url="~/Embarque/wf_FormularioEmbarque.aspx" title="Formulario Embarque"  description="Formulario Embarque"/>
+      <siteMapNode url="~/Embarque/wf_CargarEmbarque.aspx" title="Cargar Embarque"  description="Cargar Embarque"/>
+    </siteMapNode>
+    
+    <siteMapNode url="~/wf_Control.aspx" title="Centro Control" description="Centro Control"/>
+    
+    <siteMapNode url="~/wf_Doc_Y_Infor.aspx" title="Información" description="Información"/>
+  
+  </siteMapNode>
+</siteMap>

@@ -954,18 +954,13 @@
     <Content Include="Scripts\js\pedidos.js" />
     <Content Include="Scripts\js\script.js" />
     <Content Include="Default.aspx" />
-    <Content Include="Reportes\Alisto\RecargaGuanacaste\wf_ReporteRecargaGuanacaste.aspx" />
     <Content Include="Reportes\Alisto\wf_ReporteAsignacionAlisto.aspx" />
     <Content Include="Reportes\Certificacion\wf_AsignoCertificacion.aspx" />
-    <Content Include="Reportes\Certificacion\wf_SSCCSINOFinalizados.aspx" />
     <Content Include="Reportes\DespachoMercaderia\wf_DespachoMercaderia.aspx" />
     <Content Include="Reportes\KardexXSkuTIDSAP\wf_KardexXSkuTIDSAP.aspx" />
     <Content Include="Reportes\OrdenesCompra\wf_ReporteOrdenesCompras.aspx" />
-    <Content Include="Reportes\RotacionInventario\wf_ReporteRotacionInventario.aspx" />
     <Content Include="Reportes\TransitoMercaderia\wf_TransitoMercaderia.aspx" />
     <Content Include="Reportes\Traslado\wf_ReporteTrasladoMercaderia.aspx" />
-    <Content Include="Reportes\UbicacionSku\wf_ReporteTotalUbicacionesSku.aspx" />
-    <Content Include="Reportes\UnidadDisponibleTIDSAP\wf_UnidadDisponibleTIDSAP.aspx" />
     <Content Include="Reportes\VecimientoProdcuto\wf_VencimientoProducto.aspx" />
     <Content Include="Reportes\wf_KardexSkuDetalleTra.aspx" />
     <Content Include="Images\Button\error.png" />
@@ -1609,7 +1604,6 @@
     <Content Include="Notificaciones\Notificaciones.aspx" />
     <Content Include="Operaciones\Certificacion\wfSSCCCertificados.aspx" />
     <Content Include="Operaciones\Certificacion\wf_Certificacion.aspx" />
-    <Content Include="Operaciones\Embarques\wf_Programacion.aspx" />
     <Content Include="Operaciones\Eventos\wf_DemoEventos.aspx" />
     <Content Include="Operaciones\Ingresos\Provedores\wf_MantenimientoProvedor.aspx" />
     <Content Include="Administracion\Motor de Desiciones\Contextos.aspx" />
@@ -1643,12 +1637,9 @@
     <Content Include="Reportes\Despacho.aspx" />
     <Content Include="Reportes\Historico_OrdenC.aspx" />
     <Content Include="Reportes\PedidosFacturadosProducto\wfProductoPedidosFacturados.aspx" />
-    <Content Include="Reportes\ReporteArticulos.aspx" />
     <Content Include="Reportes\FaltantesDespacho\ReporteFaltantesDespacho.aspx" />
     <Content Include="Reportes\ReportePicking.aspx" />
-    <Content Include="Reportes\RptDespachosPorPedido\RptDespachosPorPedidoVisor.aspx" />
     <Content Include="Reportes\RptDespachosPorPedido\RptDespachosPorPedidoVisorF.aspx" />
-    <Content Include="Reportes\SugerenciasAlmacenamiento.aspx" />
     <Content Include="Reportes\ProductosPedidoFacturado\wfTrazabilidadPorPerdido.aspx" />
     <Content Include="Reportes\TrazabilidadProducto.aspx" />
     <Content Include="Reportes\Trazabilidad\Trazabilidad.aspx" />
@@ -1661,13 +1652,10 @@
     <Content Include="Reportes\RptDespachosPorPedido\wf_DespachosPorPedido.aspx" />
     <Content Include="Reportes\wf_DiferenciaInventario.aspx" />
     <Content Include="Reportes\wf_DisponibilidaBodegaPorPedido.aspx" />
-    <Content Include="Reportes\wf_HistoricoDemanda.aspx" />
     <Content Include="Reportes\wf_Historico_Devoluciones.aspx" />
     <Content Include="Reportes\wf_Kardex.aspx" />
     <Content Include="Reportes\wf_KardexMacro.aspx" />
     <Content Include="Reportes\wf_Kardex_V2.aspx" />
-    <Content Include="Reportes\wf_PedidosSinOla.aspx" />
-    <Content Include="Reportes\wf_RecibidoProveedor.aspx" />
     <Content Include="Reportes\wf_Reporte_CantidadPedidaTiendas.aspx" />
     <Content Include="Reportes\wf_Reporte_PersonaAlisto.aspx" />
     <Content Include="Scripts\Alertas\alertify.js" />
@@ -2435,12 +2423,6 @@
     <Compile Include="Operaciones\Traslados\SolicitudTraslados\solicitud_traslado.aspx.designer.cs">
       <DependentUpon>solicitud_traslado.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Reportes\Alisto\RecargaGuanacaste\wf_ReporteRecargaGuanacaste.aspx.cs">
-      <DependentUpon>wf_ReporteRecargaGuanacaste.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Reportes\Alisto\RecargaGuanacaste\wf_ReporteRecargaGuanacaste.aspx.designer.cs">
-      <DependentUpon>wf_ReporteRecargaGuanacaste.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Reportes\Alisto\ReporteAsignacionAjax.aspx.cs">
       <DependentUpon>ReporteAsignacionAjax.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2468,12 +2450,6 @@
     </Compile>
     <Compile Include="Reportes\Certificacion\wf_AsignoCertificacion.aspx.designer.cs">
       <DependentUpon>wf_AsignoCertificacion.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Reportes\Certificacion\wf_SSCCSINOFinalizados.aspx.cs">
-      <DependentUpon>wf_SSCCSINOFinalizados.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Reportes\Certificacion\wf_SSCCSINOFinalizados.aspx.designer.cs">
-      <DependentUpon>wf_SSCCSINOFinalizados.aspx</DependentUpon>
     </Compile>
     <Compile Include="Reportes\DespachadoVsRecibido\DespachadoVsRecibidoAjax.aspx.cs">
       <DependentUpon>DespachadoVsRecibidoAjax.aspx</DependentUpon>
@@ -2545,12 +2521,6 @@
     <Compile Include="Reportes\Ingresos\OrdenCompraAjax.aspx.designer.cs">
       <DependentUpon>OrdenCompraAjax.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Reportes\RotacionInventario\wf_ReporteRotacionInventario.aspx.cs">
-      <DependentUpon>wf_ReporteRotacionInventario.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Reportes\RotacionInventario\wf_ReporteRotacionInventario.aspx.designer.cs">
-      <DependentUpon>wf_ReporteRotacionInventario.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Reportes\SolicitudDevolucion\SolicitudDevolucionAjax.aspx.cs">
       <DependentUpon>SolicitudDevolucionAjax.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2578,18 +2548,6 @@
     </Compile>
     <Compile Include="Reportes\Traslado\wf_ReporteTrasladoMercaderia.aspx.designer.cs">
       <DependentUpon>wf_ReporteTrasladoMercaderia.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Reportes\UbicacionSku\wf_ReporteTotalUbicacionesSku.aspx.cs">
-      <DependentUpon>wf_ReporteTotalUbicacionesSku.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Reportes\UbicacionSku\wf_ReporteTotalUbicacionesSku.aspx.designer.cs">
-      <DependentUpon>wf_ReporteTotalUbicacionesSku.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Reportes\UnidadDisponibleTIDSAP\wf_UnidadDisponibleTIDSAP.aspx.cs">
-      <DependentUpon>wf_UnidadDisponibleTIDSAP.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Reportes\UnidadDisponibleTIDSAP\wf_UnidadDisponibleTIDSAP.aspx.designer.cs">
-      <DependentUpon>wf_UnidadDisponibleTIDSAP.aspx</DependentUpon>
     </Compile>
     <Compile Include="Reportes\VecimientoProdcuto\wf_VencimientoProducto.aspx.cs">
       <DependentUpon>wf_VencimientoProducto.aspx</DependentUpon>
@@ -2740,13 +2698,6 @@
     </Compile>
     <Compile Include="Operaciones\Certificacion\wf_Certificacion.aspx.designer.cs">
       <DependentUpon>wf_Certificacion.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Operaciones\Embarques\wf_Programacion.aspx.cs">
-      <DependentUpon>wf_Programacion.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Operaciones\Embarques\wf_Programacion.aspx.designer.cs">
-      <DependentUpon>wf_Programacion.aspx</DependentUpon>
     </Compile>
     <Compile Include="Operaciones\Eventos\wf_DemoEventos.aspx.cs">
       <DependentUpon>wf_DemoEventos.aspx</DependentUpon>
@@ -2986,12 +2937,6 @@
     <Compile Include="Reportes\PedidosFacturadosProducto\wfProductoPedidosFacturados.aspx.designer.cs">
       <DependentUpon>wfProductoPedidosFacturados.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Reportes\ReporteArticulos.aspx.cs">
-      <DependentUpon>ReporteArticulos.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Reportes\ReporteArticulos.aspx.designer.cs">
-      <DependentUpon>ReporteArticulos.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Reportes\FaltantesDespacho\ReporteFaltantesDespacho.aspx.cs">
       <DependentUpon>ReporteFaltantesDespacho.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -3017,25 +2962,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DSDespachosPorPedido.xsd</DependentUpon>
     </Compile>
-    <Compile Include="Reportes\RptDespachosPorPedido\RptDespachosPorPedidoVisor.aspx.cs">
-      <DependentUpon>RptDespachosPorPedidoVisor.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Reportes\RptDespachosPorPedido\RptDespachosPorPedidoVisor.aspx.designer.cs">
-      <DependentUpon>RptDespachosPorPedidoVisor.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Reportes\RptDespachosPorPedido\RptDespachosPorPedidoVisorF.aspx.cs">
       <DependentUpon>RptDespachosPorPedidoVisorF.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Reportes\RptDespachosPorPedido\RptDespachosPorPedidoVisorF.aspx.designer.cs">
       <DependentUpon>RptDespachosPorPedidoVisorF.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Reportes\SugerenciasAlmacenamiento.aspx.cs">
-      <DependentUpon>SugerenciasAlmacenamiento.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Reportes\SugerenciasAlmacenamiento.aspx.designer.cs">
-      <DependentUpon>SugerenciasAlmacenamiento.aspx</DependentUpon>
     </Compile>
     <Compile Include="Reportes\ProductosPedidoFacturado\wfTrazabilidadPorPerdido.aspx.cs">
       <DependentUpon>wfTrazabilidadPorPerdido.aspx</DependentUpon>
@@ -3129,13 +3061,6 @@
     <Compile Include="Reportes\wf_DisponibilidaBodegaPorPedido.aspx.designer.cs">
       <DependentUpon>wf_DisponibilidaBodegaPorPedido.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Reportes\wf_HistoricoDemanda.aspx.cs">
-      <DependentUpon>wf_HistoricoDemanda.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Reportes\wf_HistoricoDemanda.aspx.designer.cs">
-      <DependentUpon>wf_HistoricoDemanda.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Reportes\Kardex1.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -3178,19 +3103,6 @@
     </Compile>
     <Compile Include="Reportes\wf_Kardex_V2.aspx.designer.cs">
       <DependentUpon>wf_Kardex_V2.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Reportes\wf_PedidosSinOla.aspx.cs">
-      <DependentUpon>wf_PedidosSinOla.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Reportes\wf_PedidosSinOla.aspx.designer.cs">
-      <DependentUpon>wf_PedidosSinOla.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Reportes\wf_RecibidoProveedor.aspx.cs">
-      <DependentUpon>wf_RecibidoProveedor.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Reportes\wf_RecibidoProveedor.aspx.designer.cs">
-      <DependentUpon>wf_RecibidoProveedor.aspx</DependentUpon>
     </Compile>
     <Compile Include="Reportes\wf_Reporte_CantidadPedidaTiendas.aspx.cs">
       <DependentUpon>wf_Reporte_CantidadPedidaTiendas.aspx</DependentUpon>
@@ -3397,7 +3309,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties UseJQuerySupport="False" UseAjaxifiedTemplates="False" />
+      <UserProperties UseAjaxifiedTemplates="False" UseJQuerySupport="False" />
     </VisualStudio>
   </ProjectExtensions>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

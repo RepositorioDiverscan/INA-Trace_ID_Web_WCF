@@ -1,0 +1,1 @@
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="pedidoAdminAjax.aspx.cs" Inherits="Diverscan.MJP.UI.Operaciones.Pedidos.PedidosAdministrativos.pedidoAdminAjax" %>

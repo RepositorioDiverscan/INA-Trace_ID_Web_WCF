@@ -1,12 +1,37 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Kevin H\\INA-Trace_ID_Web_WCF\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{2120D5C3-0CA8-4FDE-BBF2-C72EC59802BE}|TRACEID.WCFHH\\TRACEID.WCF.csproj|c:\\kevin h\\ina-trace_id_web_wcf\\traceid.wcfhh\\web.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{2120D5C3-0CA8-4FDE-BBF2-C72EC59802BE}|TRACEID.WCFHH\\TRACEID.WCF.csproj|solutionrelative:traceid.wcfhh\\web.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": []
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Web.config",
+              "DocumentMoniker": "C:\\Kevin H\\INA-Trace_ID_Web_WCF\\TRACEID.WCFHH\\Web.config",
+              "RelativeDocumentMoniker": "TRACEID.WCFHH\\Web.config",
+              "ToolTip": "C:\\Kevin H\\INA-Trace_ID_Web_WCF\\TRACEID.WCFHH\\Web.config",
+              "RelativeToolTip": "TRACEID.WCFHH\\Web.config",
+              "ViewState": "AgIAAA0AAAAAAAAAAAAAwEkAAABKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000601|",
+              "WhenOpened": "2024-09-04T20:20:45.297Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
     }
   ]
 }
