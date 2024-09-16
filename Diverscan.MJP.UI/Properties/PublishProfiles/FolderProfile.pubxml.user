@@ -4,7 +4,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
 -->
 <Project>
   <PropertyGroup>
-    <History>False|2024-09-05T23:17:33.6230128Z||;False|2024-09-05T17:17:01.0861143-06:00||;False|2024-09-05T17:15:40.5654312-06:00||;False|2024-09-05T17:13:49.7923894-06:00||;False|2024-09-05T17:13:08.8801023-06:00||;False|2024-09-05T17:12:09.8121918-06:00||;False|2024-09-05T17:11:19.5892363-06:00||;False|2024-09-05T17:09:14.4706157-06:00||;False|2024-09-05T17:06:28.3675436-06:00||;</History>
+    <History>True|2024-09-11T20:36:16.6073092Z||;False|2024-09-05T17:17:33.6230128-06:00||;False|2024-09-05T17:17:01.0861143-06:00||;False|2024-09-05T17:15:40.5654312-06:00||;False|2024-09-05T17:13:49.7923894-06:00||;False|2024-09-05T17:13:08.8801023-06:00||;False|2024-09-05T17:12:09.8121918-06:00||;False|2024-09-05T17:11:19.5892363-06:00||;False|2024-09-05T17:09:14.4706157-06:00||;False|2024-09-05T17:06:28.3675436-06:00||;</History>
     <LastFailureDetails />
     <_PublishTargetUrl>C:\Publicados</_PublishTargetUrl>
   </PropertyGroup>
@@ -145,10 +145,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>09/20/2012 01:13:04</publishTime>
     </File>
     <File Include="bin/App_global.asax.compiled">
-      <publishTime>09/05/2024 17:19:04</publishTime>
+      <publishTime>09/11/2024 14:35:54</publishTime>
     </File>
     <File Include="bin/App_global.asax.dll">
-      <publishTime>09/05/2024 17:19:04</publishTime>
+      <publishTime>09/11/2024 14:35:54</publishTime>
     </File>
     <File Include="bin/ar/AjaxControlToolkit.resources.dll">
       <publishTime>09/20/2012 01:13:04</publishTime>
@@ -247,37 +247,37 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/26/2021 13:20:42</publishTime>
     </File>
     <File Include="bin/Diverscan.MJP.AccesoDatos.dll">
-      <publishTime>09/05/2024 17:16:45</publishTime>
+      <publishTime>09/11/2024 14:35:10</publishTime>
     </File>
     <File Include="bin/Diverscan.MJP.AccesoDatos.dll.config">
       <publishTime>08/28/2024 09:55:06</publishTime>
     </File>
     <File Include="bin/Diverscan.MJP.AccesoDatos.pdb">
-      <publishTime>09/05/2024 17:16:45</publishTime>
+      <publishTime>09/11/2024 14:35:10</publishTime>
     </File>
     <File Include="bin/Diverscan.MJP.Entidades.dll">
-      <publishTime>09/05/2024 17:06:16</publishTime>
+      <publishTime>09/11/2024 14:35:09</publishTime>
     </File>
     <File Include="bin/Diverscan.MJP.Entidades.dll.config">
       <publishTime>08/28/2024 09:29:35</publishTime>
     </File>
     <File Include="bin/Diverscan.MJP.Entidades.pdb">
-      <publishTime>09/05/2024 17:06:16</publishTime>
+      <publishTime>09/11/2024 14:35:09</publishTime>
     </File>
     <File Include="bin/Diverscan.MJP.Negocio.dll">
-      <publishTime>09/05/2024 17:16:45</publishTime>
+      <publishTime>09/11/2024 14:35:11</publishTime>
     </File>
     <File Include="bin/Diverscan.MJP.Negocio.dll.config">
       <publishTime>08/28/2024 09:55:06</publishTime>
     </File>
     <File Include="bin/Diverscan.MJP.Negocio.pdb">
-      <publishTime>09/05/2024 17:16:45</publishTime>
+      <publishTime>09/11/2024 14:35:11</publishTime>
     </File>
     <File Include="bin/Diverscan.MJP.UI.dll">
-      <publishTime>09/05/2024 17:18:54</publishTime>
+      <publishTime>09/11/2024 14:35:26</publishTime>
     </File>
     <File Include="bin/Diverscan.MJP.UI.pdb">
-      <publishTime>09/05/2024 17:18:54</publishTime>
+      <publishTime>09/11/2024 14:35:26</publishTime>
     </File>
     <File Include="bin/Diverscan.MJP.Utilidades.dll">
       <publishTime>08/30/2024 14:22:15</publishTime>
@@ -313,7 +313,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>08/28/2024 09:28:44</publishTime>
     </File>
     <File Include="bin/es-PE/App_GlobalResources.resources.dll">
-      <publishTime>09/05/2024 17:19:03</publishTime>
+      <publishTime>09/11/2024 14:35:53</publishTime>
     </File>
     <File Include="bin/es/AjaxControlToolkit.resources.dll">
       <publishTime>09/20/2012 01:13:04</publishTime>
@@ -889,13 +889,13 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>03/27/2023 07:44:30</publishTime>
     </File>
     <File Include="bin/TRACEID.WCFHH.dll">
-      <publishTime>09/05/2024 17:18:52</publishTime>
+      <publishTime>09/11/2024 14:35:12</publishTime>
     </File>
     <File Include="bin/TRACEID.WCFHH.dll.config">
-      <publishTime>08/28/2024 09:55:09</publishTime>
+      <publishTime>09/09/2024 11:09:56</publishTime>
     </File>
     <File Include="bin/TRACEID.WCFHH.pdb">
-      <publishTime>09/05/2024 17:18:52</publishTime>
+      <publishTime>09/11/2024 14:35:12</publishTime>
     </File>
     <File Include="bin/x64/SqlServerSpatial160.dll">
       <publishTime>10/08/2022 06:58:44</publishTime>
@@ -4888,7 +4888,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>08/28/2024 11:25:54</publishTime>
     </File>
     <File Include="PrecompiledApp.config">
-      <publishTime>09/05/2024 17:18:57</publishTime>
+      <publishTime>09/11/2024 14:35:31</publishTime>
     </File>
     <File Include="Properties/DataSources/Diverscan.MJP.Entidades.e_CatalogoCompraRed.datasource">
       <publishTime>08/28/2024 09:28:43</publishTime>
@@ -5266,7 +5266,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>08/28/2024 09:28:43</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>09/05/2024 17:08:56</publishTime>
+      <publishTime>09/11/2024 14:35:29</publishTime>
     </File>
     <File Include="Web.sitemap">
       <publishTime>08/28/2024 09:28:43</publishTime>
