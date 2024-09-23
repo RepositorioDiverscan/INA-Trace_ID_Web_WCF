@@ -10,12 +10,12 @@ namespace Diverscan.MJP.AccesoDatos.Despacho
     public class DDespacho
     {
 
-        public List<EArticuloDespacho> ObtenerFaltantesDespacho(DateTime dateInit, DateTime dateFinal, int idWarehouse) 
+        public List<EArticuloDespacho> ObtenerFaltantesDespacho(DateTime dateInit, DateTime dateFinal, int idWarehouse)
         {
             List<EArticuloDespacho> faltantesDespacho = new List<EArticuloDespacho>();
             var dbTse = DatabaseFactory.CreateDatabase("MJPConnectionString");
             var dbCommand = dbTse.GetStoredProcCommand("ObtenerFaltantesDespachoArticulos");
-           
+
             dbTse.AddInParameter(dbCommand, "@dateInit", DbType.DateTime, dateInit);
             dbTse.AddInParameter(dbCommand, "@dateFinal", DbType.DateTime, dateFinal);
             dbTse.AddInParameter(dbCommand, "@idWareHouse", DbType.Int32, idWarehouse);
@@ -55,6 +55,7 @@ namespace Diverscan.MJP.AccesoDatos.Despacho
             }
             return olasDespacho;
         }
+
         public string AsignarPedidoEncargado(EAsignarDespacho input, string PIN)
         {
             var dbTse = DatabaseFactory.CreateDatabase("MJPConnectionString");
@@ -71,5 +72,25 @@ namespace Diverscan.MJP.AccesoDatos.Despacho
                 return dbTse.GetParameterValue(dbCommand, "@Resultado").ToString();
             }
         }
+
+        public byte PedidoOTraslado(string NumeroTransaccion)
+        {
+            var dbTse = DatabaseFactory.CreateDatabase("MJPConnectionString");
+
+            using (var dbCommand = dbTse.GetSqlStringCommand("SELECT dbo.Pedido_o_Traslado(@NumeroTransaccion)"))
+            {
+                dbTse.AddInParameter(dbCommand, "@NumeroTransaccion", DbType.String, NumeroTransaccion);
+
+                try
+                {
+                    return (byte)dbTse.ExecuteScalar(dbCommand);
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }
+        }
+
     }
 }

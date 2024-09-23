@@ -207,12 +207,12 @@ namespace Diverscan.MJP.AccesoDatos.Sincronizador
             }
             catch (Exception exError)
             {
-                var clLog = new clErrores();
-                const string nombreProcedimiento = "ObtenerPedidosSincronizador";
-                var indexNumLinea = exError.StackTrace.LastIndexOf("línea", StringComparison.Ordinal);
-                if (indexNumLinea < 0) indexNumLinea = exError.StackTrace.LastIndexOf("line", StringComparison.Ordinal); // Si no existe, está en inglés
-                var lineaError = exError.StackTrace.Substring(indexNumLinea);
-                clLog.escribirErrorDetallado("da_Sincronizador.cs", "ObtenerPedidos()", "", lineaError, nombreProcedimiento, "", exError.Message);
+                //var clLog = new clErrores();
+                //const string nombreProcedimiento = "ObtenerPedidosSincronizador";
+                //var indexNumLinea = exError.StackTrace.LastIndexOf("línea", StringComparison.Ordinal);
+                //if (indexNumLinea < 0) indexNumLinea = exError.StackTrace.LastIndexOf("line", StringComparison.Ordinal); // Si no existe, está en inglés
+                //var lineaError = exError.StackTrace.Substring(indexNumLinea);
+                //clLog.escribirErrorDetallado("da_Sincronizador.cs", "ObtenerPedidos()", "", lineaError, nombreProcedimiento, "", exError.Message);
 
                 return null;
             }

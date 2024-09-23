@@ -19,24 +19,42 @@ namespace Diverscan.MJP.AccesoDatos.Despacho
         }
         public string AsignarPedidoEncargado(EAsignarDespacho input)
         {
-            string PIN = GenerateRandomPIN();
-
-            try
+            //Si se le asigna a un Encargado de Bodega un Pedido proveniente de un Traslado, no se envia correo con PIN, regla de negocio.
+            if (input.CorreoEnvioPIN.Equals("Traslado"))
             {
-                string res = dDespacho.AsignarPedidoEncargado(input, PIN);
-
-                if (res.Equals("SSCC Asignado para Despachar con éxito."))
+                try
                 {
-                    SendEmailWithPin(PIN, input.CorreoEnvioPIN);
+                    return dDespacho.AsignarPedidoEncargado(input, "NA");
                 }
+                catch (Exception ex)
+                {
 
-                return res;
+                    _fileExceptionWriter.WriteException(ex, PathFileConfig.VEHICLEFILEPATHEXCEPTION);
+                    return ex.Message;
+                }
             }
-            catch (Exception ex)
+            else
             {
-                _fileExceptionWriter.WriteException(ex, PathFileConfig.VEHICLEFILEPATHEXCEPTION);
-                return ex.Message;
+                string PIN = GenerateRandomPIN();
+
+                try
+                {
+                    string res = dDespacho.AsignarPedidoEncargado(input, PIN);
+
+                    if (res.Equals("SSCC Asignado para Despachar con éxito."))
+                    {
+                        SendEmailWithPin(PIN, input.CorreoEnvioPIN);
+                    }
+
+                    return res;
+                }
+                catch (Exception ex)
+                {
+                    _fileExceptionWriter.WriteException(ex, PathFileConfig.VEHICLEFILEPATHEXCEPTION);
+                    return ex.Message;
+                }
             }
+            
         }
 
         public string GenerateRandomPIN()
@@ -74,6 +92,11 @@ namespace Diverscan.MJP.AccesoDatos.Despacho
                     smtp.Send(mail);
                 }
             }
+        }
+
+        public byte PedidoOTraslado(string NumeroTransaccion)
+        {
+            return dDespacho.PedidoOTraslado(NumeroTransaccion);
         }
     }
 }

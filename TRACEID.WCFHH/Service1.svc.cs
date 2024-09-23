@@ -998,6 +998,12 @@ namespace TRACEID.WCF
             NDespacho nDespacho = new NDespacho(_fileExceptionWriter);
             return nDespacho.AsignarPedidoEncargado(input);
         }
+
+        public byte PedidoOTraslado(string input)
+        {
+            NDespacho nDespacho = new NDespacho(_fileExceptionWriter);
+            return nDespacho.PedidoOTraslado(input);
+        }
     }
 }
 

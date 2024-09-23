@@ -720,5 +720,12 @@ namespace TRACEID.WCF
         ResponseFormat = WebMessageFormat.Json,
         UriTemplate = "AsignarPedidoEncargado")]
         string AsignarPedidoEncargado(EAsignarDespacho input);
+
+        [OperationContract]
+        [WebInvoke(Method = "POST",
+        BodyStyle = WebMessageBodyStyle.Wrapped,
+        ResponseFormat = WebMessageFormat.Json,
+        UriTemplate = "PedidoOTraslado")]
+        byte PedidoOTraslado(string input);
     }
 }
