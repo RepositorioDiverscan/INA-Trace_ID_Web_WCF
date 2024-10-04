@@ -3,8 +3,16 @@
   "WorkspaceRootPath": "C:\\Kevin H\\INA-Trace_ID_Web_WCF\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A9563F34-E560-48EF-95E2-C88705710977}|Diverscan.MJP.UI\\TRACEID.UI.csproj|c:\\kevin h\\ina-trace_id_web_wcf\\diverscan.mjp.ui\\web.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
-      "RelativeMoniker": "D:0:0:{A9563F34-E560-48EF-95E2-C88705710977}|Diverscan.MJP.UI\\TRACEID.UI.csproj|solutionrelative:diverscan.mjp.ui\\web.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+      "AbsoluteMoniker": "D:0:0:{EE1EF192-9089-4689-ACC2-22922A485E47}|Diverscan.MJP.AccesoDatos\\TRACEID.AccesoDatos.csproj|c:\\kevin h\\ina-trace_id_web_wcf\\diverscan.mjp.accesodatos\\devolutions\\da_solicituddevolucion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EE1EF192-9089-4689-ACC2-22922A485E47}|Diverscan.MJP.AccesoDatos\\TRACEID.AccesoDatos.csproj|solutionrelative:diverscan.mjp.accesodatos\\devolutions\\da_solicituddevolucion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2120D5C3-0CA8-4FDE-BBF2-C72EC59802BE}|TRACEID.WCFHH\\TRACEID.WCF.csproj|c:\\kevin h\\ina-trace_id_web_wcf\\traceid.wcfhh\\service1.svc.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2120D5C3-0CA8-4FDE-BBF2-C72EC59802BE}|TRACEID.WCFHH\\TRACEID.WCF.csproj|solutionrelative:traceid.wcfhh\\service1.svc.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2120D5C3-0CA8-4FDE-BBF2-C72EC59802BE}|TRACEID.WCFHH\\TRACEID.WCF.csproj|c:\\kevin h\\ina-trace_id_web_wcf\\traceid.wcfhh\\web.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{2120D5C3-0CA8-4FDE-BBF2-C72EC59802BE}|TRACEID.WCFHH\\TRACEID.WCF.csproj|solutionrelative:traceid.wcfhh\\web.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
     }
   ],
   "DocumentGroupContainers": [
@@ -19,14 +27,40 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "da_SolicitudDevolucion.cs",
+              "DocumentMoniker": "C:\\Kevin H\\INA-Trace_ID_Web_WCF\\Diverscan.MJP.AccesoDatos\\Devolutions\\da_SolicitudDevolucion.cs",
+              "RelativeDocumentMoniker": "Diverscan.MJP.AccesoDatos\\Devolutions\\da_SolicitudDevolucion.cs",
+              "ToolTip": "C:\\Kevin H\\INA-Trace_ID_Web_WCF\\Diverscan.MJP.AccesoDatos\\Devolutions\\da_SolicitudDevolucion.cs",
+              "RelativeToolTip": "Diverscan.MJP.AccesoDatos\\Devolutions\\da_SolicitudDevolucion.cs",
+              "ViewState": "AgIAAJUAAAAAAAAAAADwv4gAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-04T15:46:29.775Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Service1.svc.cs",
+              "DocumentMoniker": "C:\\Kevin H\\INA-Trace_ID_Web_WCF\\TRACEID.WCFHH\\Service1.svc.cs",
+              "RelativeDocumentMoniker": "TRACEID.WCFHH\\Service1.svc.cs",
+              "ToolTip": "C:\\Kevin H\\INA-Trace_ID_Web_WCF\\TRACEID.WCFHH\\Service1.svc.cs",
+              "RelativeToolTip": "TRACEID.WCFHH\\Service1.svc.cs",
+              "ViewState": "AgIAAKIDAAAAAAAAAADwv60DAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-04T16:15:54.294Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "Web.config",
-              "DocumentMoniker": "C:\\Kevin H\\INA-Trace_ID_Web_WCF\\Diverscan.MJP.UI\\Web.config",
-              "RelativeDocumentMoniker": "Diverscan.MJP.UI\\Web.config",
-              "ToolTip": "C:\\Kevin H\\INA-Trace_ID_Web_WCF\\Diverscan.MJP.UI\\Web.config",
-              "RelativeToolTip": "Diverscan.MJP.UI\\Web.config",
-              "ViewState": "AgIAABsAAAAAAAAAAAAAAC0AAABPAAAAAAAAAA==",
+              "DocumentMoniker": "C:\\Kevin H\\INA-Trace_ID_Web_WCF\\TRACEID.WCFHH\\Web.config",
+              "RelativeDocumentMoniker": "TRACEID.WCFHH\\Web.config",
+              "ToolTip": "C:\\Kevin H\\INA-Trace_ID_Web_WCF\\TRACEID.WCFHH\\Web.config",
+              "RelativeToolTip": "TRACEID.WCFHH\\Web.config",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAnAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000601|",
-              "WhenOpened": "2024-09-09T20:07:37.433Z",
+              "WhenOpened": "2024-10-04T15:45:44.414Z",
               "EditorCaption": ""
             }
           ]
