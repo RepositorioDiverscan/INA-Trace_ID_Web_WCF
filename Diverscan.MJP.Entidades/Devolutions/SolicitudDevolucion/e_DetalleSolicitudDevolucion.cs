@@ -17,6 +17,7 @@ namespace Diverscan.MJP.Entidades.Devolutions.SolicitudDevolucion
         private string _NombreArticulo;
         private string _Marca;
         private long _IdDetalleSolicitudDevolucion;
+        private bool _esActivo;
 
         public e_DetalleSolicitudDevolucion(long idArticulo, int cantidad, string placa, string lote, string fechaVencimiento)
         {
@@ -27,7 +28,7 @@ namespace Diverscan.MJP.Entidades.Devolutions.SolicitudDevolucion
             this._FechaVencimiento = fechaVencimiento;
         }
 
-        public e_DetalleSolicitudDevolucion(long idArticulo, int cantidad, string placa, string lote, string fechaVencimiento, string nombreArticulo, string marca, long idDetalleSolicitudDevolucion)
+        public e_DetalleSolicitudDevolucion(long idArticulo, int cantidad, string placa, string lote, string fechaVencimiento, string nombreArticulo, string marca, long idDetalleSolicitudDevolucion, bool esActivo)
         {
             _IdArticulo = idArticulo;
             _Cantidad = cantidad;
@@ -37,6 +38,7 @@ namespace Diverscan.MJP.Entidades.Devolutions.SolicitudDevolucion
             _NombreArticulo = nombreArticulo;
             _Marca = marca;
             _IdDetalleSolicitudDevolucion = idDetalleSolicitudDevolucion;
+            _esActivo = esActivo;
         }
 
         public long IdArticulo { get => _IdArticulo; set => _IdArticulo = value; }
@@ -47,5 +49,6 @@ namespace Diverscan.MJP.Entidades.Devolutions.SolicitudDevolucion
         public string NombreArticulo { get => _NombreArticulo; set => _NombreArticulo = value; }
         public string Marca { get => _Marca; set => _Marca = value; }
         public long IdDetalleSolicitudDevolucion { get => _IdDetalleSolicitudDevolucion; set => _IdDetalleSolicitudDevolucion = value; }
+        public bool EsActivo { get => _esActivo; set => _esActivo = value; }
     }
 }

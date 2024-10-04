@@ -39,9 +39,9 @@
                                 targets: 7, // Índice de la columna "Activo"
                                 render: function (data) {
                                     if (data) {
-                                        return '<i class="fas fa-check"></i>'; // Icono de check
+                                        return 'No consumible';
                                     } else {
-                                        return '<i class="fas fa-times"></i>'; // Icono de x
+                                        return 'Consumible';
                                     }
                                 }
                             }

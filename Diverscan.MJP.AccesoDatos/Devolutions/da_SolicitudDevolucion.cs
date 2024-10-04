@@ -161,8 +161,9 @@ namespace Diverscan.MJP.AccesoDatos.Devolutions
                 long idDetalleSolicitudDevolucion = long.Parse(reader["idDetalleSolicitudDevolucion"].ToString());
                 string Lote = "NA";
                 string FechaVencimiento = "1900-01-01";
+                bool esActivo = Convert.ToBoolean(reader["Activo"]);
 
-                var detalle = new e_DetalleSolicitudDevolucion(idArticulo, Cantidad, Placa, Lote, FechaVencimiento, Nombre, MARCA, idDetalleSolicitudDevolucion);
+                var detalle = new e_DetalleSolicitudDevolucion(idArticulo, Cantidad, Placa, Lote, FechaVencimiento, Nombre, MARCA, idDetalleSolicitudDevolucion, esActivo);
 
                 return detalle;
             }

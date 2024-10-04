@@ -29,7 +29,7 @@
                         <th>Familia Articulo</th>
                         <th>Contenido</th>
                         <th>Unidad Medida</th>
-                        <th>Activo</th>
+                        <th>Tipo Activo</th>
                         <th>Fecha Registro </th>
                        
                     </tr>
