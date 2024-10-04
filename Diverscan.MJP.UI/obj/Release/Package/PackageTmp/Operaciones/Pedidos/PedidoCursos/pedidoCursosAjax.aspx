@@ -1,1 +1,0 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="pedidoCursosAjax.aspx.cs" Inherits="Diverscan.MJP.UI.Operaciones.Pedidos.PedidoCursos.pedidoCursosAjax" %>

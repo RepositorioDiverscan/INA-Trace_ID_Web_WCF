@@ -1,1 +1,0 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="adminTrasladosAjax.aspx.cs" Inherits="Diverscan.MJP.UI.Operaciones.Traslados.AdministracionTraslados.adminTrasladosAjax" %>
