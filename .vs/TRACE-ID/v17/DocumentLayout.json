@@ -3,7 +3,7 @@
   "WorkspaceRootPath": "C:\\Kevin H\\INA-Trace_ID_Web_WCF\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{2120D5C3-0CA8-4FDE-BBF2-C72EC59802BE}|TRACEID.WCFHH\\TRACEID.WCF.csproj|C:\\Kevin H\\INA-Trace_ID_Web_WCF\\traceid.wcfhh\\iservice1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{2120D5C3-0CA8-4FDE-BBF2-C72EC59802BE}|TRACEID.WCFHH\\TRACEID.WCF.csproj|c:\\kevin h\\ina-trace_id_web_wcf\\traceid.wcfhh\\iservice1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{2120D5C3-0CA8-4FDE-BBF2-C72EC59802BE}|TRACEID.WCFHH\\TRACEID.WCF.csproj|solutionrelative:traceid.wcfhh\\iservice1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
@@ -11,7 +11,7 @@
       "RelativeMoniker": "D:0:0:{2120D5C3-0CA8-4FDE-BBF2-C72EC59802BE}|TRACEID.WCFHH\\TRACEID.WCF.csproj|solutionrelative:traceid.wcfhh\\service1.svc.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{BAF89A5E-ABF5-4C50-9A7B-50841366704F}|Diverscan.MJP.Negocio\\TRACEID.Negocio.csproj|c:\\kevin h\\ina-trace_id_web_wcf\\diverscan.mjp.negocio\\syncactiveid\\nsyncactiveid.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{BAF89A5E-ABF5-4C50-9A7B-50841366704F}|Diverscan.MJP.Negocio\\TRACEID.Negocio.csproj|C:\\Kevin H\\INA-Trace_ID_Web_WCF\\diverscan.mjp.negocio\\syncactiveid\\nsyncactiveid.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{BAF89A5E-ABF5-4C50-9A7B-50841366704F}|Diverscan.MJP.Negocio\\TRACEID.Negocio.csproj|solutionrelative:diverscan.mjp.negocio\\syncactiveid\\nsyncactiveid.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
@@ -42,8 +42,7 @@
               "RelativeToolTip": "Diverscan.MJP.Entidades\\SyncActiceID\\eUbicacionActivo.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAADIAAAAUAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-07T17:44:55.262Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-07T17:44:55.262Z"
             },
             {
               "$type": "Document",
@@ -55,8 +54,7 @@
               "RelativeToolTip": "Diverscan.MJP.AccesoDatos\\SyncActiveID\\da_SyncActiveID.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-05T15:04:46.37Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-05T15:04:46.37Z"
             },
             {
               "$type": "Document",
@@ -68,8 +66,7 @@
               "RelativeToolTip": "Diverscan.MJP.Negocio\\SyncActiveID\\nSyncActiveID.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-07T16:57:21.488Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-07T16:57:21.488Z"
             },
             {
               "$type": "Document",
@@ -81,8 +78,7 @@
               "RelativeToolTip": "TRACEID.WCFHH\\Service1.svc.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAC0AAAAlAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-07T17:22:09.202Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-07T17:22:09.202Z"
             },
             {
               "$type": "Document",
