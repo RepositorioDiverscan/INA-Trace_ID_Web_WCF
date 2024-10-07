@@ -1,6 +1,4 @@
-﻿using Diverscan.Visitas.Utilidades;
-using System.Linq;
-using System;
+﻿using System;
 using Diverscan.MJP.Entidades;
 using Diverscan.MJP.Utilidades;
 using Diverscan.MJP.Negocio.Administracion;
@@ -46,7 +44,6 @@ using Diverscan.MJP.AccesoDatos.RolUsuarioHH;
 using Diverscan.MJP.AccesoDatos.Articulos.InfoArticulo;
 using Diverscan.MJP.AccesoDatos.Certificación;
 using Diverscan.MJP.AccesoDatos.SSCC;
-using Diverscan.MJP.AccesoDatos.Vehiculo;
 using Diverscan.MJP.AccesoDatos.Despacho;
 using Diverscan.MJP.AccesoDatos.RecpecionHH.ProductoRecibido;
 using Diverscan.MJP.AccesoDatos.RecpecionHH;
@@ -65,6 +62,8 @@ using Diverscan.MJP.Negocio.Consulta;
 using Diverscan.MJP.Entidades.Consultas;
 using Diverscan.MJP.AccesoDatos.Devolutions;
 using Diverscan.MJP.AccesoDatos.Encargado;
+using Diverscan.MJP.Entidades.SyncActiceID;
+using Diverscan.MJP.Negocio.SyncActiveID;
 
 namespace TRACEID.WCF
 {
@@ -1004,6 +1003,22 @@ namespace TRACEID.WCF
             NDespacho nDespacho = new NDespacho(_fileExceptionWriter);
             return nDespacho.PedidoOTraslado(input);
         }
+
+        #region SyncActiveID
+
+        public eUbicacionActivo ObtenerUbicacionActualActivo(string input) 
+        {
+            nSyncActiveID output = new nSyncActiveID();
+            return output.ObtenerUbicacionActual(input);
+        }
+
+        public bool ActualizarUbicacionDefectoActivo(string input)
+        {
+            nSyncActiveID output = new nSyncActiveID();
+            return output.ActualizarUbicacionDefecto(input);
+        }
+
+        #endregion
     }
 }
 

@@ -1,26 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using Diverscan.MJP.Entidades;
 using Diverscan.MJP.Entidades.MotivoAjusteInventario;
 using Diverscan.MJP.Entidades.Invertario;
 using Diverscan.MJP.Entidades.InventarioBasico;
-using Diverscan.MJP.Negocio.ProcesarSolicitud;
-using Diverscan.MJP.Entidades.ProcesarSolicitud;
 using Diverscan.MJP.Entidades.OrdenCompra;
-using Diverscan.MJP.Entidades.PICKING;
-using Diverscan.MJP.Entidades.SSCC;
-using Diverscan.MJP.Entidades.Alistos;
 using Diverscan.MJP.Entidades.Devolutions.DevolucionHeader;
 using Diverscan.MJP.Entidades.Devolutions.DevolutionsDetail;
 using Diverscan.MJP.Entidades.Devolutions.DevolutionProductLocation;
 using Diverscan.MJP.AccesoDatos.DetalleOrdenCompra;
 using Diverscan.MJP.Entidades.GTIN14VariableLogistic;
 using Diverscan.MJP.AccesoDatos.Traslados;
-using Diverscan.MJP.Entidades.MaestroArticulo;
 using Diverscan.MJP.AccesoDatos.MaestroArticulo;
-using Diverscan.MJP.AccesoDatos.ModuloConsultas;
 using Diverscan.MJP.AccesoDatos.Alistos;
 using Diverscan.MJP.Entidades.OPESALMaestroSolicitud;
 using Diverscan.MJP.AccesoDatos.Bodega;
@@ -29,7 +21,6 @@ using Diverscan.MJP.AccesoDatos.RolUsuarioHH;
 using Diverscan.MJP.AccesoDatos.Articulos.InfoArticulo;
 using Diverscan.MJP.AccesoDatos.SSCC;
 using Diverscan.MJP.Utilidades;
-using Diverscan.MJP.AccesoDatos.Vehiculo;
 using Diverscan.MJP.AccesoDatos.RecpecionHH.ProductoRecibido;
 using Diverscan.MJP.AccesoDatos.RecpecionHH.DevolucionProducto;
 using Diverscan.MJP.AccesoDatos.RecpecionHH.DetalleRecepcion;
@@ -44,6 +35,7 @@ using Diverscan.MJP.Entidades.Consultas;
 using Diverscan.MJP.AccesoDatos.Devolutions;
 using Diverscan.MJP.AccesoDatos.Encargado;
 using Diverscan.MJP.AccesoDatos.Despacho;
+using Diverscan.MJP.Entidades.SyncActiceID;
 
 namespace TRACEID.WCF
 {
@@ -727,5 +719,19 @@ namespace TRACEID.WCF
         ResponseFormat = WebMessageFormat.Json,
         UriTemplate = "PedidoOTraslado")]
         byte PedidoOTraslado(string input);
+
+        [OperationContract]
+        [WebInvoke(Method = "POST",
+        BodyStyle = WebMessageBodyStyle.Wrapped,
+        ResponseFormat = WebMessageFormat.Json,
+        UriTemplate = "ObtenerUbicacionActualActivo")]
+        eUbicacionActivo ObtenerUbicacionActualActivo(string input);
+
+        [OperationContract]
+        [WebInvoke(Method = "POST",
+        BodyStyle = WebMessageBodyStyle.Wrapped,
+        ResponseFormat = WebMessageFormat.Json,
+        UriTemplate = "ActualizarUbicacionDefectoActivo")]
+        bool ActualizarUbicacionDefectoActivo(string input);
     }
 }

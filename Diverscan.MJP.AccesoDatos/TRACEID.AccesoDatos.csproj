@@ -406,6 +406,7 @@
     <Compile Include="SSCC\ResultGetSSCCDespatch.cs" />
     <Compile Include="SSCC\ResultGetSSCCProducts.cs" />
     <Compile Include="SSCC\ESSCC.cs" />
+    <Compile Include="SyncActiveID\da_SyncActiveID.cs" />
     <Compile Include="Tareas\TareaUsuarioDBA.cs" />
     <Compile Include="TomasFisicas\eTomaFiscaEn.cs" />
     <Compile Include="TomasFisicas\eTomaFisicaDe.cs" />

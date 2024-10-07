@@ -177,6 +177,7 @@
     <Compile Include="SectorWarehouse\NSectorWareHouse.cs" />
     <Compile Include="Sincronizador\n_Sincronizador.cs" />
     <Compile Include="SSCC\SSCCLoader.cs" />
+    <Compile Include="SyncActiveID\nSyncActiveID.cs" />
     <Compile Include="Tareas\N_TareaUsuario.cs" />
     <Compile Include="TRAIngresoSalidaArticulos\TRAIngresoSalidaArticulosLoader.cs" />
     <Compile Include="TRAIngresoSalida\N_TRAIngresoSalida.cs" />

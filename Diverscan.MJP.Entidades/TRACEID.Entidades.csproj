@@ -237,6 +237,7 @@
     <Compile Include="Rol\e_RolHH.cs" />
     <Compile Include="Rol\ResultadoObtenerRoles.cs" />
     <Compile Include="SSCC\SSCCRecord.cs" />
+    <Compile Include="SyncActiceID\eUbicacionActivo.cs" />
     <Compile Include="Tareas\TareaUsuarioRecord.cs" />
     <Compile Include="TRAIngresoSalidaArticulos\TRAIngresoSalidaArticulosRecord.cs" />
     <Compile Include="Trazabilidad\ArticuloTrazabilidad.cs" />

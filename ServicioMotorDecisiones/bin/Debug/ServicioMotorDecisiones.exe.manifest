@@ -66,38 +66,38 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Diverscan.MJP.AccesoDatos.dll" size="403968">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Diverscan.MJP.AccesoDatos.dll" size="406528">
       <assemblyIdentity name="Diverscan.MJP.AccesoDatos" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>sh60+qLm6NK5BNwn9qkO2WBuI9GYn+HIMhd89mb7RzY=</dsig:DigestValue>
+        <dsig:DigestValue>O+vwBEstb7lz/3OInh8JjNOSxN35zkx0tHKvzTiKCnE=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Diverscan.MJP.Entidades.dll" size="281600">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Diverscan.MJP.Entidades.dll" size="282624">
       <assemblyIdentity name="Diverscan.MJP.Entidades" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>bJX4MWBhNc26xGjw6Dir4aMUxwR+WOGZH69/kcTpQ4A=</dsig:DigestValue>
+        <dsig:DigestValue>NckoIbfif3kWxlBlbuRoHD1EAgiEPpI+JQ+OVmCZ/QA=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Diverscan.MJP.Negocio.dll" size="249856">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Diverscan.MJP.Negocio.dll" size="250368">
       <assemblyIdentity name="Diverscan.MJP.Negocio" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>FkNOfosMY91B5liSMlALkBA4RR1J6lQvsbmK9zuCyXc=</dsig:DigestValue>
+        <dsig:DigestValue>Jy+cotCvoJ/OZrRfxqb5yod6m2nnVYO3H0neZw2BK6g=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -109,7 +109,7 @@
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>Ft2YdTUUM4NLu0if6TY/1LtEGQHX+J3hc4NAZaULedU=</dsig:DigestValue>
+        <dsig:DigestValue>hSI/gdK5vkYDkrxDKq7VuYE3YnrN+jzd5JLdM8hsPQo=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -217,7 +217,7 @@
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>GOVl8nIyR7G/yjmCbbb1sg3MsfzicHK2VED4GqCm5r4=</dsig:DigestValue>
+        <dsig:DigestValue>uQMIsiT6wqDDcrgrA8WIJhyJ6oI9OVkzBmGgfT0J/pY=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

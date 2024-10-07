@@ -1,0 +1,17 @@
+C:\Kevin H\INA-Trace_ID_Web_WCF\Diverscan.MJP.Utilidades\bin\Release\Diverscan.MJP.Utilidades.dll
+C:\Kevin H\INA-Trace_ID_Web_WCF\Diverscan.MJP.Utilidades\bin\Release\Diverscan.MJP.Utilidades.pdb
+C:\Kevin H\INA-Trace_ID_Web_WCF\Diverscan.MJP.Utilidades\bin\Release\Microsoft.Practices.EnterpriseLibrary.Common.dll
+C:\Kevin H\INA-Trace_ID_Web_WCF\Diverscan.MJP.Utilidades\bin\Release\Microsoft.Practices.EnterpriseLibrary.Data.dll
+C:\Kevin H\INA-Trace_ID_Web_WCF\Diverscan.MJP.Utilidades\bin\Release\Microsoft.Practices.EnterpriseLibrary.Security.Cryptography.dll
+C:\Kevin H\INA-Trace_ID_Web_WCF\Diverscan.MJP.Utilidades\bin\Release\Microsoft.Practices.ServiceLocation.dll
+C:\Kevin H\INA-Trace_ID_Web_WCF\Diverscan.MJP.Utilidades\bin\Release\Microsoft.Practices.Unity.dll
+C:\Kevin H\INA-Trace_ID_Web_WCF\Diverscan.MJP.Utilidades\bin\Release\Microsoft.Practices.Unity.Interception.dll
+C:\Kevin H\INA-Trace_ID_Web_WCF\Diverscan.MJP.Utilidades\bin\Release\Newtonsoft.Json.dll
+C:\Kevin H\INA-Trace_ID_Web_WCF\Diverscan.MJP.Utilidades\bin\Release\Telerik.Web.UI.dll
+C:\Kevin H\INA-Trace_ID_Web_WCF\Diverscan.MJP.Utilidades\bin\Release\Telerik.Web.Spreadsheet.dll
+C:\Kevin H\INA-Trace_ID_Web_WCF\Diverscan.MJP.Utilidades\bin\Release\Newtonsoft.Json.xml
+C:\Kevin H\INA-Trace_ID_Web_WCF\Diverscan.MJP.Utilidades\obj\Release\TRACEID.Utilidades.csproj.AssemblyReference.cache
+C:\Kevin H\INA-Trace_ID_Web_WCF\Diverscan.MJP.Utilidades\obj\Release\TRACEID.Utilidades.csproj.CoreCompileInputs.cache
+C:\Kevin H\INA-Trace_ID_Web_WCF\Diverscan.MJP.Utilidades\obj\Release\TRACEID..A34321DD.Up2Date
+C:\Kevin H\INA-Trace_ID_Web_WCF\Diverscan.MJP.Utilidades\obj\Release\Diverscan.MJP.Utilidades.dll
+C:\Kevin H\INA-Trace_ID_Web_WCF\Diverscan.MJP.Utilidades\obj\Release\Diverscan.MJP.Utilidades.pdb
