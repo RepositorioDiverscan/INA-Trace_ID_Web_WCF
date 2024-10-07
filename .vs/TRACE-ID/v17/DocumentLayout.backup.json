@@ -3,24 +3,24 @@
   "WorkspaceRootPath": "C:\\Kevin H\\INA-Trace_ID_Web_WCF\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{2120D5C3-0CA8-4FDE-BBF2-C72EC59802BE}|TRACEID.WCFHH\\TRACEID.WCF.csproj|C:\\Kevin H\\INA-Trace_ID_Web_WCF\\traceid.wcfhh\\iservice1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2120D5C3-0CA8-4FDE-BBF2-C72EC59802BE}|TRACEID.WCFHH\\TRACEID.WCF.csproj|solutionrelative:traceid.wcfhh\\iservice1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2120D5C3-0CA8-4FDE-BBF2-C72EC59802BE}|TRACEID.WCFHH\\TRACEID.WCF.csproj|C:\\Kevin H\\INA-Trace_ID_Web_WCF\\traceid.wcfhh\\service1.svc.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2120D5C3-0CA8-4FDE-BBF2-C72EC59802BE}|TRACEID.WCFHH\\TRACEID.WCF.csproj|solutionrelative:traceid.wcfhh\\service1.svc.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{BAF89A5E-ABF5-4C50-9A7B-50841366704F}|Diverscan.MJP.Negocio\\TRACEID.Negocio.csproj|c:\\kevin h\\ina-trace_id_web_wcf\\diverscan.mjp.negocio\\syncactiveid\\nsyncactiveid.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{BAF89A5E-ABF5-4C50-9A7B-50841366704F}|Diverscan.MJP.Negocio\\TRACEID.Negocio.csproj|solutionrelative:diverscan.mjp.negocio\\syncactiveid\\nsyncactiveid.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7F85C5B8-7FE4-471F-98A9-2E6AAA9CF258}|Diverscan.MJP.Entidades\\TRACEID.Entidades.csproj|c:\\kevin h\\ina-trace_id_web_wcf\\diverscan.mjp.entidades\\syncacticeid\\eubicacionactivo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7F85C5B8-7FE4-471F-98A9-2E6AAA9CF258}|Diverscan.MJP.Entidades\\TRACEID.Entidades.csproj|solutionrelative:diverscan.mjp.entidades\\syncacticeid\\eubicacionactivo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{EE1EF192-9089-4689-ACC2-22922A485E47}|Diverscan.MJP.AccesoDatos\\TRACEID.AccesoDatos.csproj|c:\\kevin h\\ina-trace_id_web_wcf\\diverscan.mjp.accesodatos\\syncactiveid\\da_syncactiveid.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{EE1EF192-9089-4689-ACC2-22922A485E47}|Diverscan.MJP.AccesoDatos\\TRACEID.AccesoDatos.csproj|C:\\Kevin H\\INA-Trace_ID_Web_WCF\\diverscan.mjp.accesodatos\\syncactiveid\\da_syncactiveid.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{EE1EF192-9089-4689-ACC2-22922A485E47}|Diverscan.MJP.AccesoDatos\\TRACEID.AccesoDatos.csproj|solutionrelative:diverscan.mjp.accesodatos\\syncactiveid\\da_syncactiveid.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{2120D5C3-0CA8-4FDE-BBF2-C72EC59802BE}|TRACEID.WCFHH\\TRACEID.WCF.csproj|c:\\kevin h\\ina-trace_id_web_wcf\\traceid.wcfhh\\service1.svc.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2120D5C3-0CA8-4FDE-BBF2-C72EC59802BE}|TRACEID.WCFHH\\TRACEID.WCF.csproj|solutionrelative:traceid.wcfhh\\service1.svc.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2120D5C3-0CA8-4FDE-BBF2-C72EC59802BE}|TRACEID.WCFHH\\TRACEID.WCF.csproj|c:\\kevin h\\ina-trace_id_web_wcf\\traceid.wcfhh\\iservice1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2120D5C3-0CA8-4FDE-BBF2-C72EC59802BE}|TRACEID.WCFHH\\TRACEID.WCF.csproj|solutionrelative:traceid.wcfhh\\iservice1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{7F85C5B8-7FE4-471F-98A9-2E6AAA9CF258}|Diverscan.MJP.Entidades\\TRACEID.Entidades.csproj|C:\\Kevin H\\INA-Trace_ID_Web_WCF\\diverscan.mjp.entidades\\syncacticeid\\eubicacionactivo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7F85C5B8-7FE4-471F-98A9-2E6AAA9CF258}|Diverscan.MJP.Entidades\\TRACEID.Entidades.csproj|solutionrelative:diverscan.mjp.entidades\\syncacticeid\\eubicacionactivo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,69 +30,69 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 4,
               "Title": "eUbicacionActivo.cs",
               "DocumentMoniker": "C:\\Kevin H\\INA-Trace_ID_Web_WCF\\Diverscan.MJP.Entidades\\SyncActiceID\\eUbicacionActivo.cs",
               "RelativeDocumentMoniker": "Diverscan.MJP.Entidades\\SyncActiceID\\eUbicacionActivo.cs",
               "ToolTip": "C:\\Kevin H\\INA-Trace_ID_Web_WCF\\Diverscan.MJP.Entidades\\SyncActiceID\\eUbicacionActivo.cs",
               "RelativeToolTip": "Diverscan.MJP.Entidades\\SyncActiceID\\eUbicacionActivo.cs",
-              "ViewState": "AgIAACMAAAAAAAAAAAAnwDIAAAAUAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADIAAAAUAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-10-07T17:44:55.262Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "da_SyncActiveID.cs",
               "DocumentMoniker": "C:\\Kevin H\\INA-Trace_ID_Web_WCF\\Diverscan.MJP.AccesoDatos\\SyncActiveID\\da_SyncActiveID.cs",
               "RelativeDocumentMoniker": "Diverscan.MJP.AccesoDatos\\SyncActiveID\\da_SyncActiveID.cs",
               "ToolTip": "C:\\Kevin H\\INA-Trace_ID_Web_WCF\\Diverscan.MJP.AccesoDatos\\SyncActiveID\\da_SyncActiveID.cs",
               "RelativeToolTip": "Diverscan.MJP.AccesoDatos\\SyncActiveID\\da_SyncActiveID.cs",
-              "ViewState": "AgIAACkAAAAAAAAAAAAuwC8AAAAWAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-10-05T15:04:46.37Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "nSyncActiveID.cs",
               "DocumentMoniker": "C:\\Kevin H\\INA-Trace_ID_Web_WCF\\Diverscan.MJP.Negocio\\SyncActiveID\\nSyncActiveID.cs",
               "RelativeDocumentMoniker": "Diverscan.MJP.Negocio\\SyncActiveID\\nSyncActiveID.cs",
               "ToolTip": "C:\\Kevin H\\INA-Trace_ID_Web_WCF\\Diverscan.MJP.Negocio\\SyncActiveID\\nSyncActiveID.cs",
               "RelativeToolTip": "Diverscan.MJP.Negocio\\SyncActiveID\\nSyncActiveID.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAAA8AAAA8AAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-10-07T16:57:21.488Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 1,
               "Title": "Service1.svc.cs",
               "DocumentMoniker": "C:\\Kevin H\\INA-Trace_ID_Web_WCF\\TRACEID.WCFHH\\Service1.svc.cs",
               "RelativeDocumentMoniker": "TRACEID.WCFHH\\Service1.svc.cs",
               "ToolTip": "C:\\Kevin H\\INA-Trace_ID_Web_WCF\\TRACEID.WCFHH\\Service1.svc.cs",
               "RelativeToolTip": "TRACEID.WCFHH\\Service1.svc.cs",
-              "ViewState": "AgIAAOoDAAAAAAAAAAAAAPcDAAAIAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAC0AAAAlAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-10-07T17:22:09.202Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 0,
               "Title": "IService1.cs",
               "DocumentMoniker": "C:\\Kevin H\\INA-Trace_ID_Web_WCF\\TRACEID.WCFHH\\IService1.cs",
               "RelativeDocumentMoniker": "TRACEID.WCFHH\\IService1.cs",
               "ToolTip": "C:\\Kevin H\\INA-Trace_ID_Web_WCF\\TRACEID.WCFHH\\IService1.cs",
               "RelativeToolTip": "TRACEID.WCFHH\\IService1.cs",
-              "ViewState": "AgIAANQCAAAAAAAAAAAAAOgCAAAFAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-10-07T17:22:31.541Z",
               "EditorCaption": ""
