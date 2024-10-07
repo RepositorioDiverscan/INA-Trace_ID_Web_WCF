@@ -483,3 +483,5 @@ $RECYCLE.BIN/
 # Vim temporary swap files
 *.swp
 /.vs/TRACE-ID/v17/.suo
+/.vs/TRACE-ID/v17/DocumentLayout.backup.json
+/.vs/TRACE-ID/v17/DocumentLayout.json
