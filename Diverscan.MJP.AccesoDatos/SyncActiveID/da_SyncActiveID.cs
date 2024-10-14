@@ -14,7 +14,7 @@ namespace Diverscan.MJP.AccesoDatos.SyncActiveID
 
             StringBuilder query = new StringBuilder();
 
-            query.AppendLine("SELECT Activos.companySysId, Edificio.name AS Edificio, Piso.name AS Piso, OFicina.name AS Oficina ");
+            query.AppendLine("SELECT Activos.shortDescription, Activos.companySysId, Edificio.name AS Edificio, Piso.name AS Piso, OFicina.name AS Oficina ");
             query.AppendLine("FROM assets AS Activos ");
             query.AppendLine("INNER JOIN tagRegistry AS Tag ON Activos.tagSysId = Tag.tagSysId ");
             query.AppendLine("INNER JOIN buildings AS Edificio ON Activos.buildingSysId = Edificio.buildingSysId ");

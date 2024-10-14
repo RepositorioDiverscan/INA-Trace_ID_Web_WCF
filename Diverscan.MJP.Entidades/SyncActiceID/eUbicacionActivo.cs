@@ -9,7 +9,7 @@ namespace Diverscan.MJP.Entidades.SyncActiceID
     {
         #region VARIABLES PRIVADAS
 
-        private string _companySysId, _buildingSysId, _floorSysId, _officeSysId, _buildingName, _floorName, _officeName;
+        private string _descCorta, _companySysId, _buildingSysId, _floorSysId, _officeSysId, _buildingName, _floorName, _officeName;
 
         #endregion
 
@@ -18,6 +18,7 @@ namespace Diverscan.MJP.Entidades.SyncActiceID
 
         public eUbicacionActivo(IDataReader reader)
         {
+            DescCorta = Convert.ToString(reader["shortDescription"]);
             BuildingName = Convert.ToString(reader["Edificio"]);
             FloorName = Convert.ToString(reader["Piso"]);
             OfficeName = Convert.ToString(reader["Oficina"]);
@@ -50,6 +51,8 @@ namespace Diverscan.MJP.Entidades.SyncActiceID
         public string FloorName { get => _floorName; set => _floorName = value; }
         [DataMember]
         public string OfficeName { get => _officeName; set => _officeName = value; }
+        [DataMember]
+        public string DescCorta { get => _descCorta; set => _descCorta = value; }
 
         #endregion
     }

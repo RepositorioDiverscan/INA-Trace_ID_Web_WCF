@@ -5,7 +5,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
 <Project>
   <PropertyGroup>
     <_PublishTargetUrl>C:\Publicados</_PublishTargetUrl>
-    <History>True|2024-10-07T19:27:45.5913958Z||;True|2024-10-07T11:59:17.9419074-06:00||;True|2024-10-07T11:53:13.6025156-06:00||;True|2024-10-07T11:47:27.5609496-06:00||;True|2024-10-07T11:42:44.2680301-06:00||;True|2024-10-07T11:35:27.5034267-06:00||;True|2024-10-05T10:10:28.6075673-06:00||;True|2024-09-11T16:20:11.2808107-06:00||;True|2024-09-06T13:56:25.0149809-06:00||;True|2024-09-06T13:24:05.0768254-06:00||;True|2024-09-04T13:31:02.2943476-06:00||;True|2024-08-30T14:22:20.4446190-06:00||;</History>
+    <History>True|2024-10-11T16:15:41.4496579Z||;True|2024-10-09T18:48:58.7290005-06:00||;True|2024-10-08T16:20:42.8136176-06:00||;True|2024-10-07T13:27:45.5913958-06:00||;True|2024-10-07T11:59:17.9419074-06:00||;True|2024-10-07T11:53:13.6025156-06:00||;True|2024-10-07T11:47:27.5609496-06:00||;True|2024-10-07T11:42:44.2680301-06:00||;True|2024-10-07T11:35:27.5034267-06:00||;True|2024-10-05T10:10:28.6075673-06:00||;True|2024-09-11T16:20:11.2808107-06:00||;True|2024-09-06T13:56:25.0149809-06:00||;True|2024-09-06T13:24:05.0768254-06:00||;True|2024-09-04T13:31:02.2943476-06:00||;True|2024-08-30T14:22:20.4446190-06:00||;</History>
     <LastFailureDetails />
   </PropertyGroup>
   <ItemGroup>
@@ -16,31 +16,31 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>08/07/2014 04:51:44</publishTime>
     </File>
     <File Include="bin/Diverscan.MJP.AccesoDatos.dll">
-      <publishTime>10/07/2024 11:53:07</publishTime>
+      <publishTime>10/11/2024 10:15:26</publishTime>
     </File>
     <File Include="bin/Diverscan.MJP.AccesoDatos.dll.config">
       <publishTime>08/28/2024 09:55:06</publishTime>
     </File>
     <File Include="bin/Diverscan.MJP.AccesoDatos.pdb">
-      <publishTime>10/07/2024 11:53:07</publishTime>
+      <publishTime>10/11/2024 10:15:26</publishTime>
     </File>
     <File Include="bin/Diverscan.MJP.Entidades.dll">
-      <publishTime>10/07/2024 11:53:07</publishTime>
+      <publishTime>10/11/2024 10:15:25</publishTime>
     </File>
     <File Include="bin/Diverscan.MJP.Entidades.dll.config">
       <publishTime>08/28/2024 09:29:35</publishTime>
     </File>
     <File Include="bin/Diverscan.MJP.Entidades.pdb">
-      <publishTime>10/07/2024 11:53:07</publishTime>
+      <publishTime>10/11/2024 10:15:25</publishTime>
     </File>
     <File Include="bin/Diverscan.MJP.Negocio.dll">
-      <publishTime>10/07/2024 13:27:39</publishTime>
+      <publishTime>10/11/2024 10:15:27</publishTime>
     </File>
     <File Include="bin/Diverscan.MJP.Negocio.dll.config">
       <publishTime>08/28/2024 09:55:06</publishTime>
     </File>
     <File Include="bin/Diverscan.MJP.Negocio.pdb">
-      <publishTime>10/07/2024 13:27:39</publishTime>
+      <publishTime>10/11/2024 10:15:27</publishTime>
     </File>
     <File Include="bin/Diverscan.MJP.Utilidades.dll">
       <publishTime>10/05/2024 10:10:14</publishTime>
@@ -73,13 +73,13 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>03/08/2023 01:09:56</publishTime>
     </File>
     <File Include="bin/ServicioMotorDecisiones.exe">
-      <publishTime>10/07/2024 13:27:39</publishTime>
+      <publishTime>10/11/2024 10:15:27</publishTime>
     </File>
     <File Include="bin/ServicioMotorDecisiones.exe.config">
       <publishTime>08/28/2024 09:55:08</publishTime>
     </File>
     <File Include="bin/ServicioMotorDecisiones.pdb">
-      <publishTime>10/07/2024 13:27:39</publishTime>
+      <publishTime>10/11/2024 10:15:27</publishTime>
     </File>
     <File Include="bin/Telerik.Web.Spreadsheet.dll">
       <publishTime>08/28/2024 09:28:44</publishTime>
@@ -88,13 +88,13 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>08/28/2024 09:28:44</publishTime>
     </File>
     <File Include="bin/TRACEID.WCFHH.dll">
-      <publishTime>10/07/2024 13:27:40</publishTime>
+      <publishTime>10/11/2024 10:15:29</publishTime>
     </File>
     <File Include="bin/TRACEID.WCFHH.pdb">
-      <publishTime>10/07/2024 13:27:40</publishTime>
+      <publishTime>10/11/2024 10:15:29</publishTime>
     </File>
     <File Include="PrecompiledApp.config">
-      <publishTime>10/07/2024 13:27:41</publishTime>
+      <publishTime>10/11/2024 10:15:31</publishTime>
     </File>
     <File Include="Resources/EmailTempates/PinEmailTemplate.html">
       <publishTime>08/28/2024 09:28:44</publishTime>
@@ -106,7 +106,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>08/28/2024 09:28:44</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>10/07/2024 11:35:21</publishTime>
+      <publishTime>10/11/2024 10:15:29</publishTime>
     </File>
   </ItemGroup>
 </Project>

@@ -43,8 +43,9 @@ namespace Diverscan.MJP.AccesoDatos.RecpecionHH.DevolucionInmediata
                 int idArticulo = Convert.ToInt32(reader["idArticulo"].ToString());
                 int cantidadDevolucion = Convert.ToInt32(reader["CantidadDevolucion"].ToString());
                 string nombreArticulo = reader["NombreHH"].ToString();
+                bool esActivo = Convert.ToBoolean(reader["Activo"]);
 
-                var e_Devolucion = new e_DevolucionInmediata(idDetallePedidoOriginal, idPedidoOriginal, idArticulo, cantidadDevolucion, nombreArticulo);
+                var e_Devolucion = new e_DevolucionInmediata(idDetallePedidoOriginal, idPedidoOriginal, idArticulo, cantidadDevolucion, nombreArticulo, esActivo);
 
                 return e_Devolucion;
             }

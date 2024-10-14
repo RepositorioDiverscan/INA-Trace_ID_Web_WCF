@@ -73,12 +73,19 @@ namespace Diverscan.MJP.AccesoDatos.Devolutions
             dbCommand.Parameters.Add(tablaDetalles);
             dbCommand.CommandTimeout = 3600;
 
-            db.AddOutParameter(dbCommand, "@P_resultado", DbType.String, 200);
-            db.ExecuteNonQuery(dbCommand);
+            try
+            {
+                db.AddOutParameter(dbCommand, "@P_resultado", DbType.String, 200);
+                db.ExecuteNonQuery(dbCommand);
 
-            string resultado = dbCommand.Parameters["@P_resultado"].Value.ToString();
+                string resultado = dbCommand.Parameters["@P_resultado"].Value.ToString();
 
-            return resultado;
+                return resultado;
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
 
         }
 
